@@ -1,0 +1,76 @@
+@startuml
+left to right direction
+
+' Group Users and their related tables
+package "Utilisateurs" {
+  entity users {
+    *id : UUID <<PK>>
+    email : varchar(255) <<UNIQUE>>
+    passwordHash : text
+    role : int
+  }
+
+  entity panier {
+    *id : UUID <<PK>>
+    idUser : UUID <<FK>>
+  }
+
+  entity reservation {
+    *id : UUID <<PK>>
+    idUser : UUID <<FK>>
+    dateDebut : date
+    dateFin : date
+    statut : varchar(20)
+  }
+
+  users ||--o{ panier : "possède"
+  users ||--o{ reservation : "effectue"
+}
+
+' Group Categorie and Outils
+package "Outils" {
+  entity categorie {
+    *id : UUID <<PK>>
+    nom : varchar(255)
+    description : text
+  }
+
+  entity outil {
+    *id : UUID <<PK>>
+    nom : varchar(255)
+    description : text
+    tarifJournalier : double precision
+    quantiteStock : int
+    idCat : UUID <<FK>>
+  }
+
+  categorie ||--o{ outil : "contient"
+}
+
+' Group Panier_Outil
+package "Panier Détails" {
+  entity panier_outil {
+    *id : UUID <<PK>>
+    idPanier : UUID <<FK>>
+    idOutil : UUID <<FK>>
+    quantite : int
+    dateReservation : date
+  }
+
+  panier ||--o{ panier_outil : "contient"
+  outil ||--o{ panier_outil : "est dans"
+}
+
+' Group Reservation_Outil
+package "Reservation Détails" {
+  entity reservation_outil {
+    *id : UUID <<PK>>
+    idReservation : UUID <<FK>>
+    idOutil : UUID <<FK>>
+    quantite : int
+  }
+
+  reservation ||--o{ reservation_outil : "comprend"
+  outil ||--o{ reservation_outil : "est réservé"
+}
+@enduml
