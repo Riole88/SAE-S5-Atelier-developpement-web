@@ -2,19 +2,17 @@
 
 namespace charlymatloc\core\domain\entities\ReservationDetail;
 
-use Faker\Core\Uuid;
-
 class ReservationOutil
 {
     public function __construct(
-        private Uuid $id,
-        private Uuid $idReservation,
-        private Uuid $idOutil,
+        private string $id,
+        private string $id_reservation,
+        private string $id_outil,
         private int $quantite,
-        private ?Uuid $creePar,
-        private \DateTimeInterface $creeQuand,
-        private ?Uuid $modifiePar,
-        private \DateTimeInterface $modifieQuand
+        private ?string $cree_par,
+        private string $cree_quand,
+        private ?string $modifie_par,
+        private string $modifie_quand
     ){}
 
     public function __get(string $name){

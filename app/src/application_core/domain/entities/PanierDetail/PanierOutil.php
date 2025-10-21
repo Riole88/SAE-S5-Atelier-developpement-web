@@ -2,20 +2,18 @@
 
 namespace charlymatloc\core\domain\entities\PanierDetail;
 
-use Faker\Core\Uuid;
-
 class PanierOutil
 {
     public function __construct(
-        private Uuid $id,
-        private Uuid $idPanier,
-        private Uuid $idOutil,
+        private string $id,
+        private string $id_panier,
+        private string $id_outil,
         private int $quantite,
-        private \DateTimeInterface $dateReservation,
-        private ?Uuid $creePar,
-        private \DateTimeInterface $creeQuand,
-        private ?Uuid $modifiePar,
-        private \DateTimeInterface $modifieQuand
+        private string $date_reservation,
+        private ?string $cree_par,
+        private string $cree_quand,
+        private ?string $modifie_par,
+        private string $modifie_quand
     ){}
 
     public function __get(string $name){
