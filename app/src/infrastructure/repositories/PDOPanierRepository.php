@@ -5,6 +5,9 @@ namespace charlymatloc\infra\repositories;
 use charlymatloc\core\domain\entities\Utilisateur\Panier;
 use charlymatloc\infra\repositories\interface\PanierRepositoryInterface;
 use PDO;
+use Slim\Exception\HttpInternalServerErrorException;
+use DI\NotFoundException;
+use charlymatloc\core\application\ports\spi\exceptions\EntityNotFoundException;
 
 class PDOPanierRepository implements PanierRepositoryInterface {
 
