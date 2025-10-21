@@ -5,6 +5,9 @@ use charlymatloc\api\dto\UserDTO;
 use charlymatloc\core\domain\entities\user\User;
 use charlymatloc\infra\repositories\interface\UserRepositoryInterface;
 use PDO;
+use Slim\Exception\HttpInternalServerErrorException;
+use DI\NotFoundException;
+use charlymatloc\core\application\ports\spi\exceptions\EntityNotFoundException;
 
 class PDOUserRepository implements UserRepositoryInterface {
 
@@ -16,9 +19,19 @@ class PDOUserRepository implements UserRepositoryInterface {
 
     public function findById(string $id): User
     {
-        $stmt = $this->pdo_user->prepare("SELECT * FROM users WHERE id = :id");
-        $stmt->execute(['id' => $id]);
-        $user = $stmt->fetch(\PDO::FETCH_ASSOC);
+        try{
+            $stmt = $this->pdo_user->prepare("SELECT * FROM users WHERE id = :id");
+            $stmt->execute(['id' => $id]);
+            $user = $stmt->fetch(\PDO::FETCH_ASSOC);
+        } catch(HttpInternalServerErrorException){
+            throw new HttpInternalServerErrorException("Erreur lors de l'execution de la requête");
+        } catch(\Throwable){
+            throw new \Exception("Erreur lors de la reception du user");
+        }
+
+        if(!$user){
+            throw new EntityNotFoundException("User avec l'id $id pas trouver");
+        }
 
         return new User(
             id: $user['id'],
@@ -34,16 +47,31 @@ class PDOUserRepository implements UserRepositoryInterface {
 
     public function saveUser(User $user): void
     {
-        $stmt = $this->pdo_user->prepare("INSERT INTO users (email, password, role) VALUES (:email, :password_hash)");
-        $stmt->execute(['email' => $user->email, 'password_hash' => $user->password_hash]);
+        try{
+            $stmt = $this->pdo_user->prepare("INSERT INTO users (email, password, role) VALUES (:email, :password_hash)");
+            $stmt->execute(['email' => $user->email, 'password_hash' => $user->password_hash]);
+        } catch(HttpInternalServerErrorException){
+            throw new HttpInternalServerErrorException("Erreur lors de l'execution de la requête");
+        } catch(\Throwable){
+            throw new \Exception("Erreur lors de l'enregistrement des données");
+        }
     }
 
     public function findByEmail(string $email): User
     {
-        $stmt = $this->pdo_user->prepare("SELECT * FROM users WHERE email = :email");
-        $stmt->execute(['email' => $email]);
-        $user = $stmt->fetch(\PDO::FETCH_ASSOC);
+        try{
+            $stmt = $this->pdo_user->prepare("SELECT * FROM users WHERE email = :email");
+            $stmt->execute(['email' => $email]);
+            $user = $stmt->fetch(\PDO::FETCH_ASSOC);
+        } catch(HttpInternalServerErrorException){
+            throw new HttpInternalServerErrorException("Erreur lors de l'execution de la requête");
+        } catch(\Throwable){
+            throw new \Exception("Erreur lors de la reception du user");
+        }
 
+        if(!$user){
+            throw new EntityNotFoundException("User avec l'email $email pas trouver");
+        }
         return new User(
             id: $user['id'],
             email: $user['email'],
