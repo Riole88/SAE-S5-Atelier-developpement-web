@@ -8,6 +8,7 @@ use PDO;
 use Slim\Exception\HttpInternalServerErrorException;
 use DI\NotFoundException;
 use charlymatloc\core\application\ports\spi\exceptions\EntityNotFoundException;
+use charlymatloc\core\domain\entities\outil\Outil;
 
 class PDOPanierRepository implements PanierRepositoryInterface {
 
@@ -73,7 +74,7 @@ class PDOPanierRepository implements PanierRepositoryInterface {
 
     public function findPanierByOwnerId(string $userId) : Panier{
         try{
-        $stmt = $this->panier_pdo->prepare("SELECT * 
+            $stmt = $this->panier_pdo->prepare("SELECT * 
             FROM panier
             WHERE idUser = :id");
             $stmt->execute(['id' => $userId]);
@@ -96,4 +97,40 @@ class PDOPanierRepository implements PanierRepositoryInterface {
         );
     }
     
+    public function findAllOutilsByPanierId(string $panierId) : array{
+        try{
+            $stmt = $this->panier_pdo->prepare("SELECT p.quantite, o.*
+            FROM panier_outil p
+            JOIN outil o
+            ON p.idoutil = o.id
+            WHERE p.idpanier = :id");
+            $stmt->execute(['id' => $panierId]);
+            $outils = $stmt->fetch(PDO::FETCH_ASSOC);
+        } catch(HttpInternalServerErrorException){
+            throw new HttpInternalServerErrorException("Erreur lors de l'execution de la requête");
+        } catch(\Throwable){
+            throw new \Exception("Erreur lors de la reception des outils");
+        }
+        if(!$outils){
+            throw new EntityNotFoundException("outils du panier  $panierId pas trouver");
+        }
+
+        $res = [];
+         foreach ($outils as $outil) {
+            $res[] = ['outil' => new Outil(
+                $outil["id"],
+                $outil["nom"],
+                $outil["description"],
+                $outil["image"],
+                $outil["tarifjournalier"],
+                $outil["quantitestock"],
+                $outil["idcat"],
+                $outil["cree_par"],
+                $outil["cree_quand"],
+                $outil["modifie_par"],
+                $outil["modifie_quand"]
+            ), 'quantite' => $outil["quantite"]];
+        }
+        return $res;
+    }
 }
