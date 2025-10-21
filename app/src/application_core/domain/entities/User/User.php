@@ -1,6 +1,6 @@
 <?php
 
-namespace toubilib\core\domain\entities\user;
+namespace charlymatloc\core\domain\entities\User;
 
 use Exception;
 
