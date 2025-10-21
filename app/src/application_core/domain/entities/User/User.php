@@ -8,25 +8,23 @@ class User {
 
     private string $id;
     private string $email;
-    private string $password;
+    private string $password_hash;
     private int $role;
+    private ?string $cree_par;
+    private string $cree_quand;
+    private ?string $modifie_par;
+    private string $modifie_quand;
 
-    public function __construct(string $id, string $email, string $password, int $role)
+    public function __construct(string $id, string $email, string $password, int $role, ?string $cree_par, string $cree_quand, ?string $modifie_par, string $modifie_quand)
     {
         $this->id = $id;
         $this->email = $email;
-        $this->password = $password;
+        $this->password_hash = $password;
         $this->role = $role;
-    }
-
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            $data['id'],
-            $data['email'],
-            $data['password'],
-            $data['role']
-        );
+        $this->cree_par = $cree_par;
+        $this->cree_quand = $cree_quand;
+        $this->modifie_par = $modifie_par;
+        $this->modifie_quand = $modifie_quand;
     }
 
     /**
