@@ -2,7 +2,7 @@
 
 namespace charlymatloc\infra\repositories;
 
-use charlymatloc\core\domain\entities\outil\Outil;
+use charlymatloc\core\domain\entities\Outil\Outil;
 use charlymatloc\infra\repositories\interface\OutilRepositoryInterface;
 use PDO;
 use Slim\Exception\HttpInternalServerErrorException;
