@@ -2,8 +2,6 @@
 
 namespace charlymatloc\core\domain\entities\Outil;
 
-use DateTimeInterface;
-
 class Categorie
 {
     private string $id;
@@ -35,59 +33,19 @@ class Categorie
     }
 
     // --- Getters ---
-    public function getId(): string
-    {
-        return $this->id;
-    }
-
-    public function getNom(): string
-    {
-        return $this->nom;
-    }
-
-    public function getDescription(): ?string
-    {
-        return $this->description;
-    }
-
-    public function getCreePar(): ?string
-    {
-        return $this->cree_par;
-    }
-
-    public function getCreeQuand(): ?string
-    {
-        return $this->cree_quand;
-    }
-
-    public function getModifiePar(): ?string
-    {
-        return $this->modifie_par;
-    }
-
-    public function getModifieQuand(): ?string
-    {
-        return $this->modifie_quand;
+    public function __get(string $name){
+        if(property_exists($this,$name)) {
+            return $this->$name;
+        }
+        throw new \Exception("Propriété '$name' inexistante dans " . __CLASS__);
     }
 
     // --- Setters ---
-    public function setNom(string $nom): void
-    {
-        $this->nom = $nom;
-    }
-
-    public function setDescription(?string $description): void
-    {
-        $this->description = $description;
-    }
-
-    public function setModifiePar(?string $modifiePar): void
-    {
-        $this->modifie_par = $modifiePar;
-    }
-
-    public function setModifieQuand(?string $modifieQuand): void
-    {
-        $this->modifie_quand = $modifieQuand;
+    public function __set(string $name, string $valeur){
+        if(property_exists($this,$name)) {
+            $this->$name = $valeur;
+        } else {
+            throw new \Exception("Propriété '$name' inexistante dans " . __CLASS__);
+        }
     }
 }
