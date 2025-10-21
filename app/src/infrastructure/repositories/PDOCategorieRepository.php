@@ -35,7 +35,7 @@ class PDOCategorieRepository implements CategorieRepositoryInterface {
         $stmt = $this->cat_pdo->query("SELECT * 
         FROM categorie");
         $stmt->execute(['id' => $id]);
-        $categorie = $stmt->fetch(PDO::FETCH_ASSOC);
+        $categorie = $stmt->fetchAll(PDO::FETCH_ASSOC);
         $res = [];
         foreach ($outils as $outil) {
             $res[] = new Categorie(
