@@ -15,11 +15,11 @@ class User {
     private ?string $modifie_par;
     private string $modifie_quand;
 
-    public function __construct(string $id, string $email, string $password, int $role, ?string $cree_par, string $cree_quand, ?string $modifie_par, string $modifie_quand)
+    public function __construct(string $id, string $email, string $password_hash, int $role, ?string $cree_par, string $cree_quand, ?string $modifie_par, string $modifie_quand)
     {
         $this->id = $id;
         $this->email = $email;
-        $this->password_hash = $password;
+        $this->password_hash = $password_hash;
         $this->role = $role;
         $this->cree_par = $cree_par;
         $this->cree_quand = $cree_quand;
