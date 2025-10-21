@@ -29,7 +29,7 @@ class PDOOutilRepository implements OutilRepositoryInterface {
         }
 
         if(!$outil){
-            throw new EntityNotFoundException("Categorie avec l'id $id pas trouver");
+            throw new EntityNotFoundException("Outil avec l'id $id pas trouver");
         }
 
         return new Outil(
