@@ -86,4 +86,41 @@ class PDOReservationRepository implements ReservationRepositoryInterface {
             throw new \Exception("Erreur lors de l'enregistrement des données");
         }
     }
+
+    public function findAllOutilsByReservationId(string $reservationId) : array{
+        try{
+            $stmt = $this->panier_pdo->prepare("SELECT r.quantite, o.*
+            FROM reservation_outil r
+            JOIN outil o
+            ON r.idoutil = o.id
+            WHERE r.idreservation = :id");
+            $stmt->execute(['id' => $reservationId]);
+            $outils = $stmt->fetch(PDO::FETCH_ASSOC);
+        } catch(HttpInternalServerErrorException){
+            throw new HttpInternalServerErrorException("Erreur lors de l'execution de la requête");
+        } catch(\Throwable){
+            throw new \Exception("Erreur lors de la reception des outils");
+        }
+        if(!$outils){
+            throw new EntityNotFoundException("outils de la reservation $reservationId pas trouver");
+        }
+
+        $res = [];
+         foreach ($outils as $outil) {
+            $res[] = ['outil' => new Outil(
+                $outil["id"],
+                $outil["nom"],
+                $outil["description"],
+                $outil["image"],
+                $outil["tarifjournalier"],
+                $outil["quantitestock"],
+                $outil["idcat"],
+                $outil["cree_par"],
+                $outil["cree_quand"],
+                $outil["modifie_par"],
+                $outil["modifie_quand"]
+            ), 'quantite' => $outil["quantite"]];
+        }
+        return $res;
+    }
 }
