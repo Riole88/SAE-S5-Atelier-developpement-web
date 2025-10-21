@@ -3,10 +3,10 @@
 namespace charlymatloc\infra\repositories;
 
 use charlymatloc\core\domain\entities\Outil\Outil;
+use charlymatloc\core\domain\exceptions\EntityNotFoundException;
 use charlymatloc\infra\repositories\interface\OutilRepositoryInterface;
 use PDO;
 use DI\NotFoundException;
-use charlymatloc\core\application\ports\spi\exceptions\EntityNotFoundException;
 
 class PDOOutilRepository implements OutilRepositoryInterface {
 

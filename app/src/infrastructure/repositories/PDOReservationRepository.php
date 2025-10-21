@@ -2,12 +2,12 @@
 
 namespace charlymatloc\infra\repositories;
 
+use charlymatloc\core\domain\entities\Outil\Outil;
 use charlymatloc\core\domain\entities\Utilisateur\Reservation;
 use charlymatloc\infra\repositories\interface\ReservationRepositoryInterface;
 use PDO;
 use DI\NotFoundException;
 use charlymatloc\core\application\ports\spi\exceptions\EntityNotFoundException;
-use charlymatloc\core\domain\entities\outil\Outil;
 
 class PDOReservationRepository implements ReservationRepositoryInterface {
 
@@ -19,9 +19,7 @@ class PDOReservationRepository implements ReservationRepositoryInterface {
 
     public function findReservationById(string $id): Reservation{
         try{
-            $stmt = $this->reservation_pdo->prepare("SELECT * 
-            FROM reservation
-            WHERE id = :id");
+            $stmt = $this->reservation_pdo->prepare("SELECT * FROM reservation WHERE id = :id");
             $stmt->execute(['id' => $id]);
             $reservation = $stmt->fetch(PDO::FETCH_ASSOC);
         } catch(\PDOException $e){
@@ -48,8 +46,7 @@ class PDOReservationRepository implements ReservationRepositoryInterface {
 
     public function findAllReservations(): array{
         try{
-            $stmt = $this->reservation_pdo->query("SELECT * 
-            FROM reservation");
+            $stmt = $this->reservation_pdo->query("SELECT * FROM reservation");
             $reservations = $stmt->fetchAll(PDO::FETCH_ASSOC);
         } catch(\PDOException $e){
             throw new \Exception("Erreur lors de l'execution de la requête");
@@ -78,7 +75,7 @@ class PDOReservationRepository implements ReservationRepositoryInterface {
 
     public function saveReservation(Reservation $reservation): void{
         try{
-            $stmt = $this->pdo_user->prepare("INSERT INTO reservation (idUser, dateDebut, dateFin, statut) VALUES (:id_user, :date_debut, :date_fin, :statut)");
+            $stmt = $this->reservation_pdo->prepare("INSERT INTO reservation (idUser, dateDebut, dateFin, statut) VALUES (:id_user, :date_debut, :date_fin, :statut)");
             $stmt->execute(['id_user' => $reservation->id_user, 'date_debut' => $reservation->date_debut, 'date_fin' => $reservation->date_fin, 'statut' => $reservation->statut]);
         } catch(\PDOException $e){
             throw new \Exception("Erreur lors de l'execution de la requête");
@@ -89,11 +86,10 @@ class PDOReservationRepository implements ReservationRepositoryInterface {
 
     public function findAllOutilsByReservationId(string $reservationId) : array{
         try{
-            $stmt = $this->reservation_pdo->prepare("SELECT r.quantite, o.*
-            FROM reservation_outil r
-            JOIN outil o
-            ON r.idoutil = o.id
-            WHERE r.idreservation = :id");
+            $stmt = $this->reservation_pdo->prepare("SELECT r.quantite, o.* FROM reservation_outil r
+                                                            JOIN outil o
+                                                            ON r.idoutil = o.id
+                                                            WHERE r.idreservation = :id");
             $stmt->execute(['id' => $reservationId]);
             $outils = $stmt->fetch(PDO::FETCH_ASSOC);
         } catch(\PDOException $e){

@@ -3,10 +3,10 @@
 namespace charlymatloc\infra\repositories;
 
 use charlymatloc\core\domain\entities\outil\Categorie;
+use charlymatloc\core\domain\exceptions\EntityNotFoundException;
 use charlymatloc\infra\repositories\interface\CategorieRepositoryInterface;
 use PDO;
 use DI\NotFoundException;
-use charlymatloc\core\application\ports\spi\exceptions\EntityNotFoundException;
 
 
 class PDOCategorieRepository implements CategorieRepositoryInterface {
@@ -19,9 +19,7 @@ class PDOCategorieRepository implements CategorieRepositoryInterface {
 
     public function findCategorieById(string $id): Categorie{
         try{
-            $stmt = $this->cat_pdo->prepare("SELECT * 
-            FROM categorie
-            WHERE id = :id");
+            $stmt = $this->cat_pdo->prepare("SELECT * FROM categorie WHERE id = :id");
             $stmt->execute(['id' => $id]);
             $categorie = $stmt->fetch(PDO::FETCH_ASSOC);
         } catch(\PDOException $e){
@@ -47,9 +45,7 @@ class PDOCategorieRepository implements CategorieRepositoryInterface {
 
     public function findAllCategories(): array{
         try{
-            $stmt = $this->cat_pdo->query("SELECT * 
-            FROM categorie");
-            $stmt->execute(['id' => $id]);
+            $stmt = $this->cat_pdo->query("SELECT * FROM categorie");
             $categories = $stmt->fetchAll(PDO::FETCH_ASSOC);
         } catch(\PDOException $e){
             throw new \Exception("Erreur lors de l'execution de la requête");

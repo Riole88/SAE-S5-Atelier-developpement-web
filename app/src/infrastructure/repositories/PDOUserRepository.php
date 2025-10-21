@@ -8,6 +8,7 @@ use PDO;
 use DI\NotFoundException;
 use charlymatloc\core\application\ports\spi\exceptions\EntityNotFoundException;
 
+
 class PDOUserRepository implements UserRepositoryInterface {
 
     private PDO $pdo_user;
