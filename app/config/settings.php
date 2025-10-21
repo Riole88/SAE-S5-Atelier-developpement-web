@@ -1,5 +1,7 @@
 <?php
 
+use charlymatloc\infra\repositories\interface\OutilRepositoryInterface;
+use charlymatloc\infra\repositories\PDOOutilRepository;
 use Psr\Container\ContainerInterface;
 
 //use toubilib\infra\repositories\   ;
@@ -19,6 +21,11 @@ return [
         $user = $config['charly.username'];
         $password = $config['charly.password'];
         return new \PDO($dsn, $user, $password, [\PDO::ATTR_ERRMODE => \PDO::ERRMODE_EXCEPTION]);
+    },
+
+    // REPOSITORY
+    OutilRepositoryInterface::class => function (ContainerInterface $c) {
+        return new PDOOutilRepository($c->get("charlymatloc.pdo"));
     },
 ];
 
