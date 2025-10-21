@@ -11,13 +11,13 @@ class Outil {
         private string $nom,
         private string $description,
         private string $image,
-        private float $tarifJournalier,
-        private int $quantiteStock,
-        private string $idCat,
-        private ?string $creePar,
-        private ?string $creeQuand,
-        private ?string $modifiePar,
-        private ?string $modifieQuand)
+        private float $tarif_journalier,
+        private int $quantite_stock,
+        private string $id_cat,
+        private ?string $cree_par,
+        private ?string $cree_quand,
+        private ?string $modifie_par,
+        private ?string $modifie_quand)
     {}
 
     /**

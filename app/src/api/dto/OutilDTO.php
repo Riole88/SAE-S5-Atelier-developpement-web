@@ -11,12 +11,12 @@ class OutilDTO {
         public readonly string $nom,
         public readonly string $desc,
         public readonly string $image,
-        public readonly ?string $tarifJournalier,
-        public readonly ?string $quantite,
-        public readonly ?string $idCat,
-        public readonly ?string $creerPar,
-        public readonly ?string $creeQuand,
-        public readonly ?string $modifiePar,
-        public readonly ?string $modifieQuand
+        public readonly ?string $tarif_journalier,
+        public readonly ?string $quantite_stock,
+        public readonly ?string $id_cat,
+        public readonly ?string $creer_par,
+        public readonly ?string $cree_quand,
+        public readonly ?string $modifie_par,
+        public readonly ?string $modifie_quand
     ) {}
 }
