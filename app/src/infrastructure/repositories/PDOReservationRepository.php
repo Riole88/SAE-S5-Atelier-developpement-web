@@ -76,5 +76,14 @@ class PDOReservationRepository implements ReservationRepositoryInterface {
         return $res;
     }
 
-    
+    public function saveReservation(Reservation $reservation): void{
+        try{
+            $stmt = $this->pdo_user->prepare("INSERT INTO reservation (idUser, dateDebut, dateFin, statut) VALUES (:id_user, :date_debut, :date_fin, :statut)");
+            $stmt->execute(['id_user' => $reservation->id_user, 'date_debut' => $reservation->date_debut, 'date_fin' => $reservation->date_fin, 'statut' => $reservation->statut]);
+        } catch(HttpInternalServerErrorException){
+            throw new HttpInternalServerErrorException("Erreur lors de l'execution de la requête");
+        } catch(\Throwable){
+            throw new \Exception("Erreur lors de l'enregistrement des données");
+        }
+    }
 }
