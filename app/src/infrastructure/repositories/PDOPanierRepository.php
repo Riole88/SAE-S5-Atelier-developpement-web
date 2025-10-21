@@ -2,15 +2,12 @@
 
 namespace charlymatloc\infra\repositories;
 
-use charlymatloc\api\actions\ReserverOutilAction;
-use charlymatloc\core\domain\entities\PanierDetail\PanierOutil;
 use charlymatloc\core\domain\entities\Utilisateur\Panier;
 use charlymatloc\infra\repositories\interface\PanierRepositoryInterface;
 use Exception;
-use Faker\Core\Uuid;
 use PDO;
 use Slim\Exception\HttpInternalServerErrorException;
-use DI\NotFoundException;
+
 class PDOPanierRepository implements PanierRepositoryInterface {
 
     private PDO $panier_pdo;
@@ -21,9 +18,7 @@ class PDOPanierRepository implements PanierRepositoryInterface {
 
     public function findPanierById(string $id): Panier{
         try{
-        $stmt = $this->panier_pdo->prepare("SELECT * 
-            FROM panier
-            WHERE id = :id");
+        $stmt = $this->panier_pdo->prepare("SELECT * FROM panier WHERE id = :id");
             $stmt->execute(['id' => $id]);
             $panier = $stmt->fetch(PDO::FETCH_ASSOC);
         } catch(HttpInternalServerErrorException){
@@ -47,8 +42,7 @@ class PDOPanierRepository implements PanierRepositoryInterface {
 
     public function findAllPaniers(): array{
         try{
-            $stmt = $this->panier_pdo->query("SELECT * 
-            FROM panier");
+            $stmt = $this->panier_pdo->query("SELECT * FROM panier");
             $paniers = $stmt->fetchAll(PDO::FETCH_ASSOC);
         } catch(HttpInternalServerErrorException){
             throw new HttpInternalServerErrorException("Erreur lors de l'execution de la requête");
@@ -75,9 +69,7 @@ class PDOPanierRepository implements PanierRepositoryInterface {
 
     public function findPanierByOwnerId(string $userId) : Panier{
         try{
-        $stmt = $this->panier_pdo->prepare("SELECT * 
-            FROM panier
-            WHERE idUser = :id");
+        $stmt = $this->panier_pdo->prepare("SELECT * FROM panier WHERE idUser = :id");
             $stmt->execute(['id' => $userId]);
             $panier = $stmt->fetch(PDO::FETCH_ASSOC);
         } catch(HttpInternalServerErrorException){
@@ -119,23 +111,6 @@ class PDOPanierRepository implements PanierRepositoryInterface {
                 'date_reservation' => $dto->date_reservation
             ]);
 
-            $stmt = $this->panier_pdo->prepare("
-                INSERT INTO panier_outil (idpanier, idoutil, quantite, datereservation)
-                VALUES (:id_panier, :id_outil, :quantite, :date_reservation)
-            ");
-
-            //on met a jour la quantite
-            $stmt2 = $this->panier_pdo->prepare("
-                UPDATE outil
-                SET quantitestock = quantitestock - :quantite
-                WHERE id = :id_outil
-                AND quantitestock >= :quantite
-            ");
-
-            $stmt2->execute([
-                'quantite' => $dto->quantite,
-                'id_outil' => $dto->id_outil
-            ]);
 
         } catch (HttpInternalServerErrorException) {
             //500
@@ -157,7 +132,7 @@ class PDOPanierRepository implements PanierRepositoryInterface {
             throw new Exception("Erreur lors de la création du rendez-vous.");
         }
 
-        if ($quantiteStock < 1) {
+        if ($quantiteStock < $dto->quantite) {
             return false;
         } else {
             return true;
