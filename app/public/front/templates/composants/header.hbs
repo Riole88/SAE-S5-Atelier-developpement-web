@@ -1,23 +1,17 @@
 <header class="navbar">
     <nav class="navbar__container">
-        <!-- Logo / retour à l'accueil -->
-        <a href="/" data-link class="navbar__logo">
-            <img src="images/home-icon.svg" alt="Catalogue" class="navbar__icon">
-        </a>
+        <!-- retour à l'accueil -->
+        <a href="/" data-link class="navbar__logo"> Catalogue</a>
 
-        <!-- Liens de navigation -->
+        <!-- Liens de nav -->
         <ul class="navbar__links">
             <li><a href="/compte" data-link>Espace Compte</a></li>
             <li><a href="/connexion" data-link>Connexion / Inscription</a></li>
         </ul>
 
         <!-- Panier -->
-        <a href="/panier" data-link class="navbar__cart">
-            <img src="images/cart-icon.svg" alt="Panier" class="navbar__icon">
+        <a href="/panier" data-link class="navbar__cart">Panier
             <span class="navbar__cart-text"></span>
-            {{#if nbArticles}}
-                <span class="navbar__cart-count">{{nbArticles}}</span>
-            {{/if}}
         </a>
     </nav>
 </header>

@@ -1,17 +1,79 @@
 {{> header}}
 
-{{#if erreur}}
-<p class="error">{{erreur}}</p>
-{{else}}
-<ul class="produits">
-    {{#each produits}}
-    <li>
-        <h3>{{nom}}</h3>
-        <p>{{description}}</p>
-        <button data-add-cart data-product-id="{{id}}">Ajouter au panier</button>
-    </li>
-    {{/each}}
-</ul>
-{{/if}}
+<div class="page-catalogue">
+  <main class="container">
+
+    <div class="catalogue-header">
+      <h1>{{titre}}</h1>
+      {{#if nombreProduits}}
+        <p class="catalogue-info">{{nombreProduits}} outil(s) disponible(s)</p>
+      {{/if}}
+    </div>
+
+
+{{!-- cas d'erreur --}}
+    {{#if erreur}}
+      <div class="alert alert-error">
+        <span>{{erreur}}</span>
+      </div>
+    {{/if}}
+
+      <div class="produits-grid">
+        {{#each produits}}
+          <article class="produit-card {{#unless disponible}}indisponible{{/unless}}">
+            <div class="produit-image-container">
+              <img
+
+{{!-- GERER IMAGE--}}
+                src="/assets/images/produits/{{image}}"
+                alt="{{nom}}"
+                class="produit-image">
+
+              {{#unless disponible}}
+                <span class="badge-indisponible">Rupture de stock</span>
+              {{/unless}}
+
+                </div>
+
+            <div class="produit-content">
+              <h3 class="produit-titre">{{nom}}</h3>
+              <p class="produit-description">{{description}}</p>
+
+              <div class="produit-footer">
+                <div class="produit-prix">
+                  <span class="prix-label">Tarif journalier</span>
+                  <span class="prix-montant">{{prix}} €/jour</span>
+                </div>
+
+                <div class="produit-actions">
+                  <button
+                    class="btn btn-secondary btn-sm"
+                    data-product-detail
+                    data-product-id="{{id}}">
+                    Détails
+                  </button>
+
+                  {{#if disponible}}
+                    <button
+                      class="btn btn-primary btn-sm"
+                      data-add-cart
+                      data-product-id="{{id}}">
+                      Louer
+                    </button>
+                  {{else}}
+                    <button class="btn btn-disabled btn-sm" disabled>
+                      Indisponible
+                    </button>
+                  {{/if}}
+                </div>
+              </div>
+            </div>
+          </article>
+        {{/each}}
+      </div>
+      </div>
+
+  </main>
+</div>
 
 {{> footer}}

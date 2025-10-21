@@ -1,5 +1,9 @@
 import router from './routeur.js';
 import catalogueController from './controlleurs/catalogueControlleur.js';
+import panierController from "./controlleurs/panierControlleur.js";
+import compteController from "./controlleurs/compteControlleur.js";
+import detailOutilController from "./controlleurs/detailOutilControlleur.js";
+import loginController from "./controlleurs/loginControlleur.js";
 
 async function chargerComposants() {
     const composants = ['header', 'footer'];
@@ -17,12 +21,14 @@ async function chargerComposants() {
 async function demarrer() {
     try {
         await chargerComposants();
-        console.log("Composants chargés ✅");
 
         // Définir les routes
         router.add('/', () => catalogueController.afficher());
-        router.add('/catalogue', () => catalogueController.afficher());
-        console.log("Routes définies ✅");
+        router.add('#/catalogue', () => catalogueController.afficher());
+        router.add('#/detailOutil', () => detailOutilController.afficher());
+        router.add('#/panier', () => panierController.afficher());
+        router.add('#/compte', () => compteController.afficher());
+        router.add('#/login', () => loginController.afficher());
 
         // Démarrer le router
         router.init();
