@@ -4,11 +4,10 @@ namespace charlymatloc\infra\repositories;
 
 use charlymatloc\core\domain\entities\Outil\Outil;
 use charlymatloc\core\domain\entities\Utilisateur\Reservation;
-use charlymatloc\core\domain\exceptions\EntityNotFoundException;
 use charlymatloc\infra\repositories\interface\ReservationRepositoryInterface;
 use PDO;
-use Slim\Exception\HttpInternalServerErrorException;
 use DI\NotFoundException;
+use charlymatloc\core\application\ports\spi\exceptions\EntityNotFoundException;
 
 class PDOReservationRepository implements ReservationRepositoryInterface {
 
@@ -23,8 +22,8 @@ class PDOReservationRepository implements ReservationRepositoryInterface {
             $stmt = $this->reservation_pdo->prepare("SELECT * FROM reservation WHERE id = :id");
             $stmt->execute(['id' => $id]);
             $reservation = $stmt->fetch(PDO::FETCH_ASSOC);
-        } catch(HttpInternalServerErrorException){
-            throw new HttpInternalServerErrorException("Erreur lors de l'execution de la requête");
+        } catch(\PDOException $e){
+            throw new \Exception("Erreur lors de l'execution de la requête");
         } catch(\Throwable){
             throw new \Exception("Erreur lors de la reception de la reservation");
         }
@@ -49,8 +48,8 @@ class PDOReservationRepository implements ReservationRepositoryInterface {
         try{
             $stmt = $this->reservation_pdo->query("SELECT * FROM reservation");
             $reservations = $stmt->fetchAll(PDO::FETCH_ASSOC);
-        } catch(HttpInternalServerErrorException){
-            throw new HttpInternalServerErrorException("Erreur lors de l'execution de la requête");
+        } catch(\PDOException $e){
+            throw new \Exception("Erreur lors de l'execution de la requête");
         } catch(\Throwable){
             throw new \Exception("Erreur lors de la reception des reservations");
         }
@@ -78,8 +77,8 @@ class PDOReservationRepository implements ReservationRepositoryInterface {
         try{
             $stmt = $this->reservation_pdo->prepare("INSERT INTO reservation (idUser, dateDebut, dateFin, statut) VALUES (:id_user, :date_debut, :date_fin, :statut)");
             $stmt->execute(['id_user' => $reservation->id_user, 'date_debut' => $reservation->date_debut, 'date_fin' => $reservation->date_fin, 'statut' => $reservation->statut]);
-        } catch(HttpInternalServerErrorException){
-            throw new HttpInternalServerErrorException("Erreur lors de l'execution de la requête");
+        } catch(\PDOException $e){
+            throw new \Exception("Erreur lors de l'execution de la requête");
         } catch(\Throwable){
             throw new \Exception("Erreur lors de l'enregistrement des données");
         }
@@ -93,8 +92,8 @@ class PDOReservationRepository implements ReservationRepositoryInterface {
                                                             WHERE r.idreservation = :id");
             $stmt->execute(['id' => $reservationId]);
             $outils = $stmt->fetch(PDO::FETCH_ASSOC);
-        } catch(HttpInternalServerErrorException){
-            throw new HttpInternalServerErrorException("Erreur lors de l'execution de la requête");
+        } catch(\PDOException $e){
+            throw new \Exception("Erreur lors de l'execution de la requête");
         } catch(\Throwable){
             throw new \Exception("Erreur lors de la reception des outils");
         }

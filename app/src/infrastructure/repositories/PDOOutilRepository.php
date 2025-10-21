@@ -6,7 +6,6 @@ use charlymatloc\core\domain\entities\Outil\Outil;
 use charlymatloc\core\domain\exceptions\EntityNotFoundException;
 use charlymatloc\infra\repositories\interface\OutilRepositoryInterface;
 use PDO;
-use Slim\Exception\HttpInternalServerErrorException;
 use DI\NotFoundException;
 
 class PDOOutilRepository implements OutilRepositoryInterface {
@@ -22,8 +21,8 @@ class PDOOutilRepository implements OutilRepositoryInterface {
             $stmt = $this->outil_pdo->prepare("SELECT * FROM outil WHERE id = :id");
             $stmt->execute(['id' => $id]);
             $outil = $stmt->fetch(PDO::FETCH_ASSOC);
-        } catch(HttpInternalServerErrorException){
-            throw new HttpInternalServerErrorException("Erreur lors de l'execution de la requête");
+        } catch(\PDOException $e){
+            throw new \Exception("Erreur lors de l'execution de la requête");
         } catch(\Throwable){
             throw new \Exception("Erreur lors de la reception de l'outil");
         }
@@ -53,8 +52,8 @@ class PDOOutilRepository implements OutilRepositoryInterface {
             $stmt = $this->outil_pdo->query("SELECT * FROM outil");
             $outils = $stmt->fetchAll(PDO::FETCH_ASSOC);
             $res = [];
-        } catch(HttpInternalServerErrorException){
-            throw new HttpInternalServerErrorException("Erreur lors de l'execution de la requête");
+        } catch(\PDOException $e){
+            throw new \Exception("Erreur lors de l'execution de la requête");
         } catch(\Throwable){
             throw new \Exception("Erreur lors de la reception des outils");
         }
