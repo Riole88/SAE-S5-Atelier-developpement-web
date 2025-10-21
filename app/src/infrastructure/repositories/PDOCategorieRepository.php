@@ -48,5 +48,7 @@ class PDOCategorieRepository implements CategorieRepositoryInterface {
                 $categorie["modifie_quand"]
             );
         }
+
+        return res;
     }
 }
