@@ -14,7 +14,7 @@ class PDOReservationRepository implements ReservationRepositoryInterface {
         $this->reservation_pdo = $pdo;
     }
 
-    public function findReservationById(string $id): Panier{
+    public function findReservationById(string $id): Reservation{
         $stmt = $this->reservation_pdo->prepare("SELECT * 
         FROM reservation
         WHERE id = :id");
@@ -36,9 +36,9 @@ class PDOReservationRepository implements ReservationRepositoryInterface {
     public function findAllReservations(): array{
         $stmt = $this->reservation_pdo->query("SELECT * 
         FROM reservation");
-        $reservation = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $reservations = $stmt->fetchAll(PDO::FETCH_ASSOC);
         $res = [];
-        foreach ($outils as $outil) {
+        foreach ($reservations as $reservation) {
             $res[] = new Reservation(
                 $reservation["id"],
                 $reservation["iduser"],
