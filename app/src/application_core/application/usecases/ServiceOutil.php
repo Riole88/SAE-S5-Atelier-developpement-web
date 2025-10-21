@@ -62,13 +62,13 @@ class ServiceOutil implements ServiceOutilInterface {
             $outil->nom,
             $outil->description,
             $outil->image,
-            $outil->tarifJournalier,
-            $outil->quantiteStock,
-            $outil->idCat,
-            $outil->creePar,
-            $outil->creeQuand,
-            $outil->modifiePar,
-            $outil->modifieQuand
+            $outil->tarif_journalier,
+            $outil->quantite_stock,
+            $outil->id_cat,
+            $outil->cree_par,
+            $outil->cree_quand,
+            $outil->modifie_par,
+            $outil->modifie_quand
         );
     }
 }
