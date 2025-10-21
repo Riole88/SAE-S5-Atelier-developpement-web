@@ -49,6 +49,6 @@ class PDOCategorieRepository implements CategorieRepositoryInterface {
             );
         }
 
-        return res;
+        return $res;
     }
 }
