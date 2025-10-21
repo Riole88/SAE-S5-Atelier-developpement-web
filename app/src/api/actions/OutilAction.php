@@ -1,14 +1,14 @@
 <?php
 
 namespace charlymatloc\api\actions;
-use charlymatloc\infra\repositories\interface\OutilRepositoryInterface;
+use charlymatloc\core\application\usecases\interface\ServiceOutilInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
 class OutilAction {
-    private OutilRepositoryInterface $serviceOutil;
+    private ServiceOutilInterface $serviceOutil;
 
-    public function __construct(OutilRepositoryInterface $serviceOutil) {
+    public function __construct(ServiceOutilInterface $serviceOutil) {
         $this->serviceOutil = $serviceOutil;
     }
 
@@ -21,7 +21,7 @@ class OutilAction {
             if(empty($id_outil)) {
                 throw new \Exception("Saisissez un id pour l'outil");
             }
-            $res = $this->serviceOutil->findOutilById($id_outil);
+            $res = $this->serviceOutil->getOutil($id_outil);
             $response->getBody()->write(json_encode($res));
             return $response->withHeader("Content-Type", "application/json");
         } catch (\Exception) {
