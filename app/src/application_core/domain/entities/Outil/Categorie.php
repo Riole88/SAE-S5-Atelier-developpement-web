@@ -2,92 +2,50 @@
 
 namespace charlymatloc\core\domain\entities\Outil;
 
-use DateTimeInterface;
-
 class Categorie
 {
     private string $id;
     private string $nom;
     private ?string $description;
 
-    private ?string $creePar;
-    private ?DateTimeInterface $creeQuand;
-    private ?string $modifiePar;
-    private ?DateTimeInterface $modifieQuand;
+    private ?string $cree_par;
+    private ?string $cree_quand;
+    private ?string $modifie_par;
+    private ?string $modifie_quand;
 
     public function __construct(
         string             $id,
         string             $nom,
         ?string            $description = null,
         ?string            $creePar = null,
-        ?DateTimeInterface $creeQuand = null,
+        ?string $creeQuand = null,
         ?string            $modifiePar = null,
-        ?DateTimeInterface $modifieQuand = null
+        ?string $modifieQuand = null
     )
     {
         $this->id = $id;
         $this->nom = $nom;
         $this->description = $description;
-        $this->creePar = $creePar;
-        $this->creeQuand = $creeQuand;
-        $this->modifiePar = $modifiePar;
-        $this->modifieQuand = $modifieQuand;
+        $this->cree_par = $creePar;
+        $this->cree_quand = $creeQuand;
+        $this->modifie_par = $modifiePar;
+        $this->modifie_quand = $modifieQuand;
     }
 
     // --- Getters ---
-    public function getId(): string
-    {
-        return $this->id;
-    }
-
-    public function getNom(): string
-    {
-        return $this->nom;
-    }
-
-    public function getDescription(): ?string
-    {
-        return $this->description;
-    }
-
-    public function getCreePar(): ?string
-    {
-        return $this->creePar;
-    }
-
-    public function getCreeQuand(): ?DateTimeInterface
-    {
-        return $this->creeQuand;
-    }
-
-    public function getModifiePar(): ?string
-    {
-        return $this->modifiePar;
-    }
-
-    public function getModifieQuand(): ?DateTimeInterface
-    {
-        return $this->modifieQuand;
+    public function __get(string $name){
+        if(property_exists($this,$name)) {
+            return $this->$name;
+        }
+        throw new \Exception("Propriété '$name' inexistante dans " . __CLASS__);
     }
 
     // --- Setters ---
-    public function setNom(string $nom): void
-    {
-        $this->nom = $nom;
-    }
-
-    public function setDescription(?string $description): void
-    {
-        $this->description = $description;
-    }
-
-    public function setModifiePar(?string $modifiePar): void
-    {
-        $this->modifiePar = $modifiePar;
-    }
-
-    public function setModifieQuand(?DateTimeInterface $modifieQuand): void
-    {
-        $this->modifieQuand = $modifieQuand;
+    public function __set(string $name, string $valeur){
+        if(property_exists($this,$name)) {
+            $this->$name = $valeur;
+        } else {
+            throw new \Exception("Propriété '$name' inexistante dans " . __CLASS__);
+        }
     }
 }
