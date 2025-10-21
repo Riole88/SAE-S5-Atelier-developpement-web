@@ -1,6 +1,6 @@
 <?php
 
-namespace toubilib\core\application\ports\spi\repositoryInterfaces;
+namespace charlymatloc\core\application\ports\spi\repositoryInterfaces;
 
 use toubilib\core\domain\entities\user\User;
 
