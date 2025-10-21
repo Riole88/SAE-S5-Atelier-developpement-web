@@ -47,7 +47,7 @@ class ServiceOutil implements ServiceOutilInterface {
     /**
      * @throws \Exception
      */
-    public function getOutil(string $id): Outil
+    public function getOutil(string $id): OutilDTO
     {
 //        try {
             $outil = $this->outilRepository->findOutilById($id);
@@ -57,6 +57,18 @@ class ServiceOutil implements ServiceOutilInterface {
 //            throw new \Exception("probleme lors de la reception du patient.", $e->getCode());
 //        }
 
-        return $outil;
+        return new OutilDTO(
+            $outil->id,
+            $outil->nom,
+            $outil->description,
+            $outil->image,
+            $outil->tarifJournalier,
+            $outil->quantiteStock,
+            $outil->idCat,
+            $outil->creePar,
+            $outil->creeQuand,
+            $outil->modifiePar,
+            $outil->modifieQuand
+        );
     }
 }
