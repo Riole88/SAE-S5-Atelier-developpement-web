@@ -7,6 +7,6 @@ use charlymatloc\core\domain\entities\user\User;
 
 interface UserRepositoryInterface {
     public function findById(string $id): User;
-    public function saveUser(User $user): void;
+    public function saveUser(UserDTO $user): void;
     public function findByEmail(string $email): User;
 }

@@ -32,10 +32,10 @@ class PDOUserRepository implements UserRepositoryInterface {
         );
     }
 
-    public function saveUser(User $user): void
+    public function saveUser(UserDTO $user): void
     {
-        $stmt = $this->pdo_user->prepare("INSERT INTO users (email, password, role) VALUES (:email, :password_hash)");
-        $stmt->execute(['email' => $user->email, 'password_hash' => $user->password_hash]);
+        $stmt = $this->pdo_user->prepare("INSERT INTO users (email, passwordhash) VALUES (:email, :password_hash)");
+        $stmt->execute(['email' => $user->email, 'password_hash' => $user->password]);
     }
 
     public function findByEmail(string $email): User
