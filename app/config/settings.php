@@ -2,6 +2,8 @@
 
 use charlymatloc\infra\repositories\interface\OutilRepositoryInterface;
 use charlymatloc\infra\repositories\PDOOutilRepository;
+use charlymatloc\infra\repositories\interface\PanierRepositoryInterface;
+use charlymatloc\infra\repositories\PanierOutilRepository;
 use Psr\Container\ContainerInterface;
 
 //use toubilib\infra\repositories\   ;
@@ -26,6 +28,10 @@ return [
     // REPOSITORY
     OutilRepositoryInterface::class => function (ContainerInterface $c) {
         return new PDOOutilRepository($c->get("charlymatloc.pdo"));
+    },
+
+    PanierRepositoryInterface::class => function (ContainerInterface $c) {
+        return new PDOPanierRepository($c->get("charlymatloc.pdo"));
     },
 ];
 
