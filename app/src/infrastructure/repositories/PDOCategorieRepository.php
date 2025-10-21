@@ -15,7 +15,7 @@ class PDOCategorieRepository implements CategorieRepositoryInterface {
     }
 
     public function findCategorieById(string $id): Categorie{
-        $stmt = $this->pdo->prepare("SELECT * 
+        $stmt = $this->cat_pdo->prepare("SELECT * 
         FROM categorie
         WHERE id = :id");
         $stmt->execute(['id' => $id]);
@@ -32,7 +32,7 @@ class PDOCategorieRepository implements CategorieRepositoryInterface {
     }
 
     public function findAllCategories(): array{
-        $stmt = $this->pdo->prepare("SELECT * 
+        $stmt = $this->cat_pdo->prepare("SELECT * 
         FROM categorie");
         $stmt->execute(['id' => $id]);
         $categorie = $stmt->fetch(PDO::FETCH_ASSOC);
