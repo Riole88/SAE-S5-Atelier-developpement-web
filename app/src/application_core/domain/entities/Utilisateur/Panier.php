@@ -2,8 +2,6 @@
 
 namespace charlymatloc\core\domain\entities\Utilisateur;
 
-use Faker\Core\Uuid;
-
 class Panier
 {
     public function __construct(

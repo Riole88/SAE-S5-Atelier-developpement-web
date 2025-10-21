@@ -2,8 +2,6 @@
 
 namespace charlymatloc\core\domain\entities\ReservationDetail;
 
-use Faker\Core\Uuid;
-
 class ReservationOutil
 {
     public function __construct(
