@@ -7,4 +7,5 @@ use charlymatloc\core\domain\entities\Utilisateur\Reservation;
 interface ReservationRepositoryInterface {
     public function findReservationById(string $id): Reservation;
     public function findAllReservations(): array;
+    public function saveReservation(Reservation $reservation): void;
 }
