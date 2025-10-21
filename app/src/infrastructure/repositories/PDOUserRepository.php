@@ -5,7 +5,6 @@ use charlymatloc\api\dto\UserDTO;
 use charlymatloc\core\domain\entities\user\User;
 use charlymatloc\infra\repositories\interface\UserRepositoryInterface;
 use PDO;
-use Slim\Exception\HttpInternalServerErrorException;
 use DI\NotFoundException;
 use charlymatloc\core\application\ports\spi\exceptions\EntityNotFoundException;
 
@@ -23,8 +22,8 @@ class PDOUserRepository implements UserRepositoryInterface {
             $stmt = $this->pdo_user->prepare("SELECT * FROM users WHERE id = :id");
             $stmt->execute(['id' => $id]);
             $user = $stmt->fetch(\PDO::FETCH_ASSOC);
-        } catch(HttpInternalServerErrorException){
-            throw new HttpInternalServerErrorException("Erreur lors de l'execution de la requête");
+        } catch(\PDOException $e){
+            throw new \Exception("Erreur lors de l'execution de la requête");
         } catch(\Throwable){
             throw new \Exception("Erreur lors de la reception du user");
         }
@@ -50,8 +49,8 @@ class PDOUserRepository implements UserRepositoryInterface {
         try{
             $stmt = $this->pdo_user->prepare("INSERT INTO users (email, password) VALUES (:email, :password_hash)");
             $stmt->execute(['email' => $user->email, 'password_hash' => $user->password]);
-        } catch(HttpInternalServerErrorException){
-            throw new HttpInternalServerErrorException("Erreur lors de l'execution de la requête");
+        } catch(\PDOException $e){
+            throw new \Exception("Erreur lors de l'execution de la requête");
         } catch(\Throwable){
             throw new \Exception("Erreur lors de l'enregistrement des données");
         }
@@ -63,8 +62,8 @@ class PDOUserRepository implements UserRepositoryInterface {
             $stmt = $this->pdo_user->prepare("SELECT * FROM users WHERE email = :email");
             $stmt->execute(['email' => $email]);
             $user = $stmt->fetch(\PDO::FETCH_ASSOC);
-        } catch(HttpInternalServerErrorException){
-            throw new HttpInternalServerErrorException("Erreur lors de l'execution de la requête");
+        } catch(\PDOException $e){
+            throw new \Exception("Erreur lors de l'execution de la requête");
         } catch(\Throwable){
             throw new \Exception("Erreur lors de la reception du user");
         }

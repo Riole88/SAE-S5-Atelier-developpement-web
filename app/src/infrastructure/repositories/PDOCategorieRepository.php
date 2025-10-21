@@ -5,7 +5,6 @@ namespace charlymatloc\infra\repositories;
 use charlymatloc\core\domain\entities\outil\Categorie;
 use charlymatloc\infra\repositories\interface\CategorieRepositoryInterface;
 use PDO;
-use Slim\Exception\HttpInternalServerErrorException;
 use DI\NotFoundException;
 use charlymatloc\core\application\ports\spi\exceptions\EntityNotFoundException;
 
@@ -25,8 +24,8 @@ class PDOCategorieRepository implements CategorieRepositoryInterface {
             WHERE id = :id");
             $stmt->execute(['id' => $id]);
             $categorie = $stmt->fetch(PDO::FETCH_ASSOC);
-        } catch(HttpInternalServerErrorException){
-            throw new HttpInternalServerErrorException("Erreur lors de l'execution de la requête");
+        } catch(\PDOException $e){
+            throw new \Exception("Erreur lors de l'execution de la requête");
         } catch(\Throwable){
             throw new \Exception("Erreur lors de la reception de la categorie");
         }
@@ -52,8 +51,8 @@ class PDOCategorieRepository implements CategorieRepositoryInterface {
             FROM categorie");
             $stmt->execute(['id' => $id]);
             $categories = $stmt->fetchAll(PDO::FETCH_ASSOC);
-        } catch(HttpInternalServerErrorException){
-            throw new HttpInternalServerErrorException("Erreur lors de l'execution de la requête");
+        } catch(\PDOException $e){
+            throw new \Exception("Erreur lors de l'execution de la requête");
         } catch(\Throwable){
             throw new \Exception("Erreur lors de la reception des categories");
         }
