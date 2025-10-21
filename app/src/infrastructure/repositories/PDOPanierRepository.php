@@ -8,6 +8,7 @@ use charlymatloc\core\domain\exceptions\EntityNotFoundException;
 use charlymatloc\infra\repositories\interface\PanierRepositoryInterface;
 use PDO;
 use DI\NotFoundException;
+use Slim\Exception\HttpInternalServerErrorException;
 
 class PDOPanierRepository implements PanierRepositoryInterface {
 
@@ -15,30 +16,6 @@ class PDOPanierRepository implements PanierRepositoryInterface {
 
     public function __construct(PDO $pdo) {
         $this->panier_pdo = $pdo;
-    }
-
-    public function findPanierById(string $id): Panier{
-        try{
-        $stmt = $this->panier_pdo->prepare("SELECT * FROM panier WHERE id = :id");
-            $stmt->execute(['id' => $id]);
-            $panier = $stmt->fetch(PDO::FETCH_ASSOC);
-        } catch(\PDOException $e){
-            throw new \Exception("Erreur lors de l'execution de la requête");
-        } catch(\Throwable){
-            throw new \Exception("Erreur lors de la reception du panier");
-        }
-
-        if(!$panier){
-            throw new EntityNotFoundException("Panier avec l'id $id pas trouver");
-        }
-        return new Panier(
-            $panier["id"],
-            $panier["idUser"],
-            $panier["cree_par"],
-            $panier["cree_quand"],
-            $panier["modifie_par"],
-            $panier["modifie_quand"]
-        );
     }
 
     public function findAllPaniers(): array{
@@ -70,20 +47,18 @@ class PDOPanierRepository implements PanierRepositoryInterface {
 
     public function findPanierByOwnerId(string $userId) : Panier{
         try{
-        $stmt = $this->panier_pdo->prepare("SELECT * FROM panier WHERE idUser = :id");
-            $stmt->execute(['id' => $userId]);
-            $panier = $stmt->fetch(PDO::FETCH_ASSOC);
+            $panier = $this->panier_pdo->query("SELECT * FROM panier WHERE idUser = '$userId'")->fetch(PDO::FETCH_ASSOC);
         } catch(\PDOException $e){
-            throw new \Exception("Erreur lors de l'execution de la requête");
+            throw new \Exception("Erreur lors de l'execution de la requete.");
         } catch(\Throwable){
-            throw new \Exception("Erreur lors de la reception du panier");
+            throw new \Exception("Erreur lors de la reception du panier.");
         }
         if(!$panier){
-            throw new EntityNotFoundException("Panier avec l'id d'utilisateur $userId pas trouver");
+            throw new EntityNotFoundException("Panier avec l'id d'utilisateur $userId introuvable.");
         }
         return new Panier(
             $panier["id"],
-            $panier["idUser"],
+            $panier["iduser"],
             $panier["cree_par"],
             $panier["cree_quand"],
             $panier["modifie_par"],
@@ -99,8 +74,8 @@ class PDOPanierRepository implements PanierRepositoryInterface {
                                                         ON p.idoutil = o.id
                                                         WHERE p.idpanier = :id");
             $stmt->execute(['id' => $panierId]);
-            $outils = $stmt->fetch(PDO::FETCH_ASSOC);
-        } catch(\PDOException $e){
+            $outils = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        } catch(\PDOException $e) {
             throw new \Exception("Erreur lors de l'execution de la requête");
         } catch(\Throwable){
             throw new \Exception("Erreur lors de la reception des outils");

@@ -1,6 +1,6 @@
 <?php
 
-use charlymatloc\api\actions\PaniersAction;
+use charlymatloc\api\actions\PanierAction;
 use charlymatloc\api\actions\ReserverOutilAction;
 use charlymatloc\api\actions\OutilAction;
 use charlymatloc\core\application\usecases\interface\ServiceOutilInterface;
@@ -18,7 +18,7 @@ return [
     ReserverOutilAction::class => function (ContainerInterface $c) {
         return new ReserverOutilAction($c->get(ServicePanierInterface::class));
     },
-    PaniersAction::class => function (ContainerInterface $c) {
-        return new PaniersAction($c->get(ServicePanierInterface::class));
+    PanierAction::class => function (ContainerInterface $c) {
+        return new PanierAction($c->get(ServicePanierInterface::class));
     },
 ];

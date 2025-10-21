@@ -2,7 +2,7 @@
 declare(strict_types=1);
 
 use charlymatloc\api\middlewares\CorsMiddleware;
-use charlymatloc\api\actions\PaniersAction;
+use charlymatloc\api\actions\PanierAction;
 use charlymatloc\api\actions\ReserverOutilAction;
 use charlymatloc\api\middlewares\AjouterPanierValidationMiddleware;
 use Slim\App;
@@ -15,8 +15,7 @@ return function(App $app): App {
     //    GET
     $app->get('/outils', OutilsAction::class);
     $app->get('/outils/{id_outil}', OutilAction::class);
-//    $app->get('/paniers/{id_panier}', PanierAction::class);
-    $app->get('/paniers', PaniersAction::class);
+    $app->get('/paniers/{id_user}', PanierAction::class);
 
 
     //     POST
