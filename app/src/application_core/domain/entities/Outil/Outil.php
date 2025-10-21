@@ -6,16 +6,16 @@ use Faker\Core\Uuid;
 
 class Outil {
     public function __construct(
-        private UUID $id,
+        private Uuid $id,
         private string $nom,
         private string $desc,
         private string $image,
         private float $tarifJournalier,
         private int $quantite,
-        private UUID $idCat,
-        private UUID $creePar,
+        private Uuid $idCat,
+        private ?Uuid $creePar,
         private \DateTimeImmutable $creeQuand,
-        private UUID $modifiePar,
+        private ?Uuid $modifiePar,
         private \DateTimeImmutable $modifieQuand)
     {}
 
