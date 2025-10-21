@@ -55,7 +55,7 @@ class PDOCategorieRepository implements CategorieRepositoryInterface {
         } catch(HttpInternalServerErrorException){
             throw new HttpInternalServerErrorException("Erreur lors de l'execution de la requête");
         } catch(\Throwable){
-            throw new \Exception("Erreur lors de la reception de la categorie");
+            throw new \Exception("Erreur lors de la reception des categorieq");
         }
         if(!$categories){
             throw new NotFoundException("Pas de categories trouvees");
