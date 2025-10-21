@@ -7,14 +7,14 @@ use Faker\Core\Uuid;
 class ReservationOutil
 {
     public function __construct(
-        private Uuid $id,
-        private Uuid $idReservation,
-        private Uuid $idOutil,
+        private string $id,
+        private string $idReservation,
+        private string $idOutil,
         private int $quantite,
-        private ?Uuid $creePar,
-        private \DateTimeInterface $creeQuand,
-        private ?Uuid $modifiePar,
-        private \DateTimeInterface $modifieQuand
+        private ?string $creePar,
+        private string $creeQuand,
+        private ?string $modifiePar,
+        private string $modifieQuand
     ){}
 
     public function __get(string $name){

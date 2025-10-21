@@ -7,12 +7,12 @@ use Faker\Core\Uuid;
 class Panier
 {
     public function __construct(
-        private Uuid $id,
-        private Uuid $idUser,
-        private ?Uuid $creePar,
-        private \DateTimeInterface $creeQuand,
-        private ?Uuid $modifiePar,
-        private \DateTimeInterface $modifieQuand
+        private string $id,
+        private string $idUser,
+        private ?string $creePar,
+        private string $creeQuand,
+        private ?string $modifiePar,
+        private string $modifieQuand
     ){}
     public function __get(string $name){
         if(property_exists($this,$name)) {

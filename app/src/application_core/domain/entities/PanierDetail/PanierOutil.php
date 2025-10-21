@@ -7,15 +7,15 @@ use Faker\Core\Uuid;
 class PanierOutil
 {
     public function __construct(
-        private Uuid $id,
-        private Uuid $idPanier,
-        private Uuid $idOutil,
+        private string $id,
+        private string $idPanier,
+        private string $idOutil,
         private int $quantite,
-        private \DateTimeInterface $dateReservation,
-        private ?Uuid $creePar,
-        private \DateTimeInterface $creeQuand,
-        private ?Uuid $modifiePar,
-        private \DateTimeInterface $modifieQuand
+        private string $dateReservation,
+        private ?string $creePar,
+        private string $creeQuand,
+        private ?string $modifiePar,
+        private string $modifieQuand
     ){}
 
     public function __get(string $name){
