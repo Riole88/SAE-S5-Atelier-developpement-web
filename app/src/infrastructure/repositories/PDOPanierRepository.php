@@ -2,7 +2,7 @@
 
 namespace charlymatloc\infra\repositories;
 
-use charlymatloc\core\domain\entities\Panier\Panier;
+use charlymatloc\core\domain\entities\Utilisateur\Panier;
 use charlymatloc\infra\repositories\interface\PanierRepositoryInterface;
 use PDO;
 
@@ -30,12 +30,12 @@ class PDOPanierRepository implements PanierRepositoryInterface {
         );
     }
 
-    public function findAllOutils(): array{
+    public function findAllPaniers(): array{
         $stmt = $this->panier_pdo->query("SELECT * 
         FROM panier");
         $paniers = $stmt->fetchAll(PDO::FETCH_ASSOC);
         $res = [];
-        foreach ($outils as $outil) {
+        foreach ($paniers as $panier) {
             $res[] = new Panier(
                 $panier["id"],
                 $panier["idUser"],

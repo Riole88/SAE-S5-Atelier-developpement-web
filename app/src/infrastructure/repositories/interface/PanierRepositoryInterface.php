@@ -2,7 +2,7 @@
 
 namespace charlymatloc\infra\repositories\interface;
 
-use charlymatloc\core\domain\entities\Panier\Panier;
+use charlymatloc\core\domain\entities\Utilisateur\Panier;
 
 interface PanierRepositoryInterface {
     public function findPanierById(string $id): Panier;
