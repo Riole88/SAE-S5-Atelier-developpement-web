@@ -1,15 +1,15 @@
 <?php
 
 namespace charlymatloc\api\actions;
-use charlymatloc\core\application\usecases\interface\ServicePanierInterface;
+use charlymatloc\core\application\usecases\interface\ServiceOutilInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
 class OutilsAction {
-    private ServicePanierInterface $servicePanier;
+    private ServiceOutilInterface $serviceOutil;
 
-    public function __construct(ServicePanierInterface $servicePanier) {
-        $this->servicePanier = $servicePanier;
+    public function __construct(ServiceOutilInterface $serviceOutil) {
+        $this->serviceOutil = $serviceOutil;
     }
 
     /**
@@ -17,7 +17,7 @@ class OutilsAction {
      */
     public function __invoke(ServerRequestInterface $request, ResponseInterface $response, array $args): ResponseInterface {
 //        try {
-            $res = $this->servicePanier->getPaniers();
+            $res = $this->serviceOutil->getOutils();
             $response->getBody()->write(json_encode($res));
             return $response->withHeader("Content-Type", "application/json");
 //        } catch (\Exception) {
