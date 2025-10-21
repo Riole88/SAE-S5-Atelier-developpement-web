@@ -10,7 +10,7 @@ use Exception;
 use Faker\Core\Uuid;
 use PDO;
 use Slim\Exception\HttpInternalServerErrorException;
-
+use DI\NotFoundException;
 class PDOPanierRepository implements PanierRepositoryInterface {
 
     private PDO $panier_pdo;
@@ -20,11 +20,21 @@ class PDOPanierRepository implements PanierRepositoryInterface {
     }
 
     public function findPanierById(string $id): Panier{
+        try{
         $stmt = $this->panier_pdo->prepare("SELECT * 
-        FROM panier
-        WHERE id = :id");
-        $stmt->execute(['id' => $id]);
-        $panier = $stmt->fetch(PDO::FETCH_ASSOC);
+            FROM panier
+            WHERE id = :id");
+            $stmt->execute(['id' => $id]);
+            $panier = $stmt->fetch(PDO::FETCH_ASSOC);
+        } catch(HttpInternalServerErrorException){
+            throw new HttpInternalServerErrorException("Erreur lors de l'execution de la requête");
+        } catch(\Throwable){
+            throw new \Exception("Erreur lors de la reception du panier");
+        }
+
+        if(!$panier){
+            throw new EntityNotFoundException("Panier avec l'id $id pas trouver");
+        }
         return new Panier(
             $panier["id"],
             $panier["idUser"],
@@ -36,9 +46,18 @@ class PDOPanierRepository implements PanierRepositoryInterface {
     }
 
     public function findAllPaniers(): array{
-        $stmt = $this->panier_pdo->query("SELECT * 
-        FROM panier");
-        $paniers = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        try{
+            $stmt = $this->panier_pdo->query("SELECT * 
+            FROM panier");
+            $paniers = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        } catch(HttpInternalServerErrorException){
+            throw new HttpInternalServerErrorException("Erreur lors de l'execution de la requête");
+        } catch(\Throwable){
+            throw new \Exception("Erreur lors de la reception des paniers");
+        }
+        if(!$paniers){
+            throw new NotFoundException("Pas de paniers trouvees");
+        }
         $res = [];
         foreach ($paniers as $panier) {
             $res[] = new Panier(
@@ -52,6 +71,31 @@ class PDOPanierRepository implements PanierRepositoryInterface {
         }
 
         return $res;
+    }
+
+    public function findPanierByOwnerId(string $userId) : Panier{
+        try{
+        $stmt = $this->panier_pdo->prepare("SELECT * 
+            FROM panier
+            WHERE idUser = :id");
+            $stmt->execute(['id' => $userId]);
+            $panier = $stmt->fetch(PDO::FETCH_ASSOC);
+        } catch(HttpInternalServerErrorException){
+            throw new HttpInternalServerErrorException("Erreur lors de l'execution de la requête");
+        } catch(\Throwable){
+            throw new \Exception("Erreur lors de la reception du panier");
+        }
+        if(!$panier){
+            throw new EntityNotFoundException("Panier avec l'id d'utilisateur $userId pas trouver");
+        }
+        return new Panier(
+            $panier["id"],
+            $panier["idUser"],
+            $panier["cree_par"],
+            $panier["cree_quand"],
+            $panier["modifie_par"],
+            $panier["modifie_quand"]
+        );
     }
 
 

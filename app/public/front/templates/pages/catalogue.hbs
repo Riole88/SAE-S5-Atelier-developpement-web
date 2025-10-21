@@ -1,0 +1,17 @@
+{{> header}}
+
+{{#if erreur}}
+<p class="error">{{erreur}}</p>
+{{else}}
+<ul class="produits">
+    {{#each produits}}
+    <li>
+        <h3>{{nom}}</h3>
+        <p>{{description}}</p>
+        <button data-add-cart data-product-id="{{id}}">Ajouter au panier</button>
+    </li>
+    {{/each}}
+</ul>
+{{/if}}
+
+{{> footer}}

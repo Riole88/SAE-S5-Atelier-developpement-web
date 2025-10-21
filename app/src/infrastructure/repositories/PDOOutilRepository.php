@@ -5,6 +5,9 @@ namespace charlymatloc\infra\repositories;
 use charlymatloc\core\domain\entities\outil\Outil;
 use charlymatloc\infra\repositories\interface\OutilRepositoryInterface;
 use PDO;
+use Slim\Exception\HttpInternalServerErrorException;
+use DI\NotFoundException;
+use charlymatloc\core\application\ports\spi\exceptions\EntityNotFoundException;
 
 class PDOOutilRepository implements OutilRepositoryInterface {
 
@@ -15,9 +18,20 @@ class PDOOutilRepository implements OutilRepositoryInterface {
     }
 
     public function findOutilById(string $id): Outil{
-        $stmt = $this->outil_pdo->prepare("SELECT * FROM outil WHERE id = :id");
-        $stmt->execute(['id' => $id]);
-        $outil = $stmt->fetch(PDO::FETCH_ASSOC);
+        try{
+            $stmt = $this->outil_pdo->prepare("SELECT * FROM outil WHERE id = :id");
+            $stmt->execute(['id' => $id]);
+            $outil = $stmt->fetch(PDO::FETCH_ASSOC);
+        } catch(HttpInternalServerErrorException){
+            throw new HttpInternalServerErrorException("Erreur lors de l'execution de la requête");
+        } catch(\Throwable){
+            throw new \Exception("Erreur lors de la reception de l'outil");
+        }
+
+        if(!$outil){
+            throw new EntityNotFoundException("Outil avec l'id $id pas trouver");
+        }
+
         return new Outil(
             $outil["id"],
             $outil["nom"],
@@ -35,28 +49,33 @@ class PDOOutilRepository implements OutilRepositoryInterface {
 
     public function findAllOutils(): array
     {
-//        try {
+        try {
             $stmt = $this->outil_pdo->query("SELECT * FROM outil");
             $outils = $stmt->fetchAll(PDO::FETCH_ASSOC);
             $res = [];
-            foreach ($outils as $outil) {
-                $res[] = new Outil(
-                    $outil["id"],
-                    $outil["nom"],
-                    $outil["description"],
-                    $outil["image"],
-                    $outil["tarifjournalier"],
-                    $outil["quantitestock"],
-                    $outil["idcat"],
-                    $outil["cree_par"],
-                    $outil["cree_quand"],
-                    $outil["modifie_par"],
-                    $outil["modifie_quand"]
-                );
-            }
-//        } catch (\Throwable $e) {
-//            throw new Exception($e->getMessage());
-//        }
+        } catch(HttpInternalServerErrorException){
+            throw new HttpInternalServerErrorException("Erreur lors de l'execution de la requête");
+        } catch(\Throwable){
+            throw new \Exception("Erreur lors de la reception des outils");
+        }
+        if(!$outils){
+            throw new NotFoundException("Pas d'outils trouvees");
+        }
+        foreach ($outils as $outil) {
+            $res[] = new Outil(
+                $outil["id"],
+                $outil["nom"],
+                $outil["description"],
+                $outil["image"],
+                $outil["tarifjournalier"],
+                $outil["quantitestock"],
+                $outil["idcat"],
+                $outil["cree_par"],
+                $outil["cree_quand"],
+                $outil["modifie_par"],
+                $outil["modifie_quand"]
+            );
+        }
         return $res;
     }
 }
