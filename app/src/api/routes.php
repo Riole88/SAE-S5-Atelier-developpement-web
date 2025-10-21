@@ -1,6 +1,7 @@
 <?php
 declare(strict_types=1);
 
+use charlymatloc\api\middlewares\CorsMiddleware;
 use charlymatloc\api\actions\PaniersAction;
 use charlymatloc\api\actions\ReserverOutilAction;
 use charlymatloc\api\middlewares\AjouterPanierValidationMiddleware;
@@ -9,6 +10,7 @@ use charlymatloc\api\actions\OutilAction;
 use charlymatloc\api\actions\OutilsAction;
 
 return function(App $app): App {
+    $app->add(CorsMiddleware::class);
 
     //    GET
     $app->get('/outils', OutilsAction::class);

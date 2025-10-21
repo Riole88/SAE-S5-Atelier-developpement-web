@@ -45,11 +45,11 @@ class PDOUserRepository implements UserRepositoryInterface {
         );
     }
 
-    public function saveUser(User $user): void
+    public function saveUser(UserDTO $user): void
     {
         try{
-            $stmt = $this->pdo_user->prepare("INSERT INTO users (email, password, role) VALUES (:email, :password_hash)");
-            $stmt->execute(['email' => $user->email, 'password_hash' => $user->password_hash]);
+            $stmt = $this->pdo_user->prepare("INSERT INTO users (email, password) VALUES (:email, :password_hash)");
+            $stmt->execute(['email' => $user->email, 'password_hash' => $user->password]);
         } catch(HttpInternalServerErrorException){
             throw new HttpInternalServerErrorException("Erreur lors de l'execution de la requête");
         } catch(\Throwable){

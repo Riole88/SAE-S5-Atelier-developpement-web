@@ -8,6 +8,7 @@ interface PanierRepositoryInterface {
     public function findPanierById(string $id): Panier;
     public function findAllPaniers(): array;
     public function findPanierByOwnerId(string $userId) : Panier;
+    public function findAllOutilsByPanierId(string $panierId) : array;
     public function addToCart($dto);
     public function isDisponible($dto);
 }
