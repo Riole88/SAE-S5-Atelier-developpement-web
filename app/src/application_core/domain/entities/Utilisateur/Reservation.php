@@ -8,14 +8,14 @@ class Reservation
 {
     public function __construct(
         private string $id,
-        private string $idUser,
-        private string $dateDebut,
-        private string $dateFin,
+        private string $id_user,
+        private string $date_debut,
+        private string $date_fin,
         private string $statut,
-        private ?string $creePar,
-        private string $creeQuand,
-        private ?string $modifiePar,
-        private string $modifieQuand
+        private ?string $cree_par,
+        private string $cree_quand,
+        private ?string $modifie_par,
+        private string $modifie_quand
     ){}
 
     public function __get(string $name){

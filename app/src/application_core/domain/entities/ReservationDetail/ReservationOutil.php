@@ -8,13 +8,13 @@ class ReservationOutil
 {
     public function __construct(
         private string $id,
-        private string $idReservation,
-        private string $idOutil,
+        private string $id_reservation,
+        private string $id_outil,
         private int $quantite,
-        private ?string $creePar,
-        private string $creeQuand,
-        private ?string $modifiePar,
-        private string $modifieQuand
+        private ?string $cree_par,
+        private string $cree_quand,
+        private ?string $modifie_par,
+        private string $modifie_quand
     ){}
 
     public function __get(string $name){

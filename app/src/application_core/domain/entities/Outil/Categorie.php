@@ -10,28 +10,28 @@ class Categorie
     private string $nom;
     private ?string $description;
 
-    private ?string $creePar;
-    private ?DateTimeInterface $creeQuand;
-    private ?string $modifiePar;
-    private ?DateTimeInterface $modifieQuand;
+    private ?string $cree_par;
+    private ?string $cree_quand;
+    private ?string $modifie_par;
+    private ?string $modifie_quand;
 
     public function __construct(
         string             $id,
         string             $nom,
         ?string            $description = null,
         ?string            $creePar = null,
-        ?DateTimeInterface $creeQuand = null,
+        ?string $creeQuand = null,
         ?string            $modifiePar = null,
-        ?DateTimeInterface $modifieQuand = null
+        ?string $modifieQuand = null
     )
     {
         $this->id = $id;
         $this->nom = $nom;
         $this->description = $description;
-        $this->creePar = $creePar;
-        $this->creeQuand = $creeQuand;
-        $this->modifiePar = $modifiePar;
-        $this->modifieQuand = $modifieQuand;
+        $this->cree_par = $creePar;
+        $this->cree_quand = $creeQuand;
+        $this->modifie_par = $modifiePar;
+        $this->modifie_quand = $modifieQuand;
     }
 
     // --- Getters ---
@@ -52,22 +52,22 @@ class Categorie
 
     public function getCreePar(): ?string
     {
-        return $this->creePar;
+        return $this->cree_par;
     }
 
-    public function getCreeQuand(): ?DateTimeInterface
+    public function getCreeQuand(): ?string
     {
-        return $this->creeQuand;
+        return $this->cree_quand;
     }
 
     public function getModifiePar(): ?string
     {
-        return $this->modifiePar;
+        return $this->modifie_par;
     }
 
-    public function getModifieQuand(): ?DateTimeInterface
+    public function getModifieQuand(): ?string
     {
-        return $this->modifieQuand;
+        return $this->modifie_quand;
     }
 
     // --- Setters ---
@@ -83,11 +83,11 @@ class Categorie
 
     public function setModifiePar(?string $modifiePar): void
     {
-        $this->modifiePar = $modifiePar;
+        $this->modifie_par = $modifiePar;
     }
 
-    public function setModifieQuand(?DateTimeInterface $modifieQuand): void
+    public function setModifieQuand(?string $modifieQuand): void
     {
-        $this->modifieQuand = $modifieQuand;
+        $this->modifie_quand = $modifieQuand;
     }
 }

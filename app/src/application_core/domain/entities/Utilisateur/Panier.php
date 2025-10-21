@@ -8,11 +8,11 @@ class Panier
 {
     public function __construct(
         private string $id,
-        private string $idUser,
-        private ?string $creePar,
-        private string $creeQuand,
-        private ?string $modifiePar,
-        private string $modifieQuand
+        private string $id_user,
+        private ?string $cree_par,
+        private string $cree_quand,
+        private ?string $modifie_par,
+        private string $modifie_quand
     ){}
     public function __get(string $name){
         if(property_exists($this,$name)) {
