@@ -5,7 +5,7 @@ use charlymatloc\core\application\usecases\interface\ServicePanierInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
-class OutilsAction {
+class PaniersAction {
     private ServicePanierInterface $servicePanier;
 
     public function __construct(ServicePanierInterface $servicePanier) {

@@ -2,9 +2,14 @@
 
 namespace charlymatloc\infra\repositories;
 
+use charlymatloc\api\actions\ReserverOutilAction;
+use charlymatloc\core\domain\entities\PanierDetail\PanierOutil;
 use charlymatloc\core\domain\entities\Utilisateur\Panier;
 use charlymatloc\infra\repositories\interface\PanierRepositoryInterface;
+use Exception;
+use Faker\Core\Uuid;
 use PDO;
+use Slim\Exception\HttpInternalServerErrorException;
 
 class PDOPanierRepository implements PanierRepositoryInterface {
 
@@ -49,5 +54,70 @@ class PDOPanierRepository implements PanierRepositoryInterface {
         return $res;
     }
 
-    
+
+    public function addToCart($dto) {
+        try {
+            //on recupere l'id du panier grace a l'id user
+            $id_panier_row = $this->panier_pdo->query("SELECT id FROM panier WHERE iduser='$dto->id_user'")
+                                                ->fetch(PDO::FETCH_ASSOC);
+            $id_panier = $id_panier_row['id'];
+
+            //on insere l'outil dans le panier
+            $stmt = $this->panier_pdo->prepare("
+                INSERT INTO panier_outil (idpanier, idoutil, quantite, datereservation)
+                VALUES (:id_panier, :id_outil, :quantite, :date_reservation)
+            ");
+
+            $stmt->execute([
+                'id_panier' => $id_panier,
+                'id_outil' => $dto->id_outil,
+                'quantite' => $dto->quantite,
+                'date_reservation' => $dto->date_reservation
+            ]);
+
+            $stmt = $this->panier_pdo->prepare("
+                INSERT INTO panier_outil (idpanier, idoutil, quantite, datereservation)
+                VALUES (:id_panier, :id_outil, :quantite, :date_reservation)
+            ");
+
+            //on met a jour la quantite
+            $stmt2 = $this->panier_pdo->prepare("
+                UPDATE outil
+                SET quantitestock = quantitestock - :quantite
+                WHERE id = :id_outil
+                AND quantitestock >= :quantite
+            ");
+
+            $stmt2->execute([
+                'quantite' => $dto->quantite,
+                'id_outil' => $dto->id_outil
+            ]);
+
+        } catch (HttpInternalServerErrorException) {
+            //500
+            throw new Exception("Erreur lors de l'execution de la requete SQL.");
+        } catch(\Throwable $e) {
+            throw new Exception("Erreur lors de la création du rendez-vous.");
+        }
+    }
+
+    public function isDisponible($dto)
+    {
+        try {
+            $quantiteStock = $this->panier_pdo->query("SELECT outil.quantitestock FROM outil WHERE outil.id = '$dto->id_outil'")
+                                            ->fetch(PDO::FETCH_ASSOC);
+        } catch (HttpInternalServerErrorException) {
+            //500
+            throw new Exception("Erreur lors de l'execution de la requete SQL.");
+        } catch(\Throwable $e) {
+            throw new Exception("Erreur lors de la création du rendez-vous.");
+        }
+
+        if ($quantiteStock < 1) {
+            return false;
+        } else {
+            return true;
+        }
+
+    }
 }
