@@ -11,9 +11,9 @@ class PanierOutil
         private int $quantite,
         private string $date_reservation,
         private ?string $cree_par,
-        private string $cree_quand,
+        private ?string $cree_quand,
         private ?string $modifie_par,
-        private string $modifie_quand
+        private ?string $modifie_quand
     ){}
 
     public function __get(string $name){
