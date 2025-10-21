@@ -33,5 +33,9 @@ return [
     PanierRepositoryInterface::class => function (ContainerInterface $c) {
         return new PDOPanierRepository($c->get("charlymatloc.pdo"));
     },
+
+    CategorieRepositoryInterface::class => function (ContainerInterface $c) {
+        return new PDOCategorieRepository($c->get("charlymatloc.pdo"));
+    },
 ];
 
