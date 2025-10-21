@@ -3,11 +3,10 @@ namespace charlymatloc\infra\repositories;
 
 use charlymatloc\api\dto\UserDTO;
 use charlymatloc\core\domain\entities\user\User;
+use charlymatloc\core\domain\exceptions\EntityNotFoundException;
 use charlymatloc\infra\repositories\interface\UserRepositoryInterface;
 use PDO;
 use Slim\Exception\HttpInternalServerErrorException;
-use DI\NotFoundException;
-use charlymatloc\core\application\ports\spi\exceptions\EntityNotFoundException;
 
 class PDOUserRepository implements UserRepositoryInterface {
 
