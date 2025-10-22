@@ -1,36 +1,39 @@
 <?php
 
-namespace toubilib\core\application\usecases\auth;
+namespace charlymatloc\core\application\usecases\auth;
 
-use toubilib\api\dto\auth\AuthDTO;
-use toubilib\api\dto\auth\CredentialsDTO;
-use toubilib\core\application\ports\spi\repositoryInterfaces\AuthRepositoryInterface;
+use charlymatloc\api\dto\InputUserDTO;
+use charlymatloc\api\dto\auth\AuthDTO;
+use charlymatloc\api\dto\auth\CredentialsDTO;
+use charlymatloc\core\application\ports\spi\repositoryInterfaces\AuthRepositoryInterface;
+use charlymatloc\core\domain\exceptions\EntityNotFoundException;
+use charlymatloc\infra\repositories\interface\UserRepositoryInterface;
 
 class AuthnService implements AuthnServiceInterface
 {
-    public AuthRepositoryInterface $authRepository;
+    public UserRepositoryInterface $userRepository;
 
-    public function __construct(AuthRepositoryInterface $authRepository)
+    public function __construct(UserRepositoryInterface $userRepository)
     {
-        $this->authRepository = $authRepository;
+        $this->userRepository = $userRepository;
     }
 
     public function byCredentials(CredentialsDTO $credentials): AuthDTO
     {
         // Vérification des champs
-        if (empty($credentials->getEmail()) || empty($credentials->getPassword())) {
+        if (empty($credentials->email) || empty($credentials->password)) {
             throw new \InvalidArgumentException("Email et mot de passe sont requis.");
         }
 
         // Recherche de l'utilisateur par email
         try {
-            $user = $this->authRepository->getByEmail($credentials->getEmail());
-        } catch (\toubilib\core\application\ports\spi\exceptions\EntityNotFoundException $e) {
+            $user = $this->userRepository->findByEmail($credentials->email);
+        } catch (EntityNotFoundException $e) {
             throw new \RuntimeException("Utilisateur introuvable pour l'email fourni.");
         }
 
         // Vérification du mot de passe
-        if(!password_verify($credentials->getPassword(), $user->password)){
+        if(!password_verify($credentials->password, $user->password)){
             throw new \RuntimeException("Mot de passe incorrect.");
         }
 
@@ -43,9 +46,23 @@ class AuthnService implements AuthnServiceInterface
         );
     }
 
-    public function createUser(CredentialsDTO $credentials, int $role): string
-    {
-        // TODO: Implement createUser() method.
-        return "O";
+    public function register(InputUserDTO $userDto): array {
+        try {
+            $passwordhash = password_hash($userDto->password, PASSWORD_BCRYPT);
+            $credential = new CredentialsDTO($userDto->email, $passwordhash);
+
+            $this->userRepository->saveUser($credential);
+        } catch (\Exception $e) {
+            return [
+                'status' => $e->getCode(),
+                'success' => false,
+                "message" => $e->getMessage()
+            ];
+        }
+        return [
+            'status' => 201,
+            'success' => true,
+            "message" => "Outil ajoute au panier."
+        ];
     }
 }

@@ -1,12 +1,14 @@
 <?php
 namespace charlymatloc\infra\repositories;
 
+use charlymatloc\api\dto\auth\CredentialsDTO;
 use charlymatloc\api\dto\UserDTO;
 use charlymatloc\core\domain\entities\user\User;
 use charlymatloc\infra\repositories\interface\UserRepositoryInterface;
 use PDO;
 use DI\NotFoundException;
 use charlymatloc\core\application\ports\spi\exceptions\EntityNotFoundException;
+
 
 
 class PDOUserRepository implements UserRepositoryInterface {
@@ -45,15 +47,14 @@ class PDOUserRepository implements UserRepositoryInterface {
         );
     }
 
-    public function saveUser(UserDTO $user): void
+    public function saveUser(CredentialsDTO $cred): void
     {
         try{
-            $stmt = $this->pdo_user->prepare("INSERT INTO users (email, password) VALUES (:email, :password_hash)");
-            $stmt->execute(['email' => $user->email, 'password_hash' => $user->password]);
+        $this->pdo_user->query("INSERT INTO users (email, passwordhash) VALUES ('$cred->email', '$cred->password_hash')");
         } catch(\PDOException $e){
             throw new \Exception("Erreur lors de l'execution de la requête");
-        } catch(\Throwable){
-            throw new \Exception("Erreur lors de l'enregistrement des données");
+        } catch(\Throwable $e){
+            throw new \Exception($e->getMessage());
         }
     }
 
@@ -62,7 +63,7 @@ class PDOUserRepository implements UserRepositoryInterface {
         try{
             $stmt = $this->pdo_user->prepare("SELECT * FROM users WHERE email = :email");
             $stmt->execute(['email' => $email]);
-            $user = $stmt->fetch(\PDO::FETCH_ASSOC);
+
         } catch(\PDOException $e){
             throw new \Exception("Erreur lors de l'execution de la requête");
         } catch(\Throwable){

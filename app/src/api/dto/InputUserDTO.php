@@ -1,16 +1,12 @@
 <?php
+namespace charlymatloc\api\dto;
 
-namespace charlymatloc\api\dto\auth;
-
-class CredentialsDTO{
-
+class InputUserDTO{
     private string $email;
-    private string $password_hash;
-
-    public function __construct(string $email, string $password_hash)
-    {
-        $this->email = $email;
-        $this->password_hash = $password_hash;
+    private string $password;
+    public function __construct(array $data){
+        $this->email = $data['email'];
+        $this->password = $data['password'];
     }
 
     public function __get(string $name){

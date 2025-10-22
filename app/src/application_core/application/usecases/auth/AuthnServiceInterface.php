@@ -1,15 +1,17 @@
 <?php
 
-namespace toubilib\core\application\usecases\auth;
+namespace charlymatloc\core\application\usecases\auth;
 
+use charlymatloc\api\dto\InputUserDTO;
 use Faker\Core\Uuid;
-use toubilib\api\dto\auth\AuthDTO;
-use toubilib\api\dto\auth\CredentialsDTO;
+use charlymatloc\api\dto\auth\AuthDTO;
+use charlymatloc\api\dto\auth\CredentialsDTO;
 
 interface AuthnServiceInterface{
 
-    public function createUser(CredentialsDTO $credentials, int $role): string;
+    //public function createUser(CredentialsDTO $credentials, int $role): string;
 
     public function byCredentials(CredentialsDTO $credentials): AuthDTO;
 
+    public function register(InputUserDTO $userDto): array;
 }

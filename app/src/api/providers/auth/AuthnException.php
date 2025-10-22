@@ -1,6 +1,6 @@
 <?php
 
-namespace toubilib\api\providers\auth;
+namespace charlymatloc\api\providers\auth;
 
 class AuthnException extends \Exception
 {
