@@ -34,10 +34,11 @@
             <div class="produit-footer">
               <div class="produit-prix">
                 <span class="prix-label">Tarif journalier</span>
-                <span class="prix-montant">{{prix}} €/jour</span>
+                <div class="prix-stock-info">
+                    <span class="prix-montant">{{prix}} €/jour</span>
+                    <span class="stock">reste {{stock}}</span>
+                </div>
               </div>
-
-              {{!-- Les boutons ont été retirés, mais le footer conserve le style --}}
             </div>
           </div>
         </article>
