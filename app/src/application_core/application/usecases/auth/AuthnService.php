@@ -5,7 +5,6 @@ namespace charlymatloc\core\application\usecases\auth;
 use charlymatloc\api\dto\InputUserDTO;
 use charlymatloc\api\dto\auth\AuthDTO;
 use charlymatloc\api\dto\auth\CredentialsDTO;
-use charlymatloc\core\application\ports\spi\repositoryInterfaces\AuthRepositoryInterface;
 use charlymatloc\core\domain\exceptions\EntityNotFoundException;
 use charlymatloc\infra\repositories\interface\UserRepositoryInterface;
 
@@ -62,7 +61,7 @@ class AuthnService implements AuthnServiceInterface
         return [
             'status' => 201,
             'success' => true,
-            "message" => "Outil ajoute au panier."
+            "message" => "Utilisateur ajouté avec succés."
         ];
     }
 }
