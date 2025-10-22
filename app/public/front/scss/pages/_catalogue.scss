@@ -1,0 +1,119 @@
+// pages/_catalogue.scss
+
+@use '../var/variables' as *;
+@use '../var/mixins' as *;
+
+.page-catalogue {
+  min-height: 100vh;
+  background: $fond-page;
+}
+
+.container {
+  max-width: $largeur-max;
+  margin: 0 auto;
+  padding: $espace-lg;
+
+  @include desktop {
+    padding: $espace-xl;
+  }
+}
+
+.catalogue-header {
+  text-align: center;
+  margin-bottom: $espace-xl;
+
+  h1 {
+    font-size: $taille-titre;
+    color: $texte-principal;
+    margin-bottom: $espace-sm;
+
+    @include tablette {
+      font-size: 2.5rem;
+    }
+  }
+
+  .catalogue-info {
+    color: $texte-secondaire;
+    font-size: $taille-base;
+  }
+}
+
+.produits-grid {
+  @include grille-produits(1, 2, 3);
+}
+
+.produit-card {
+  background: $fond-carte;
+  border-radius: 0.5em;
+  overflow: hidden;
+  transition: box-shadow 0.3s, transform 0.3s;
+
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+  }
+}
+.produit-image-container {
+  position: relative;
+  background: $fond-jaune;
+  height: 200px;
+  overflow: hidden;
+
+
+
+  @include tablette {
+    height: 250px;
+  }
+}
+
+.produit-image {
+  overflow: hidden;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+
+.produit-content {
+  padding: $espace-md;
+}
+
+.produit-titre {
+  font-size: 1.3em;
+  color: $texte-principal;
+  margin: 0 0 $espace-xs 0;
+  font-weight: 600;
+}
+
+.produit-description {
+  color: $texte-secondaire;
+  font-size: 1em;
+  line-height: 1.5;
+  margin-bottom: $espace-md;
+}
+
+.produit-footer {
+  display: flex;
+  flex-direction: column;
+  gap: $espace-sm;
+  padding-top: $espace-sm;
+  border-top: 2px solid $fond-jaune;
+}
+
+.produit-prix {
+  .prix-label {
+    display: block;
+    font-size: 0.8rem;
+    color: $texte-secondaire;
+    text-transform: uppercase;
+    margin-bottom: 0.25rem;
+  }
+
+  .prix-montant {
+    font-size: 1.2em;
+    color: $texte-principal;
+    font-weight: 700;
+  }
+}
