@@ -19,11 +19,13 @@ class ServiceOutil implements ServiceOutilInterface {
      * @throws \Exception
      */
     public function getOutils(): array {
-//        try {
-        $outils = $this->outilRepository->findAllOutils();
-//        } catch (\Exception $e) {
-//            throw new \Exception($e->getMessage());
-//        }
+        try {
+            $outils = $this->outilRepository->findAllOutils();
+        } catch (EntityNotFoundException $e) {
+            throw new EntityNotFoundException($e->getEntity()." not found", $e->getEntity());
+        } catch (\Exception $e) {
+            throw new \Exception("probleme lors de la reception de l'outil.", $e->getCode());
+        }
 
         $res = [];
         foreach ($outils as $outil) {
@@ -49,13 +51,13 @@ class ServiceOutil implements ServiceOutilInterface {
      */
     public function getOutil(string $id): OutilDTO
     {
-//        try {
+        try {
             $outil = $this->outilRepository->findOutilById($id);
-//        } catch (EntityNotFoundException $e) {
-//            throw new EntityNotFoundException($e->getEntity()." not found", $e->getEntity());
-//        } catch (\Exception $e) {
-//            throw new \Exception("probleme lors de la reception du patient.", $e->getCode());
-//        }
+        } catch (EntityNotFoundException $e) {
+            throw new EntityNotFoundException($e->getEntity()." not found", $e->getEntity());
+        } catch (\Exception $e) {
+            throw new \Exception("probleme lors de la reception de l'outil.", $e->getCode());
+        }
 
         return new OutilDTO(
             $outil->id,

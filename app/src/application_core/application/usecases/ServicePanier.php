@@ -17,9 +17,21 @@ class ServicePanier implements ServicePanierInterface {
     }
 
     public function getPanier(string $id_user): array {
-        $panier_rec = $this->panierRepository->findPanierByOwnerId($id_user);
-        $paniers = $this->panierRepository->findAllOutilsByPanierId($panier_rec->id);
-
+        try{
+            $panier_rec = $this->panierRepository->findPanierByOwnerId($id_user);
+        } catch (EntityNotFoundException $e) {
+            throw new EntityNotFoundException($e->getEntity()." not found", $e->getEntity());
+        } catch (\Exception $e) {
+            throw new \Exception("probleme lors de la reception du panier.", $e->getCode());
+        }
+        try{
+            $paniers = $this->panierRepository->findAllOutilsByPanierId($panier_rec->id);
+        } catch (EntityNotFoundException $e) {
+            throw new EntityNotFoundException($e->getEntity()." not found", $e->getEntity());
+        } catch (\Exception $e) {
+            throw new \Exception("probleme lors de la reception du panier.", $e->getCode());
+        }
+        
         $outilsDTO = [];
         foreach ($paniers as $panier) {
             $outil = $panier['outil'];
