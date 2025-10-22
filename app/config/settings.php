@@ -1,6 +1,7 @@
 <?php
 
 use charlymatloc\infra\repositories\interface\OutilRepositoryInterface;
+use charlymatloc\infra\repositories\interface\UserRepositoryInterface;
 use charlymatloc\infra\repositories\PDOOutilRepository;
 use charlymatloc\infra\repositories\interface\PanierRepositoryInterface;
 use charlymatloc\infra\repositories\PDOPanierRepository;
@@ -8,6 +9,7 @@ use charlymatloc\infra\repositories\interface\CategorieRepositoryInterface;
 use charlymatloc\infra\repositories\PDOCategorieRepository;
 use charlymatloc\infra\repositories\interface\ReservationRepositoryInterface;
 use charlymatloc\infra\repositories\PDOReservationRepository;
+use charlymatloc\infra\repositories\PDOUserRepository;
 use Psr\Container\ContainerInterface;
 
 //use toubilib\infra\repositories\   ;
@@ -44,6 +46,9 @@ return [
 
     ReservationRepositoryInterface::class => function (ContainerInterface $c) {
         return new PDOReservationRepository($c->get("charlymatloc.pdo"));
+    },
+    UserRepositoryInterface::class => function(ContainerInterface $c) {
+        return new PDOUserRepository($c->get('charlymatloc.pdo'));
     },
 ];
 
