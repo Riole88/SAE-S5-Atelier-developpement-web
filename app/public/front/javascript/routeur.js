@@ -1,26 +1,55 @@
-// routeur.js
-const routes = {};
-
 const router = {
-    add: (path, controller) => {
-        routes[path] = controller;
-    },
-    init: () => {
-        // Écoute les changements de hash dans l'URL
-        window.addEventListener('hashchange', router.loadRoute);
+    routes: {},
 
-        // Charger la route initiale
-        router.loadRoute();
+    // ajouter une route au routuer
+    add(path, controller) {
+        this.routes[path] = controller;
     },
-    loadRoute: () => {
-        const path = location.hash.slice(1) || '/';
-        const controller = routes[path];
+
+    // Naviguer vers une route
+    goTo(path) {
+        // Changer le hash dans l'URL
+        window.location.hash = path;
+    },
+
+    // Charger la route actuelle
+    loadRoute() {
+        // Récupérer le hash (sans le #)
+        const hash = window.location.hash.slice(1) || '/';
+        const controller = this.routes[hash];
+
         if (controller) {
-            controller();
+            // Appeler la méthode pour afficher
+            controller.afficher();
         } else {
-            document.getElementById('app').innerHTML =
-                '<div class="error">Page non trouvée</div>';
+            console.error(`Route non trouvée: ${hash}`);
+            document.getElementById('app').innerHTML = `
+                <div class="error-container">
+                    <h1>404</h1>
+                    <h2>Page non trouvée</h2>
+                    <a href="#/" class="btn-primary">Retour à l'accueil</a>
+                </div>
+            `;
         }
+    },
+
+    // Initialiser le router
+    init() {
+        // on ecouteles changements de hash
+        window.addEventListener('hashchange', () => {
+            this.loadRoute();
+        });
+
+        // puis on intercepter les clics sur les liens
+        document.addEventListener('click', (e) => {
+            const link = e.target.closest('[data-link]');
+            if (link) {
+                e.preventDefault();
+                const href = link.getAttribute('href');
+                this.goTo(href);
+            }
+        });
+        this.loadRoute();
     }
 };
 
