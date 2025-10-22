@@ -15,7 +15,7 @@ const catalogueController = {
 
     async recupererDonnees() {
         try {
-            const response = await fetch('https://docketu.iutnc.univ-lorraine.fr:56197/outils');
+            const response = await fetch('http://docketu.iutnc.univ-lorraine.fr:56197/outils');
 
             const outils = await response.json();
 
@@ -24,7 +24,7 @@ const catalogueController = {
                 id: outil.id,
                 nom: outil.nom,
                 description: outil.desc,  // desc → description
-                image: `/assets/images/products/${outil.image}`,
+                image: `${outil.image}`,
                 prix: parseFloat(outil.tarif_journalier),
                 stock: parseInt(outil.quantite_stock),
                 disponible: parseInt(outil.quantite_stock) > 0

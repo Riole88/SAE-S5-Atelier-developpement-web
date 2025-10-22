@@ -4,14 +4,15 @@
     color: #333;
     padding: 2rem 1rem 1rem;
     border-top: 1px solid #e5e5e5;
-    font-size: 0.95rem;
+    font-size: 1rem;
+
 }
 
 .footer-container {
-    max-width: 1200px;
+    max-width: 80%;
     margin: 0 auto;
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(30%, 1fr));
     gap: 2rem;
 }
 
@@ -24,7 +25,7 @@
 
 .footer-section p {
     line-height: 1.5;
-    color: #555;
+    color: #5b5a5a;
 }
 
 .footer-section ul {
@@ -44,7 +45,7 @@
 }
 
 .footer-section a:hover {
-    color: #007bff;
+    color: #daa757;
 }
 
 .footer-bottom {
