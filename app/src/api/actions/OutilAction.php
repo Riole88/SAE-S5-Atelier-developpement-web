@@ -26,6 +26,8 @@ class OutilAction {
             return $response->withHeader("Content-Type", "application/json");
         } catch (\Exception) {
             throw new \Exception("Erreur lors de la récupération de l'outil.");
+        } catch(\Throwable $e){
+            throw new \Exception($e->getMessage());
         }
     }
 }

@@ -25,6 +25,8 @@ class PanierAction {
             $response->getBody()->write(json_encode($res));
             return $response->withHeader("Content-Type", "application/json");
         } catch (\Exception $e) {
+            throw new \Exception("Erreur lors de la récupération du panier.");
+        } catch(\Throwable $e){
             throw new \Exception($e->getMessage());
         }
     }

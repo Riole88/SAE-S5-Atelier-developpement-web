@@ -24,6 +24,8 @@ class RegisterAction {
             return $response->withHeader("Content-Type", "application/json");
 
         } catch (\Exception $e) {
+            throw new \Exception("Erreur lors de la création du compte.");
+        } catch(\Throwable $e){
             throw new \Exception($e->getMessage());
         }
     }

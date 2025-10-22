@@ -16,12 +16,14 @@ class OutilsAction {
      * @throws \Exception
      */
     public function __invoke(ServerRequestInterface $request, ResponseInterface $response, array $args): ResponseInterface {
-//        try {
+        try {
             $res = $this->serviceOutil->getOutils();
             $response->getBody()->write(json_encode($res));
             return $response->withHeader("Content-Type", "application/json");
-//        } catch (\Exception) {
-//            throw new \Exception("Erreur lors de la récupération de la liste des outils.");
-//        }
+        } catch (\Exception) {
+            throw new \Exception("Erreur lors de la récupération de la liste des outils.");
+        } catch(\Throwable $e){
+            throw new \Exception($e->getMessage());
+        }
     }
 }
