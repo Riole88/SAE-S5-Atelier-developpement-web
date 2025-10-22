@@ -1,6 +1,6 @@
 <?php
 
-namespace toubilib\api\dto\auth;
+namespace charlymatloc\api\dto\auth;
 
 use http\Encoding\Stream\Inflate;
 

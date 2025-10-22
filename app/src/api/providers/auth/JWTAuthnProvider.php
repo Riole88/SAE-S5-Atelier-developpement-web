@@ -1,11 +1,11 @@
 <?php
 
-namespace toubilib\api\providers\auth;
+namespace charlymatloc\api\providers\auth;
 
-use toubilib\api\dto\auth\AuthDTO;
-use toubilib\api\dto\auth\CredentialsDTO;
-use toubilib\api\providers\auth\AuthnProviderInterface;
-use toubilib\core\application\usecases\auth\AuthnServiceInterface;
+use charlymatloc\api\dto\auth\AuthDTO;
+use charlymatloc\api\dto\auth\CredentialsDTO;
+use charlymatloc\api\providers\auth\AuthnProviderInterface;
+use charlymatloc\core\application\usecases\auth\AuthnServiceInterface;
 
 class JWTAuthnProvider implements AuthnProviderInterface
 {
@@ -17,11 +17,6 @@ class JWTAuthnProvider implements AuthnProviderInterface
     {
         $this->authnService = $authnService;
         $this->jwtManager = new JWTManager();
-    }
-
-    public function register(CredentialsDTO $credentials, int $role): void
-    {
-        // TODO: Implement register() method.
     }
 
     public function signin(CredentialsDTO $credentials): AuthDTO
