@@ -22,7 +22,7 @@ class ReserverOutilAction {
             $panier_dto = $request->getAttribute('panier_dto') ?? null;
 
             if(is_null($panier_dto)) {
-                throw new Exception("Erreur récupération DTO de création d'un rendez-vous");
+                throw new \Exception("Erreur récupération DTO de création d'un rendez-vous");
             }
 
 //            $queryParams = $request->getQueryParams();
@@ -38,6 +38,8 @@ class ReserverOutilAction {
             $response->getBody()->write(json_encode($res));
             return $response->withHeader("Content-Type", "application/json");
         } catch (\Exception $e) {
+            throw new \Exception("Erreur lors de la réservation de l'outil.");
+        } catch(\Throwable $e){
             throw new \Exception($e->getMessage());
         }
     }
