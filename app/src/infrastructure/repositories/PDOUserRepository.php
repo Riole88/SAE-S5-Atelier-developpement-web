@@ -51,7 +51,7 @@ class PDOUserRepository implements UserRepositoryInterface {
         } catch(\PDOException $e){
             throw new \Exception("Erreur lors de l'execution de la requête");
         } catch(\Throwable $e){
-            throw new \Exception($e->getMessage());
+            throw new \Exception("Erreur lors de la sauvegarde d'un utilisateur");
         }
     }
 
