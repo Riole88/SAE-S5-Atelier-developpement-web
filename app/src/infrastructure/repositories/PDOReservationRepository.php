@@ -33,9 +33,9 @@ class PDOReservationRepository implements ReservationRepositoryInterface {
         }
         return new Reservation(
             $reservation["id"],
-            $reservation["iduser"],
-            $reservation["datedebut"],
-            $reservation["datefin"],
+            $reservation["id_user"],
+            $reservation["date_debut"],
+            $reservation["date_fin"],
             $reservation["statut"],
             $reservation["cree_par"],
             $reservation["cree_quand"],
@@ -60,9 +60,9 @@ class PDOReservationRepository implements ReservationRepositoryInterface {
         foreach ($reservations as $reservation) {
             $res[] = new Reservation(
                 $reservation["id"],
-                $reservation["iduser"],
-                $reservation["datedebut"],
-                $reservation["datefin"],
+                $reservation["id_user"],
+                $reservation["date_debut"],
+                $reservation["date_fin"],
                 $reservation["statut"],
                 $reservation["cree_par"],
                 $reservation["cree_quand"],
@@ -75,7 +75,7 @@ class PDOReservationRepository implements ReservationRepositoryInterface {
 
     public function saveReservation(Reservation $reservation): void{
         try{
-            $stmt = $this->reservation_pdo->prepare("INSERT INTO reservation (idUser, dateDebut, dateFin, statut) VALUES (:id_user, :date_debut, :date_fin, :statut)");
+            $stmt = $this->reservation_pdo->prepare("INSERT INTO reservation (id_user, date_debut, date_fin, statut) VALUES (:id_user, :date_debut, :date_fin, :statut)");
             $stmt->execute(['id_user' => $reservation->id_user, 'date_debut' => $reservation->date_debut, 'date_fin' => $reservation->date_fin, 'statut' => $reservation->statut]);
         } catch(\PDOException $e){
             throw new \Exception("Erreur lors de l'execution de la requête");
@@ -88,8 +88,8 @@ class PDOReservationRepository implements ReservationRepositoryInterface {
         try{
             $stmt = $this->reservation_pdo->prepare("SELECT r.quantite, o.* FROM reservation_outil r
                                                             JOIN outil o
-                                                            ON r.idoutil = o.id
-                                                            WHERE r.idreservation = :id");
+                                                            ON r.id_outil = o.id
+                                                            WHERE r.id_reservation = :id");
             $stmt->execute(['id' => $reservationId]);
             $outils = $stmt->fetch(PDO::FETCH_ASSOC);
         } catch(\PDOException $e){
@@ -108,9 +108,9 @@ class PDOReservationRepository implements ReservationRepositoryInterface {
                 $outil["nom"],
                 $outil["description"],
                 $outil["image"],
-                $outil["tarifjournalier"],
-                $outil["quantitestock"],
-                $outil["idcat"],
+                $outil["tarif_journalier"],
+                $outil["quantite_stock"],
+                $outil["id_cat"],
                 $outil["cree_par"],
                 $outil["cree_quand"],
                 $outil["modifie_par"],
