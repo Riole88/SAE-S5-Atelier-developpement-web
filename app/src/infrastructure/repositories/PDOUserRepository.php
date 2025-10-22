@@ -2,12 +2,11 @@
 namespace charlymatloc\infra\repositories;
 
 use charlymatloc\api\dto\auth\CredentialsDTO;
-use charlymatloc\api\dto\UserDTO;
 use charlymatloc\core\domain\entities\user\User;
+use charlymatloc\core\domain\exceptions\EntityNotFoundException;
 use charlymatloc\infra\repositories\interface\UserRepositoryInterface;
 use PDO;
 use DI\NotFoundException;
-use charlymatloc\core\application\ports\spi\exceptions\EntityNotFoundException;
 
 
 
@@ -22,9 +21,7 @@ class PDOUserRepository implements UserRepositoryInterface {
     public function findById(string $id): User
     {
         try{
-            $stmt = $this->pdo_user->prepare("SELECT * FROM users WHERE id = :id");
-            $stmt->execute(['id' => $id]);
-            $user = $stmt->fetch(\PDO::FETCH_ASSOC);
+            $user = $this->pdo_user->query("SELECT * FROM users WHERE id = '$id'")->fetch(\PDO::FETCH_ASSOC);
         } catch(\PDOException $e){
             throw new \Exception("Erreur lors de l'execution de la requête");
         } catch(\Throwable){
@@ -50,7 +47,7 @@ class PDOUserRepository implements UserRepositoryInterface {
     public function saveUser(CredentialsDTO $cred): void
     {
         try{
-        $this->pdo_user->query("INSERT INTO users (email, passwordhash) VALUES ('$cred->email', '$cred->password_hash')");
+        $this->pdo_user->query("INSERT INTO users (email, password_hash) VALUES ('$cred->email', '$cred->password_hash')");
         } catch(\PDOException $e){
             throw new \Exception("Erreur lors de l'execution de la requête");
         } catch(\Throwable $e){
@@ -61,9 +58,7 @@ class PDOUserRepository implements UserRepositoryInterface {
     public function findByEmail(string $email): User
     {
         try{
-            $stmt = $this->pdo_user->prepare("SELECT * FROM users WHERE email = :email");
-            $stmt->execute(['email' => $email]);
-
+            $user = $this->pdo_user->query("SELECT * FROM users WHERE email = '$email'")->fetch(PDO::FETCH_ASSOC);;
         } catch(\PDOException $e){
             throw new \Exception("Erreur lors de l'execution de la requête");
         } catch(\Throwable){
@@ -76,7 +71,7 @@ class PDOUserRepository implements UserRepositoryInterface {
         return new User(
             id: $user['id'],
             email: $user['email'],
-            password_hash: $user['passwordhash'],
+            password_hash: $user['password_hash'],
             role: $user['role'],
             cree_par: $user['cree_par'],
             cree_quand: $user['cree_quand'],
