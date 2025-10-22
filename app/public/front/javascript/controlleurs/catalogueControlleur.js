@@ -1,25 +1,23 @@
-// controllers/catalogueController.js - Version avec API
+// controllers/catalogueController.js - Version Hash Routing
+
+import router from '../routeur.js';
 
 const catalogueController = {
 
     async chargerTemplate() {
         const response = await fetch('templates/pages/catalogue.hbs');
+        if (!response.ok) {
+            throw new Error('Impossible de charger le template catalogue');
+        }
         const html = await response.text();
         return Handlebars.compile(html);
     },
 
     async recupererDonnees() {
         try {
-            const response = await fetch('http://localhost:6080/outils');
-
-            // Vérifier si la réponse est OK
-            if (!response.ok) {
-                throw new Error(`Erreur HTTP: ${response.status}`);
-            }
+            const response = await fetch('https://docketu.iutnc.univ-lorraine.fr:56197/outils');
 
             const outils = await response.json();
-
-            console.log('✅ Données reçues de l\'API:', outils);
 
             // 🎯 Mapper les données de l'API vers le format attendu par le template
             const produitsMappes = outils.map(outil => ({
@@ -39,12 +37,7 @@ const catalogueController = {
             };
 
         } catch (error) {
-            console.error('❌ Erreur lors de la récupération des données:', error);
-            return {
-                titre: 'Catalogue',
-                produits: [],
-                erreur: 'Impossible de charger les produits. Vérifiez que l\'API est démarrée.'
-            };
+            console.error('Erreur pendant la récupération des données:', error);
         }
     },
 
@@ -54,7 +47,7 @@ const catalogueController = {
         boutonsAjout.forEach(bouton => {
             bouton.addEventListener('click', (e) => {
                 const idProduit = e.target.dataset.productId;
-                this.ajouterAuPanier(idProduit);
+                //this.ajouterAuPanier(idProduit);
             });
         });
 
@@ -63,52 +56,43 @@ const catalogueController = {
         liensDetail.forEach(lien => {
             lien.addEventListener('click', (e) => {
                 e.preventDefault();
-                const idProduit = e.target.dataset.productId;
-                router.goTo(`/produit/${idProduit}`);
+                const idProduit = lien.dataset.productId;
+                router.goTo(`/detailOutil?id=${idProduit}`);
             });
         });
     },
 
-    async ajouterAuPanier(idProduit) {
-        try {
-            const response = await fetch('http://localhost:6080/panier/ajouter', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    outil_id: idProduit,
-                    quantite: 1
-                })
-            });
-
-            if (!response.ok) {
-                throw new Error('Erreur lors de l\'ajout au panier');
-            }
-
-            const data = await response.json();
-            console.log('✅ Produit ajouté au panier:', data);
-
-            this.afficherNotification('Produit ajouté au panier !', 'success');
-
-        } catch (error) {
-            console.error('❌ Erreur ajout au panier:', error);
-            this.afficherNotification('Erreur lors de l\'ajout au panier', 'error');
-        }
-    },
-
-    afficherNotification(message, type) {
-        // Créer une notification simple
-        const notification = document.createElement('div');
-        notification.className = `notification notification-${type}`;
-        notification.textContent = message;
-        document.body.appendChild(notification);
-
-        // Retirer après 2 secondes
-        setTimeout(() => {
-            notification.remove();
-        }, 2000);
-    },
+    // async ajouterAuPanier(idProduit) {
+    //     try {
+    //         const response = await fetch('http://localhost:6080/panier/ajouter', {
+    //             method: 'POST',
+    //             headers: {
+    //                 'Content-Type': 'application/json'
+    //             },
+    //             body: JSON.stringify({
+    //                 outil_id: idProduit,
+    //                 quantite: 1
+    //             })
+    //         });
+    //
+    //         if (!response.ok) {
+    //             throw new Error('Erreur lors de l\'ajout au panier');
+    //         }
+    //
+    //         const data = await response.json();
+    //         console.log('✅ Produit ajouté au panier:', data);
+    //
+    //         // Afficher notification de succès
+    //         this.afficherNotification('✓ Produit ajouté au panier !', 'success');
+    //
+    //         // Mettre à jour le badge du panier
+    //         this.mettreAJourBadgePanier();
+    //
+    //     } catch (error) {
+    //         console.error('❌ Erreur ajout au panier:', error);
+    //         this.afficherNotification('✗ Erreur lors de l\'ajout au panier', 'error');
+    //     }
+    // },
 
     async afficher() {
         const app = document.getElementById('app');
@@ -131,6 +115,7 @@ const catalogueController = {
             this.ajouterEvenements();
 
         } catch (error) {
+            console.error('Erreur lors de l\'affichage:', error);
             app.innerHTML = `
                 <div class="error-container">
                     <h2>Une erreur est survenue</h2>

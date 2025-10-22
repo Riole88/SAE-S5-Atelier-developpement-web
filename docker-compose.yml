@@ -18,6 +18,7 @@ services:
     depends_on:
       - charlymatloc.db
     command: sh -c "composer install && php -S 0.0.0.0:80 -t /var/php/public"
+    restart: always
 
   # service DB
   charlymatloc.db:
@@ -30,6 +31,8 @@ services:
     volumes:
       - ./sql:/docker-entrypoint-initdb.d
       - pgdata:/var/lib/postgresql/data
+    restart: always
+
   # administration de la base SQL
   adminer:
     image: adminer
@@ -37,6 +40,20 @@ services:
       - '8080:8080'
     networks:
       - charlymatloc.net
+    restart: unless-stopped
+
+    # service web pour afficher index.html
+  charlymatloc.web:
+    image: nginx:latest
+    ports:
+      - '7080:80'
+    volumes:
+      - ./app/public/front:/usr/share/nginx/html:ro
+    networks:
+      - charlymatloc.net
+    depends_on:
+      - api.charlymatloc
+    restart: always
 
 # déclaration du volume persistant
 volumes:

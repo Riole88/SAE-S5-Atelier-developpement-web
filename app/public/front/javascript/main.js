@@ -8,6 +8,7 @@ import loginController from "./controlleurs/loginControlleur.js";
 async function chargerComposants() {
     const composants = ['header', 'footer'];
 
+    //Charger chaque composants
     for (const nom of composants) {
         const response = await fetch(`templates/composants/${nom}.hbs`);
         if (!response.ok) {
@@ -23,12 +24,12 @@ async function demarrer() {
         await chargerComposants();
 
         // Définir les routes
-        router.add('/', () => catalogueController.afficher());
-        router.add('#/catalogue', () => catalogueController.afficher());
-        router.add('#/detailOutil', () => detailOutilController.afficher());
-        router.add('#/panier', () => panierController.afficher());
-        router.add('#/compte', () => compteController.afficher());
-        router.add('#/login', () => loginController.afficher());
+        router.add('/', catalogueController);
+        router.add('/catalogue', catalogueController);
+        router.add('/detailOutil', detailOutilController);
+        router.add('/panier', panierController);
+        router.add('/compte', compteController);
+        router.add('/login',loginController);
 
         // Démarrer le router
         router.init();
@@ -36,7 +37,7 @@ async function demarrer() {
     } catch (error) {
         console.error(error);
         document.getElementById('app').innerHTML =
-            '<div class="error">Erreur de chargement. Rechargez la page.</div>';
+            '<div class="error">Erreur : La page n\' a pas pu se charger.</div>';
     }
 }
 
