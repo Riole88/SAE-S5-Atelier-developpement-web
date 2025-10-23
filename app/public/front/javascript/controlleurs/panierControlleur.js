@@ -1,6 +1,6 @@
 // controllers/panierController.js
 
-import router from "../routeur";
+import router from "../routeur.js";
 
 const panierController = {
 

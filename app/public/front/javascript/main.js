@@ -26,7 +26,6 @@ async function demarrer() {
         // Définir les routes
         router.add('/', catalogueController);
         router.add('/catalogue', catalogueController);
-        router.add('/detailOutil', detailOutilController);
         router.add('/panier', panierController);
         router.add('/compte', compteController);
         router.add('/login',loginController);

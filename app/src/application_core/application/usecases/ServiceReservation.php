@@ -47,7 +47,7 @@ class ServiceReservation implements ServiceReservationInterface{
                     $outil->cree_quand ?? null,
                     $outil->modifie_par ?? null,
                     $outil->modifie_quand ?? null,
-                ), 'quantite' => $panier['quantite'] ?? null];
+                ), 'quantite' => $Res_outil['quantite'] ?? null];
             }
             $reservationsDTO[] = [ 'reservation' => new ReservationDTO(
                 $reservation->id,
