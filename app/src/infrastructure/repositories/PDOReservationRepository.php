@@ -7,7 +7,7 @@ use charlymatloc\core\domain\entities\Utilisateur\Reservation;
 use charlymatloc\infra\repositories\interface\ReservationRepositoryInterface;
 use PDO;
 use DI\NotFoundException;
-use charlymatloc\core\application\ports\spi\exceptions\EntityNotFoundException;
+use charlymatloc\core\domain\exceptions\EntityNotFoundException;
 
 class PDOReservationRepository implements ReservationRepositoryInterface {
 
@@ -91,14 +91,14 @@ class PDOReservationRepository implements ReservationRepositoryInterface {
                                                             ON r.id_outil = o.id
                                                             WHERE r.id_reservation = :id");
             $stmt->execute(['id' => $reservationId]);
-            $outils = $stmt->fetch(PDO::FETCH_ASSOC);
+            $outils = $stmt->fetchAll(PDO::FETCH_ASSOC);
         } catch(\PDOException $e){
             throw new \Exception("Erreur lors de l'execution de la requête");
         } catch(\Throwable){
             throw new \Exception("Erreur lors de la reception des outils");
         }
-        if(!$outils){
-            throw new EntityNotFoundException("outils de la reservation $reservationId pas trouver");
+        if(empty($outils)){
+            return [];
         }
 
         $res = [];
@@ -116,6 +116,39 @@ class PDOReservationRepository implements ReservationRepositoryInterface {
                 $outil["modifie_par"],
                 $outil["modifie_quand"]
             ), 'quantite' => $outil["quantite"]];
+        }
+        return $res;
+    }
+
+    public function findReservationsByOwnerId(string $ownerId) : array{
+        try{
+            $stmt = $this->reservation_pdo->prepare("SELECT * 
+            FROM reservation
+            WHERE id_user = :ownerId
+            AND statut IN ('en_attente', 'confirmee')");
+            $stmt->execute(['ownerId' => $ownerId]);
+            $reservations = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        } catch(\PDOException $e){
+            throw new \Exception("Erreur lors de l'execution de la requête");
+        } catch(\Throwable){
+            throw new \Exception("Erreur lors de la reception des reservations");
+        }
+        if(!$reservations){
+            throw new NotFoundException("Pas de reservations trouvees");
+        }
+        $res = [];
+        foreach ($reservations as $reservation) {
+            $res[] = new Reservation(
+                $reservation["id"],
+                $reservation["id_user"],
+                $reservation["date_debut"],
+                $reservation["date_fin"],
+                $reservation["statut"],
+                $reservation["cree_par"],
+                $reservation["cree_quand"],
+                $reservation["modifie_par"],
+                $reservation["modifie_quand"]
+            );
         }
         return $res;
     }
