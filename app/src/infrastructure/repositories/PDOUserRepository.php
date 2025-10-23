@@ -31,13 +31,13 @@ class PDOUserRepository implements UserRepositoryInterface {
         }
 
         if(!$user){
-            throw new EntityNotFoundException("User avec l'id $id pas trouver");
+            throw new EntityNotFoundException("User avec l'id $id pas trouvé");
         }
 
         return new User(
             id: $user['id'],
             email: $user['email'],
-            password_hash: $user['passwordhash'],
+            password_hash: $user['password_hash'],
             role: $user['role'],
             cree_par: $user['cree_par'],
             cree_quand: $user['cree_quand'],
@@ -48,13 +48,17 @@ class PDOUserRepository implements UserRepositoryInterface {
 
     public function saveUser(CredentialsDTO $cred): void
     {
-        try{
-            $stmt = $this->pdo_user->prepare("INSERT INTO users (email, password_hash) VALUES (:email, :password_hash)");
-            $stmt->execute(['email' => $cred->email, 'password_hash' => $cred->password_hash]);
-        } catch(\PDOException $e){
-            throw new \Exception("Erreur lors de l'execution de la requête");
-        } catch(\Throwable $e){
-            throw new \Exception("Erreur lors de la sauvegarde d'un utilisateur");
+        try {
+            // Le mot de passe est hashé dans le DTO
+            $stmt = $this->pdo_user->prepare(
+                "INSERT INTO users (email, password_hash) VALUES (:email, :password_hash)"
+            );
+            $stmt->execute([
+                'email' => $cred->email,
+                'password_hash' => $cred->password_hash
+            ]);
+        } catch(\PDOException $e) {
+            throw new \Exception("Erreur lors de la sauvegarde : " . $e->getMessage());
         }
     }
 
