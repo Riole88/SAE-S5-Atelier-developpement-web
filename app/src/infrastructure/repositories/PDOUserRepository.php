@@ -55,7 +55,7 @@ class PDOUserRepository implements UserRepositoryInterface {
             );
             $stmt->execute([
                 'email' => $cred->email,
-                'password_hash' => $cred->password_hash
+                'password_hash' => $cred->password
             ]);
         } catch(\PDOException $e) {
             throw new \Exception("Erreur lors de la sauvegarde : " . $e->getMessage());
