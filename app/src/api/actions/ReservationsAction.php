@@ -1,15 +1,15 @@
 <?php
 
 namespace charlymatloc\api\actions;
-use charlymatloc\core\application\usecases\interface\ServicePanierInterface;
+use charlymatloc\core\application\usecases\interface\ServiceReservationInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
-class PanierAction {
-    private ServicePanierInterface $servicePanier;
+class ReservationsAction {
+    private ServiceReservationInterface $serviceReservation;
 
-    public function __construct(ServicePanierInterface $servicePanier) {
-        $this->servicePanier = $servicePanier;
+    public function __construct(ServiceReservationInterface $serviceReservation) {
+        $this->serviceReservation = $serviceReservation;
     }
 
     /**
@@ -21,11 +21,11 @@ class PanierAction {
             if(empty($id_user)) {
                 throw new \Exception("Saisissez un id pour l'utilisateur");
             }
-            $res = $this->servicePanier->getPanier($id_user);
+            $res = $this->serviceReservation->getReservations($id_user);
             $response->getBody()->write(json_encode($res));
             return $response->withHeader("Content-Type", "application/json");
         } catch (\Exception $e) {
-            throw new \Exception("Erreur lors de la récupération du panier.");
+            throw new \Exception("Erreur lors de la recuperation des reservations : " . $e->getMessage());
         } catch(\Throwable $e){
             throw new \Exception($e->getMessage());
         }
