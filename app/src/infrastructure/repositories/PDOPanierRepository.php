@@ -124,19 +124,29 @@ class PDOPanierRepository implements PanierRepositoryInterface {
                 'date_reservation' => $dto->date_reservation
             ]);
 
+            //mise à jour de la quantite
+            $stmt2 = $this->panier_pdo->prepare('SELECT quantite_stock FROM outil WHERE id = :outilId');
+            $stmt2->execute(['outilId' => $dto->id_outil]);
+            $quantite_stock = $stmt2->fetch(PDO::FETCH_ASSOC);
+            $quantite = ((int)$quantite_stock['quantite_stock'] - (int)$dto->quantite);
+            $stmt3 = $this->panier_pdo->prepare('UPDATE outil
+            SET quantite_stock = :quantite 
+            WHERE id = :outilId');
+            $stmt3->execute(['quantite' => $quantite,'outilId' => $dto->id_outil]);
+
 
         } catch (HttpInternalServerErrorException) {
             //500
             throw new \Exception("Erreur lors de l'execution de la requete SQL.");
         } catch(\Throwable $e) {
-            throw new \Exception("Erreur lors de la création du rendez-vous.");
+            throw new \Exception("Erreur lors de la création du panier.");
         }
     }
 
     public function isDisponible($dto)
     {
         try {
-            $quantiteStock = $this->panier_pdo->query("SELECT outil.quantite_stock FROM outil WHERE outil.id = '$dto->id_outil'")
+            $quantiteStock = $this->panier_pdo->query("SELECT quantite_stock FROM outil WHERE outil.id = '$dto->id_outil'")
                                             ->fetch(PDO::FETCH_ASSOC);
         } catch (HttpInternalServerErrorException) {
             //500
@@ -145,7 +155,7 @@ class PDOPanierRepository implements PanierRepositoryInterface {
             throw new \Exception("Erreur lors de la création du rendez-vous.");
         }
 
-        if ($quantiteStock < $dto->quantite) {
+        if ($quantiteStock['quantite_stock'] < $dto->quantite) {
             return false;
         } else {
             return true;
