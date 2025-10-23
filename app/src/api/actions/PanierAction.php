@@ -19,7 +19,7 @@ class PanierAction {
         try {
             $id_user = $args['id_user'] ?? null;
             if(empty($id_user)) {
-                throw new \Exception("Saisissez un id pour l'outil");
+                throw new \Exception("Saisissez un id pour l'utilisateur");
             }
             $res = $this->servicePanier->getPanier($id_user);
             $response->getBody()->write(json_encode($res));
