@@ -21,7 +21,9 @@ class PDOUserRepository implements UserRepositoryInterface {
     public function findById(string $id): User
     {
         try{
-            $user = $this->pdo_user->query("SELECT * FROM users WHERE id = '$id'")->fetch(\PDO::FETCH_ASSOC);
+            $stmt = $this->pdo_user->prepare("SELECT * FROM users WHERE id = :id");
+            $stmt->execute(['id' => $id]);
+            $user = $stmt->fetch(\PDO::FETCH_ASSOC);
         } catch(\PDOException $e){
             throw new \Exception("Erreur lors de l'execution de la requête");
         } catch(\Throwable){
@@ -47,7 +49,8 @@ class PDOUserRepository implements UserRepositoryInterface {
     public function saveUser(CredentialsDTO $cred): void
     {
         try{
-        $this->pdo_user->query("INSERT INTO users (email, password_hash) VALUES ('$cred->email', '$cred->password_hash')");
+            $stmt = $this->pdo_user->prepare("INSERT INTO users (email, password_hash) VALUES (:email, :password_hash)");
+            $stmt->execute(['email' => $cred->email, 'password_hash' => $cred->password_hash]);
         } catch(\PDOException $e){
             throw new \Exception("Erreur lors de l'execution de la requête");
         } catch(\Throwable $e){
@@ -58,7 +61,9 @@ class PDOUserRepository implements UserRepositoryInterface {
     public function findByEmail(string $email): User
     {
         try{
-            $user = $this->pdo_user->query("SELECT * FROM users WHERE email = '$email'")->fetch(PDO::FETCH_ASSOC);;
+            $stmt = $this->pdo_user->prepare("SELECT * FROM users WHERE email = :email");
+            $stmt->execute(['email' => $email]);
+            $user = $stmt->fetch(\PDO::FETCH_ASSOC);
         } catch(\PDOException $e){
             throw new \Exception("Erreur lors de l'execution de la requête");
         } catch(\Throwable){
