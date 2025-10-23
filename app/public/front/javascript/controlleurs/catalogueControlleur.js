@@ -43,21 +43,26 @@ const catalogueController = {
 
     ajouterEvenements() {
         // Boutons "Ajouter au panier"
-        const boutonsAjout = document.querySelectorAll('[data-add-cart]');
-        boutonsAjout.forEach(bouton => {
-            bouton.addEventListener('click', (e) => {
-                const idProduit = e.target.dataset.productId;
-                //this.ajouterAuPanier(idProduit);
-            });
-        });
+        // const boutonsAjout = document.querySelectorAll('[data-add-cart]');
+        // boutonsAjout.forEach(bouton => {
+        //     bouton.addEventListener('click', (e) => {
+        //         const idProduit = e.target.dataset.productId;
+        //         //this.ajouterAuPanier(idProduit);
+        //     });
+        // });
 
         // Liens vers les détails des produits
-        const liensDetail = document.querySelectorAll('[data-product-detail]');
+        const liensDetail = document.querySelectorAll('.produit-card');
         liensDetail.forEach(lien => {
             lien.addEventListener('click', (e) => {
                 e.preventDefault();
-                const idProduit = lien.dataset.productId;
-                router.goTo(`/detailOutil?id=${idProduit}`);
+                const productId = lien.dataset.productId;
+                if (!productId) {
+                    console.error('Aucun ID produit trouvé sur cette carte.');
+                    return;
+                }
+                router.add(`/detailOutil/${productId}`, detailOutilControlleur)
+                router.goTo(`/detailOutil/${productId}`);
             });
         });
     },
