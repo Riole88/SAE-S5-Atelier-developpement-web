@@ -35,7 +35,7 @@ class ServicePanier implements ServicePanierInterface {
         $outilsDTO = [];
         foreach ($paniers as $panier) {
             $outil = $panier['outil'];
-            $outilsDTO[] = new OutilDTO(
+            $outilsDTO[] = [ 'outil' => new OutilDTO(
                 $outil->id,
                 $outil->nom,
                 $outil->description ?? null,
@@ -47,8 +47,7 @@ class ServicePanier implements ServicePanierInterface {
                 $outil->cree_quand ?? null,
                 $outil->modifie_par ?? null,
                 $outil->modifie_quand ?? null,
-                $panier['quantite'] ?? null
-            );
+            ), 'quantite' => $panier['quantite'] ?? null];
         }
 
         return [

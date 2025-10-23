@@ -4,9 +4,11 @@ use charlymatloc\api\actions\PanierAction;
 use charlymatloc\api\actions\RegisterAction;
 use charlymatloc\api\actions\ReserverOutilAction;
 use charlymatloc\api\actions\OutilAction;
+use charlymatloc\api\actions\ReservationsAction;
 use charlymatloc\core\application\usecases\auth\AuthnServiceInterface;
 use charlymatloc\core\application\usecases\interface\ServiceOutilInterface;
 use charlymatloc\core\application\usecases\interface\ServicePanierInterface;
+use charlymatloc\core\application\usecases\interface\ServiceReservationInterface;
 use Psr\Container\ContainerInterface;
 use charlymatloc\api\actions\OutilsAction;
 
@@ -25,5 +27,8 @@ return [
     },
     RegisterAction::class => function (ContainerInterface $c) {
         return new RegisterAction($c->get(AuthnServiceInterface::class));
-    }
+    },
+    ReservationsAction::class => function (ContainerInterface $c) {
+        return new ReservationsAction($c->get(ServiceReservationInterface::class));
+    },
 ];

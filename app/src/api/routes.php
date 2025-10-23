@@ -5,6 +5,7 @@ use charlymatloc\api\actions\RegisterAction;
 use charlymatloc\api\middlewares\CorsMiddleware;
 use charlymatloc\api\actions\PanierAction;
 use charlymatloc\api\actions\ReserverOutilAction;
+use charlymatloc\api\actions\ReservationsAction;
 use charlymatloc\api\middlewares\AjouterPanierValidationMiddleware;
 use charlymatloc\api\middlewares\EnregistrerUtilisateurMiddleware;
 use Slim\App;
@@ -18,6 +19,7 @@ return function(App $app): App {
     $app->get('/outils', OutilsAction::class);
     $app->get('/outils/{id_outil}', OutilAction::class);
     $app->get('/paniers/{id_user}', PanierAction::class);
+    $app->get('/reservations/{id_user}', ReservationsAction::class);
 
 
     //     POST

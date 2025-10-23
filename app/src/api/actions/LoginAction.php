@@ -19,12 +19,13 @@ class LoginAction
         try {
             $data = $request->getParsedBody();
             $email = $data['email'] ?? '';
-            $password_hash = $data['password'] ?? '';
+            $password = $data['password'] ?? '';
 
-            if (($email==='') OR ($password_hash==='')){
+            if (empty($email) OR empty($password)){
                 throw new \Exception("Email ou mot de passe non fourni");
             }
-            $credentials = new CredentialsDTO($data['email'], $data['password']);
+
+            $credentials = new CredentialsDTO($email, $password);
             $resLogIn = $this->authnProvider->signin($credentials);
 
             $authDTO = $resLogIn[0];
@@ -47,8 +48,10 @@ class LoginAction
 
 
         }catch (\Exception $e){
-            $response->getBody()->write($e->getMessage());
-            return $response->withStatus(400);
+            $response->getBody()->write(json_encode(['error' => $e->getMessage()]));
+            return $response
+                ->withHeader('Content-Type', 'application/json')
+                ->withStatus(400);
         }
 
     }
