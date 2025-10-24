@@ -1,5 +1,74 @@
 {{> header}}
 
-<h1> PANIER </h1>
+<div class="page-panier">
+    <main class="container">
+
+        <div class="panier-header">
+            <h1>{{titre}}</h1>
+            {{#if nombreArticles}}
+            <p class="panier-info">{{nombreArticles}} outil(s) dans le panier</p>
+            {{/if}}
+        </div>
+
+        {{!-- cas d'erreur --}}
+        {{#if erreur}}
+            <div class="alert alert-error">
+            <span>{{erreur}}</span>
+            </div>
+        {{/if}}
+
+        <div class="produits-panier-grid">
+            <div class="produits-panier">
+                {{#each articles}}
+                    <article class="produit-card {{#unless disponible}}indisponible{{/unless}}">
+
+                        <div class="produit-image-container">
+                            <img
+                            src="../front/assets/images/produits/{{image}}"
+                            alt="{{nom}}"
+                            class="produit-image">
+                        </div>
+
+                         <div class="produit-content">
+                            <h2 class="produit-titre">{{nom}}</h2>
+                            <p class="produit-description">{{description}}</p>
+                            <div class="produit-footer">
+                                <div class="produit-prix">
+                                    <span class="prix-label">Tarif journalier</span>
+                                    <div class="prix-stock-info">
+                                        <span class="prix-montant">{{prix}}€/jour</span>
+                                        <span class="stock">Quantite dans le panier : {{quantite}}</span>
+                                    </div>
+                                </div>
+                            </div>
+                         </div>
+                         <button data-minus data-item-id="{{id}}">-</button>
+                         <span>{{quantite}}</span>
+                         <button data-plus data-item-id="{{id}}">+</button>
+
+                    </article>
+                {{/each}}
+            </div>
+
+            <div class="total-panier">
+                <h2>Total du panier</h2>
+                <div class="total-panier-produits">
+                    {{#each articles}}
+                        <div class="unique-panier-produit">
+                            <p class="produit-titre-panier">{{nom}} : </p>
+                            <p class="produit-quantite-panier">x{{quantite}}</p>
+                        </div>
+                        <div class="unique-panier-produit">
+                            <p class="produit-prix-panier">Prix unité : {{prix}}€</p>
+                            <p class="produit-prix-panier">Prix total : {{prixQuantite}}€</p>
+                            <br>
+                        </div>
+                    {{/each}}
+                </div>
+                <h2 class="prix-panier">Prix total : {{total}}€</h2>
+            </div>
+        </div>
+    </main>
+</div>
 
 {{> footer}}
