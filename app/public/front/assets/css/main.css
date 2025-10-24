@@ -129,6 +129,89 @@
   display: flex;
 }
 
+.outil {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-bottom: 2rem;
+}
+
+.outil-image {
+  box-sizing: border-box;
+  width: 25%;
+}
+.outil-image img {
+  width: 100%;
+}
+@media screen and (min-width: 10em) and (max-width: 1024px) {
+  .outil-image {
+    width: 51%;
+  }
+}
+
+.outil-detail {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  padding-left: 1.5rem;
+  box-sizing: border-box;
+  width: 25%;
+}
+.outil-detail .outil-prix {
+  display: inline-block;
+  padding: 0.2rem;
+  background-color: #f6ed3b;
+}
+.outil-detail .outil-description {
+  padding-bottom: 1rem;
+  border-bottom: 0.2em solid #f6ed3b;
+}
+.outil-detail form {
+  display: flex;
+  flex-wrap: wrap;
+}
+.outil-detail form label {
+  width: 20%;
+  display: inline-block;
+  font-weight: bold;
+}
+.outil-detail form input[type=date] {
+  width: 70%;
+  display: inline-block;
+  background-color: white;
+  padding: 1rem 0.5rem 1rem 0.5rem;
+  border-radius: 5px;
+  border: 0.1em solid #6b7280;
+  margin-bottom: 1rem;
+}
+.outil-detail form .form-bas {
+  display: flex;
+  width: 100%;
+  justify-content: center;
+}
+.outil-detail form .form-bas #submit-outil {
+  background-color: #ffd73d;
+  color: #ffffff;
+  padding: 0.5rem 1rem 0.5rem 1rem;
+  font-weight: bold;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  font-size: 1em;
+  border: none;
+  border-radius: 5px;
+  margin-left: 1rem;
+}
+.outil-detail form .form-bas #submit-outil:hover {
+  filter: brightness(95%);
+  cursor: pointer;
+}
+@media screen and (min-width: 10em) and (max-width: 1024px) {
+  .outil-detail {
+    width: 51%;
+  }
+}
+
+.outil-nom {
+  text-align: center;
+}
+
 .site-footer {
   background-color: #f8f9fa;
   color: #333;

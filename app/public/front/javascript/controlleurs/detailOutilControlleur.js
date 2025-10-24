@@ -1,4 +1,4 @@
-const detailOutilController = {
+const detailOutilControlleur = {
 
     async chargerTemplate() {
         const response = await fetch('templates/pages/detailOutil.hbs');

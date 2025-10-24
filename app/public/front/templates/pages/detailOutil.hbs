@@ -1,14 +1,27 @@
 {{> header}}
 
-<h1> DETAIL OUTIL </h1>
-<img
-    src="../front/assets/images/produits/{{image}}"
-    alt="{{nom}}"
-    class="produit-image"><hr>
-<h3>{{nom}}</h1><hr><hr>
-<p>{{description}}</p><hr>
-<h1>Prix : {{prix}}</h1><hr>
-<h1>Stock : {{stock}}</h1><hr>
-<h1>Disponible : {{disponible}}</h1><hr>
+<h1 class="outil-nom">{{nom}}</h1>
+<div class="outil">
+    <div class="outil-image">
+        <img
+            src="../front/assets/images/produits/{{image}}"
+            alt="{{nom}}">
+    </div>
+    <div class="outil-detail">
+        <h3 class="outil-prix">{{prix}} €</h3>
+        <h3 class="outil-stock">Quantité restante : {{stock}}</h3>
+        <p class="outil-description">{{description}}</p>
+        <form>
+            <label for="date_debut">Du :</label>
+            <input type="date" id="date_debut">
+            <label for="date_fin">Au :</label>
+            <input type="date" id="date_fin">
+            <div class="form-bas">
+                <input type="number" value="1" min="1" max="{{stock}}">
+                <input type="submit" id="submit-outil" value="Ajouter au panier"/>
+            </div>
+        </form>
+    </div>
+</div>
 
 {{> footer}}

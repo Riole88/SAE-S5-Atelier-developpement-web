@@ -15,7 +15,7 @@ const router = {
     // Charger la route actuelle
     loadRoute() {
         const hash = window.location.hash.slice(1) || '/';
-        console.log(this.routes);
+
         // Routes exactes
         if (this.routes[hash]) {
             if (this.routes[hash].afficher.length > 0) {
