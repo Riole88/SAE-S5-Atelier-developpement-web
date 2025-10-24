@@ -1,6 +1,6 @@
 // controllers/panierController.js
 
-import router from "../routeur";
+import router from "../routeur.js";
 
 const panierController = {
 
@@ -15,21 +15,42 @@ const panierController = {
 
     async recupererDonnees() {
         try {
+            //
+            const idUser = localStorage.getItem("idUser");
             // Appel API pour récupérer le panier
-            const response = await fetch('http://localhost:6080/panier/.......');
+            const response = await fetch('http://localhost:6080/paniers/b12c59b7-9d2d-4e7c-9f84-cb39f9a1322f');
 
             if (!response.ok) {
                 throw new Error('Erreur lors de la récupération du panier');
             }
 
             const panier = await response.json();
+            const outils = panier[0].outils;
+
+            const articlesMappes = outils.map(item => ({
+                id: item.outil.id,
+                nom: item.outil.nom,
+                description: item.outil.desc,
+                image: `${item.outil.image}`,
+                prix: parseFloat(item.outil.tarif_journalier),
+                quantite: parseInt(item.quantite),
+                prixQuantite: (parseFloat(item.quantite) * parseFloat(item.outil.tarif_journalier))
+            }));
+            console.log(articlesMappes);
+
 
             console.log('✅ Panier récupéré:', panier);
 
+            const sommeTotale = articlesMappes.reduce((total, article) => {
+                return total + article.prix * article.quantite;
+            }, 0);
+            console.log(sommeTotale);
+
+
             return {
                 titre: 'Mon Panier',
-                articles: panier.articles || [],
-                total: panier.total || 0,
+                articles: articlesMappes,
+                total: sommeTotale,
                 nombreArticles: panier.articles ? panier.articles.length : 0
             };
 
