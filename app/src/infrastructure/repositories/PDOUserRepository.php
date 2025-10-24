@@ -4,6 +4,7 @@ namespace charlymatloc\infra\repositories;
 use charlymatloc\api\dto\auth\CredentialsDTO;
 use charlymatloc\core\domain\entities\user\User;
 use charlymatloc\core\domain\exceptions\EntityNotFoundException;
+use charlymatloc\infra\repositories\interface\PanierRepositoryInterface;
 use charlymatloc\infra\repositories\interface\UserRepositoryInterface;
 use PDO;
 use DI\NotFoundException;
@@ -13,9 +14,11 @@ use DI\NotFoundException;
 class PDOUserRepository implements UserRepositoryInterface {
 
     private PDO $pdo_user;
+    private PanierRepositoryInterface $panierRepository;
 
-    public function __construct(PDO $pdo){
+    public function __construct(PDO $pdo, PanierRepositoryInterface $panierRepository){
         $this->pdo_user = $pdo;
+        $this->panierRepository = $panierRepository;
     }
 
     public function findById(string $id): User
@@ -57,6 +60,10 @@ class PDOUserRepository implements UserRepositoryInterface {
                 'email' => $cred->email,
                 'password_hash' => $cred->password
             ]);
+
+            $user = $this->findByEmail($cred->email);
+            $this->panierRepository->save($user->id);
+
         } catch(\PDOException $e) {
             throw new \Exception("Erreur lors de la sauvegarde : " . $e->getMessage());
         }
