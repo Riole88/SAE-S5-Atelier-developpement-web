@@ -48,7 +48,7 @@ return [
         return new PDOReservationRepository($c->get("charlymatloc.pdo"));
     },
     UserRepositoryInterface::class => function(ContainerInterface $c) {
-        return new PDOUserRepository($c->get('charlymatloc.pdo'));
+        return new PDOUserRepository($c->get('charlymatloc.pdo'), $c->get(PanierRepositoryInterface::class));
     },
 ];
 

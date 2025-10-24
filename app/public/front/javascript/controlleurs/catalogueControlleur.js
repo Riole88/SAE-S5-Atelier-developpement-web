@@ -1,8 +1,12 @@
-// controllers/catalogueController.js - Version Hash Routing
+// controllers/catalogueController.js - Version avec filtre de recherche
 
 import router from '../routeur.js';
+import detailOutilControlleur from "./detailOutilControlleur.js";
 
 const catalogueController = {
+
+    // Stock des pour le filtrage
+    tousLesProduits: [],
 
     async chargerTemplate() {
         const response = await fetch('templates/pages/catalogue.hbs');
@@ -16,19 +20,21 @@ const catalogueController = {
     async recupererDonnees() {
         try {
             const response = await fetch('http://docketu.iutnc.univ-lorraine.fr:56197/outils');
-
             const outils = await response.json();
 
-            // 🎯 Mapper les données de l'API vers le format attendu par le template
+            //Mapper les données de l'api
             const produitsMappes = outils.map(outil => ({
                 id: outil.id,
                 nom: outil.nom,
-                description: outil.desc,  // desc → description
+                description: outil.desc,
                 image: `${outil.image}`,
                 prix: parseFloat(outil.tarif_journalier),
                 stock: parseInt(outil.quantite_stock),
                 disponible: parseInt(outil.quantite_stock) > 0
             }));
+
+            // 💾 Stocker tous les produits pour le filtrage
+            this.tousLesProduits = produitsMappes;
 
             return {
                 titre: 'Notre Catalogue d\'Outils',
@@ -38,20 +44,76 @@ const catalogueController = {
 
         } catch (error) {
             console.error('Erreur pendant la récupération des données:', error);
+            throw error;
         }
     },
 
-    ajouterEvenements() {
-        // Boutons "Ajouter au panier"
-        // const boutonsAjout = document.querySelectorAll('[data-add-cart]');
-        // boutonsAjout.forEach(bouton => {
-        //     bouton.addEventListener('click', (e) => {
-        //         const idProduit = e.target.dataset.productId;
-        //         //this.ajouterAuPanier(idProduit);
-        //     });
-        // });
+    // Filtrer les produits selon la recherche
+    filtrerProduits(recherche) {
+        if (!recherche || recherche.trim() === '') {
+            return this.tousLesProduits;
+        }
 
-        // Liens vers les détails des produits
+        const termeLowerCase = recherche.toLowerCase().trim();
+
+        return this.tousLesProduits.filter(outil =>
+            outil.nom.toLowerCase().includes(termeLowerCase)
+        );
+    },
+
+    // mettre à jour l'affichage avec les outils filtres
+    mettreAJourAffichage(produitsFiltres) {
+        const grid = document.querySelector('.produits-grid');
+        const infoElement = document.querySelector('.catalogue-info');
+
+        // Mettre à jour le compteur
+        if (infoElement) {
+            infoElement.textContent = `${produitsFiltres.length} outil(s) disponible(s)`;
+        }
+
+        // Si aucun résultat
+        if (produitsFiltres.length === 0) {
+            grid.innerHTML = `
+                <div class="no-results">
+                    <p>Aucun outil ne correspond à votre recherche.</p>
+                </div>
+            `;
+            return;
+        }
+
+        // Générer le HTML des produits filtrés
+        grid.innerHTML = produitsFiltres.map(produit => `
+            <article class="produit-card" data-product-id="${produit.id}">
+                <div class="produit-image-container">
+                    <img
+                        src="../front/assets/images/produits/${produit.image}"
+                        alt="${produit.nom}"
+                        class="produit-image">
+                </div>
+
+                <div class="produit-content">
+                    <h3 class="produit-titre">${produit.nom}</h3>
+                    <p class="produit-description">${produit.description}</p>
+
+                    <div class="produit-footer">
+                        <div class="produit-prix">
+                            <span class="prix-label">Tarif journalier</span>
+                            <div class="prix-stock-info">
+                                <span class="prix-montant">${produit.prix} €/jour</span>
+                                <span class="stock">reste ${produit.stock}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </article>
+        `).join('');
+
+        // Réattacher les événements sur les nouvelles cartes
+        this.attacherEvenementsCartes();
+    },
+
+    // événements de clic sur les cartes produits
+    attacherEvenementsCartes() {
         const liensDetail = document.querySelectorAll('.produit-card');
         liensDetail.forEach(lien => {
             lien.addEventListener('click', (e) => {
@@ -61,43 +123,26 @@ const catalogueController = {
                     console.error('Aucun ID produit trouvé sur cette carte.');
                     return;
                 }
-                router.add(`/detailOutil/${productId}`, detailOutilControlleur)
+                router.add(`/detailOutil/${productId}`, detailOutilControlleur);
                 router.goTo(`/detailOutil/${productId}`);
             });
         });
     },
 
-    // async ajouterAuPanier(idProduit) {
-    //     try {
-    //         const response = await fetch('http://localhost:6080/panier/ajouter', {
-    //             method: 'POST',
-    //             headers: {
-    //                 'Content-Type': 'application/json'
-    //             },
-    //             body: JSON.stringify({
-    //                 outil_id: idProduit,
-    //                 quantite: 1
-    //             })
-    //         });
-    //
-    //         if (!response.ok) {
-    //             throw new Error('Erreur lors de l\'ajout au panier');
-    //         }
-    //
-    //         const data = await response.json();
-    //         console.log('✅ Produit ajouté au panier:', data);
-    //
-    //         // Afficher notification de succès
-    //         this.afficherNotification('✓ Produit ajouté au panier !', 'success');
-    //
-    //         // Mettre à jour le badge du panier
-    //         this.mettreAJourBadgePanier();
-    //
-    //     } catch (error) {
-    //         console.error('❌ Erreur ajout au panier:', error);
-    //         this.afficherNotification('✗ Erreur lors de l\'ajout au panier', 'error');
-    //     }
-    // },
+    ajouterEvenements() {
+        // event de recherche dynamique
+        const searchBox = document.getElementById('search-box');
+        if (searchBox) {
+            searchBox.addEventListener('input', (e) => {
+                const recherche = e.target.value;
+                const produitsFiltres = this.filtrerProduits(recherche);
+                this.mettreAJourAffichage(produitsFiltres);
+            });
+        }
+
+        // Attacher les événements sur les cartes produits
+        this.attacherEvenementsCartes();
+    },
 
     async afficher() {
         const app = document.getElementById('app');

@@ -12,4 +12,5 @@ interface PanierRepositoryInterface {
     public function isDisponible($dto);
     public function removeFromCart(string $id_outil) : void;
     public function updateQuantityFromCart(string $id_outil, int $new_quantity) : void;
+    public function save(string $id_user) : void;
 }
