@@ -162,4 +162,68 @@ class PDOPanierRepository implements PanierRepositoryInterface {
         }
 
     }
+
+    public function removeFromCart(string $id_outil) : void{
+        try{
+            //recherche de la quantite mis dans le panier
+            $quantite_panier = $this->panier_pdo->query("SELECT quantite FROM panier_outil WHERE id_outil = '$id_outil'")
+                                            ->fetch(PDO::FETCH_ASSOC);
+            //recherche de la quantite en stock
+            $quantite_totale = $this->panier_pdo->query("SELECT quantite_stock FROM outil WHERE id = '$id_outil'")
+                                            ->fetch(PDO::FETCH_ASSOC);
+            // calcul de la nouvelle quantite en stock
+            $nouvelle_quantite = (int)$quantite_panier['quantite'] + (int)$quantite_totale['quantite_stock'];
+
+            //mise à jour de la quantite en stock
+            $stmt = $this->panier_pdo->prepare('UPDATE outil
+            SET quantite_stock = :quantite 
+            WHERE id = :id_outil');
+            $stmt->execute(['quantite' => $nouvelle_quantite,'id_outil' => $id_outil]);
+
+            //suppression de l'outil dans le panier
+            $stmt2 = $this->panier_pdo->query("DELETE FROM panier_outil WHERE id_outil = '$id_outil'");
+
+        } catch (HttpInternalServerErrorException) {
+            //500
+            throw new \Exception("Erreur lors de l'execution de la requete SQL.");
+        } catch(\Throwable $e) {
+            throw new \Exception("Erreur lors de la modification du panier.");
+        }
+    }
+
+    public function updateQuantityFromCart(string $id_outil, int $new_quantity) : void{
+        if($new_quantity = 0){
+            removeFromCart($id_outil);
+        } else {
+            try{
+                //recherche de la quantite en stock
+                $quantite_totale = $this->panier_pdo->query("SELECT quantite_stock FROM outil WHERE id = '$id_outil'")
+                                            ->fetch(PDO::FETCH_ASSOC);
+            
+                //recherche de la quantite mis dans le panier
+                $quantite_panier = $this->panier_pdo->query("SELECT quantite FROM panier_outil WHERE id_outil = '$id_outil'")
+                                            ->fetch(PDO::FETCH_ASSOC);
+            
+                //calcul de la difference entre la quantite actuelle et celle mis à jour
+                $difference_quantite = $new_quantity - (int)$quantite_panier['quantite'];
+            
+                // calcul de la nouvelle quantite en stock
+                $nouvelle_quantite = (int)$quantite_totale['quantite_stock'] - $difference_quantite;
+            
+                //mise à jour de la quantite en stock
+                $stmt = $this->panier_pdo->prepare('UPDATE outil
+                SET quantite_stock = :quantite 
+                WHERE id = :id_outil');
+                $stmt->execute(['quantite' => $nouvelle_quantite,'id_outil' => $id_outil]);
+
+                //mise à jour de la quantite dans panier_outil
+                $stmt2 = $this->panier_pdo->query("UPDATE panier_outil SET quantite = $new_quantity WHERE id_outil = '$id_outil'");
+            } catch (HttpInternalServerErrorException) {
+                //500
+                throw new \Exception("Erreur lors de l'execution de la requete SQL.");
+            } catch(\Throwable $e) {
+                throw new \Exception("Erreur lors de la modification du panier.");
+            }
+        }
+    }
 }
