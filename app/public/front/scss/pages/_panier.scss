@@ -1,0 +1,190 @@
+@use '../var/variables' as *;
+@use '../var/mixins' as *;
+
+.page-panier {
+  min-height: 100vh;
+  background: $fond-page;
+
+  .container {
+    max-width: $largeur-max;
+    margin: 0 auto;
+    padding: $espace-lg;
+
+    @include desktop {
+      padding: $espace-xl;
+    }
+  }
+
+  .panier-header {
+    text-align: center;
+    margin-bottom: $espace-xl;
+
+    h1 {
+      font-size: $taille-titre;
+      color: $texte-principal;
+      margin-bottom: $espace-sm;
+
+      @include tablette {
+        font-size: 2.5rem;
+      }
+    }
+
+    .panier-info {
+      color: $texte-secondaire;
+      font-size: $taille-base;
+    }
+  }
+
+  // ======= GRILLE PRINCIPALE =======
+  .produits-panier-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: $espace-xl;
+
+    @include tablette {
+      grid-template-columns: 2fr 1fr;
+    }
+  }
+
+  // ======= COLONNE ARTICLES =======
+  .produits-panier {
+    display: flex;
+    flex-direction: column;
+    gap: $espace-lg;
+  }
+
+  .produit-card {
+    background: $fond-carte;
+    border-radius: 0.5em;
+    overflow: hidden;
+    display: flex;
+    gap: $espace-md;
+    transition: box-shadow 0.3s, transform 0.3s;
+
+    &:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+    }
+  }
+
+  .produit-image-container {
+    flex: 0 0 150px;
+    background: $fond-jaune;
+    height: 150px;
+    overflow: hidden;
+    border-radius: 0.5em 0 0 0.5em;
+
+    @include tablette {
+      height: 200px;
+    }
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+  }
+
+  .produit-content {
+    flex: 1;
+    padding: $espace-md;
+
+    .produit-titre {
+      font-size: 1.3em;
+      color: $texte-principal;
+      margin-bottom: $espace-xs;
+      font-weight: 600;
+    }
+
+    .produit-description {
+      color: $texte-secondaire;
+      font-size: 1em;
+      line-height: 1.5;
+      margin-bottom: $espace-md;
+    }
+
+    .produit-footer {
+      display: flex;
+      flex-direction: column;
+      gap: $espace-sm;
+      padding-top: $espace-sm;
+      border-top: 2px solid $fond-jaune;
+
+      .prix-label {
+        display: block;
+        font-size: 0.8rem;
+        color: $texte-secondaire;
+        text-transform: uppercase;
+        margin-bottom: 0.25rem;
+      }
+
+      .prix-stock-info {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+
+        .prix-montant {
+          font-size: 1.2em;
+          color: $texte-principal;
+          font-weight: 700;
+        }
+
+        .stock {
+          font-size: 1em;
+          color: #338539;
+          font-weight: 700;
+        }
+      }
+    }
+  }
+
+  // ======= COLONNE RÉCAPITULATIF =======
+  .total-panier {
+    display: flex;
+    flex-direction: column;
+    background: $fond-carte;
+    border-radius: 0.5em;
+    padding: $espace-lg;
+    height: fit-content;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+
+    h3 {
+      color: $texte-principal;
+      margin-bottom: $espace-md;
+    }
+
+    .total-panier-produits {
+      margin-bottom: $espace-lg;
+
+      .unique-panier-produit{
+        display: flex;
+        justify-content: space-between;
+
+        p {
+          color: $texte-secondaire;
+          margin: $espace-xs 0;
+        }
+
+        .produit-titre-panier {
+          font-weight: 600;
+          color: $texte-principal;
+        }
+        .produit-prix-panier {
+          color: $texte-principal;
+        }
+        .produit-quantite-panier{
+          color: $texte-principal;
+        }
+      }
+    }
+
+    .prix-panier {
+      text-align: center;
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: $texte-principal;
+      border-top: 2px solid $fond-jaune;
+      padding-top: $espace-md;
+    }
+  }
+}
