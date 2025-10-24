@@ -5,6 +5,7 @@
 
     <div class="catalogue-header">
       <h1>{{titre}}</h1>
+      <input type="text" id="search-box" class="search-box" placeholder="Rechercher..." />
       {{#if nombreProduits}}
         <p class="catalogue-info">{{nombreProduits}} outil(s) disponible(s)</p>
       {{/if}}
@@ -19,7 +20,7 @@
 
     <div class="produits-grid">
       {{#each produits}}
-        <article class="produit-card {{#unless disponible}}indisponible{{/unless}}" data-product-id="{{id}}">
+        <article class="produit-card" data-product-id="{{id}}">
           <div class="produit-image-container">
             <img
               src="../front/assets/images/produits/{{image}}"
