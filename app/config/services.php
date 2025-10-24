@@ -1,5 +1,7 @@
 <?php
 
+use charlymatloc\api\providers\auth\AuthnProviderInterface;
+use charlymatloc\api\providers\auth\JWTAuthnProvider;
 use charlymatloc\core\application\usecases\auth\AuthnService;
 use charlymatloc\core\application\usecases\auth\AuthnServiceInterface;
 use charlymatloc\core\application\usecases\interface\ServiceOutilInterface;
@@ -12,7 +14,6 @@ use charlymatloc\infra\repositories\interface\OutilRepositoryInterface;
 use charlymatloc\infra\repositories\interface\PanierRepositoryInterface;
 use charlymatloc\infra\repositories\interface\UserRepositoryInterface;
 use charlymatloc\infra\repositories\interface\ReservationRepositoryInterface;
-use charlymatloc\infra\repositories\PDOOutilRepository;
 use Psr\Container\ContainerInterface;
 
 return [
@@ -28,6 +29,10 @@ return [
     },
     ServiceReservationInterface::class => function (ContainerInterface $c) {
         return new ServiceReservation($c->get(ReservationRepositoryInterface::class));
+    },
+
+    AuthnProviderInterface::class => function (ContainerInterface $c) {
+        return new JWTAuthnProvider($c->get(AuthnServiceInterface::class));
     },
 ];
 

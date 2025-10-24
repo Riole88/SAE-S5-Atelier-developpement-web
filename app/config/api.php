@@ -1,10 +1,12 @@
 <?php
 
+use charlymatloc\api\actions\LoginAction;
 use charlymatloc\api\actions\PanierAction;
 use charlymatloc\api\actions\RegisterAction;
 use charlymatloc\api\actions\ReserverOutilAction;
 use charlymatloc\api\actions\OutilAction;
 use charlymatloc\api\actions\ReservationsAction;
+use charlymatloc\api\providers\auth\AuthnProviderInterface;
 use charlymatloc\core\application\usecases\auth\AuthnServiceInterface;
 use charlymatloc\core\application\usecases\interface\ServiceOutilInterface;
 use charlymatloc\core\application\usecases\interface\ServicePanierInterface;
@@ -31,4 +33,10 @@ return [
     ReservationsAction::class => function (ContainerInterface $c) {
         return new ReservationsAction($c->get(ServiceReservationInterface::class));
     },
+
+    LoginAction::class => function (ContainerInterface $c) {
+        return new LoginAction($c->get(AuthnProviderInterface::class));
+    },
+
+
 ];

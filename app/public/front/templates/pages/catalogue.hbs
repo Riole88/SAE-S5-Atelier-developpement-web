@@ -19,7 +19,7 @@
 
     <div class="produits-grid">
       {{#each produits}}
-        <article class="produit-card {{#unless disponible}}indisponible{{/unless}}">
+        <article class="produit-card {{#unless disponible}}indisponible{{/unless}}" data-product-id="{{id}}">
           <div class="produit-image-container">
             <img
               src="../front/assets/images/produits/{{image}}"

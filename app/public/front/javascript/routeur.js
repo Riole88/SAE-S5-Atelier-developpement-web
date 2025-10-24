@@ -14,23 +14,32 @@ const router = {
 
     // Charger la route actuelle
     loadRoute() {
-        // Récupérer le hash (sans le #)
         const hash = window.location.hash.slice(1) || '/';
-        const controller = this.routes[hash];
-
-        if (controller) {
-            // Appeler la méthode pour afficher
-            controller.afficher();
-        } else {
-            console.error(`Route non trouvée: ${hash}`);
-            document.getElementById('app').innerHTML = `
-                <div class="error-container">
-                    <h1>404</h1>
-                    <h2>Page non trouvée</h2>
-                    <a href="#/" class="btn-primary">Retour à l'accueil</a>
-                </div>
-            `;
+        console.log(this.routes);
+        // Routes exactes
+        if (this.routes[hash]) {
+            if (this.routes[hash].afficher.length > 0) {
+                for (const path in this.routes) {
+                    if (path.startsWith('/detailOutil/')) {
+                        const id = hash.split('/')[2];
+                        this.routes[path].afficher(id);
+                    }
+                }
+            } else {
+                this.routes[hash].afficher();
+            }
+            return;
         }
+
+        // 404
+        console.error(`Route non trouvée: ${hash}`);
+        document.getElementById('app').innerHTML = `
+        <div class="error-container">
+            <h1>404</h1>
+            <h2>Page non trouvée</h2>
+            <a href="#/" class="btn-primary">Retour à l'accueil</a>
+        </div>
+    `;
     },
 
     // Initialiser le router

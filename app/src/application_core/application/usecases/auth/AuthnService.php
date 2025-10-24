@@ -20,19 +20,19 @@ class AuthnService implements AuthnServiceInterface
     public function byCredentials(CredentialsDTO $credentials): AuthDTO
     {
         // Vérification des champs
-        if (empty($credentials->email) || empty($credentials->password)) {
+        if (empty($credentials->getEmail()) || empty($credentials->getPassword())) {
             throw new \InvalidArgumentException("Email et mot de passe sont requis.");
         }
 
         // Recherche de l'utilisateur par email
         try {
-            $user = $this->userRepository->findByEmail($credentials->email);
+            $user = $this->userRepository->findByEmail($credentials->getEmail());
         } catch (EntityNotFoundException $e) {
             throw new \RuntimeException("Utilisateur introuvable pour l'email fourni.");
         }
 
         // Vérification du mot de passe
-        if(!password_verify($credentials->password, $user->password)){
+        if(!password_verify($credentials->getPassword(), $user->password_hash)){
             throw new \RuntimeException("Mot de passe incorrect.");
         }
 
