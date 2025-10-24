@@ -226,4 +226,16 @@ class PDOPanierRepository implements PanierRepositoryInterface {
             }
         }
     }
+
+    public function save(string $id_user): void
+    {
+        try {
+            $stmt = $this->panier_pdo->prepare('INSERT INTO panier (id_user) VALUES (:id_user)');
+            $stmt->execute([
+                'id_user' => $id_user
+            ]);
+        } catch(\PDOException $e) {
+            throw new \PDOException("Erreur lors de la sauvegarde : " . $e->getMessage());
+        }
+    }
 }
