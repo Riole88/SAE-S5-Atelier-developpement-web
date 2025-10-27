@@ -1,35 +1,27 @@
 import auth from '../services/auth.js';
 import router from '../routeur.js';
-const loginController = {
+const registerController = {
 
     async chargerTemplate() {
-        const response = await fetch('templates/pages/login.hbs');
+        const response = await fetch('templates/pages/register.hbs');
         const html = await response.text();
         return Handlebars.compile(html);
     },
     ajouterEvenements() {
         // Boutons submit
-        const formSubmit = document.querySelector('#connexion-form');
+        const formSubmit = document.querySelector('#register-form');
         if (formSubmit) {
             formSubmit.addEventListener("submit", (event) => {
                 event.preventDefault();
-                this.login(formSubmit)
-            });
-        }
-
-        const registerLink = document.querySelector('#lien-register');
-        if (registerLink) {
-            registerLink.addEventListener('click', (event) => {
-                event.preventDefault();
-                router.goTo('/register');
+                this.register(formSubmit)
             });
         }
     },
 
-    async login(formSubmit){
+    async register(formSubmit){
         try{
             const data = Object.fromEntries(new FormData(formSubmit).entries());
-            const response = await fetch('http://localhost:6080/login', {
+            const response = await fetch('http://localhost:6080/register', {
                 method: "POST",
                 headers: {
                     'Content-Type': 'application/json',
@@ -38,12 +30,13 @@ const loginController = {
                 mode: 'cors',
             });
 
-            let userData = await response.json();
+            const res = await response.json();
 
-            auth.setAuth(userData.payload, userData.profile);
-            router.goTo('/catalogue');
+            if (!res.success) {
+                throw new Error("Erreur lors de l'inscription");
+            }
 
-
+            router.goTo('/connexion');
         } catch(e){
             console.error(e);
         }
@@ -81,4 +74,4 @@ const loginController = {
     }
 }
 
-export default loginController;
+export default registerController;
