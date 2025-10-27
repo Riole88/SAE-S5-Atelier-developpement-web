@@ -1,9 +1,49 @@
+import auth from '../services/auth.js';
+import router from '../routeur.js';
 const loginController = {
 
     async chargerTemplate() {
         const response = await fetch('templates/pages/login.hbs');
         const html = await response.text();
         return Handlebars.compile(html);
+    },
+    ajouterEvenements() {
+        // Boutons submit
+        const formSubmit = document.querySelector('#connexion-form');
+        if (formSubmit) {
+            formSubmit.addEventListener("submit", (event) => {
+                event.preventDefault();
+                this.login(formSubmit)
+            });
+        }
+    },
+
+    async login(formSubmit){
+        try{
+            const data = Object.fromEntries(new FormData(formSubmit).entries());
+            const response = await fetch('http://localhost:6080/login', {
+                method: "POST",
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data),
+                mode: 'cors',
+            });
+
+            let userData = await response.json();
+
+            // 🔍 LOG pour debug
+            console.log('📦 Données reçues du backend:', userData);
+            console.log('📦 Structure payload:', userData.payload);
+            console.log('📦 Structure profile:', userData.profile);
+
+            auth.setAuth(userData.payload, userData.profile);
+            router.goTo('/catalogue');
+
+
+        } catch(e){
+            console.error(e);
+        }
     },
 
     async afficher() {
@@ -18,9 +58,8 @@ const loginController = {
 
         try {
             const template = await this.chargerTemplate();
-            const donnees = await this.recupererDonnees();
 
-            const html = template(donnees);
+            const html = template();
             app.innerHTML = html;
 
             this.ajouterEvenements();

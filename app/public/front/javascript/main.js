@@ -28,7 +28,7 @@ async function demarrer() {
         router.add('/catalogue', catalogueController);
         router.add('/panier', panierController);
         router.add('/compte', compteController);
-        router.add('/login',loginController);
+        router.add('/connexion',loginController);
 
         // Démarrer le router
         router.init();

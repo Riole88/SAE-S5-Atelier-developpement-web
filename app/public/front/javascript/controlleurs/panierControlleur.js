@@ -1,5 +1,5 @@
 // controllers/panierController.js
-
+import auth from '../services/auth.js';
 import router from "../routeur.js";
 
 const panierController = {
@@ -15,17 +15,39 @@ const panierController = {
 
     async recupererDonnees() {
         try {
-            //
-            const idUser = localStorage.getItem("idUser");
-            // Appel API pour récupérer le panier
-            const response = await fetch('http://localhost:6080/paniers/b12c59b7-9d2d-4e7c-9f84-cb39f9a1322f');
+            if (!auth.isAuthenticated()) {
+                router.goTo('/connexion');
+            }
+
+            const idUser = auth.getUserId();
+
+            const response = await fetch(`http://localhost:6080/paniers/${idUser}`, {
+                method: 'GET',
+                headers: auth.getAuthHeaders(),
+                mode: 'cors'
+            });
 
             if (!response.ok) {
+                if (response.status === 401) {
+                    auth.clearAuth();
+                    router.goTo('/login');
+                    throw new Error('Session expirée');
+                }
                 throw new Error('Erreur lors de la récupération du panier');
             }
 
             const panier = await response.json();
             const outils = panier[0].outils;
+
+            if (outils.length === 0){
+                return {
+                    titre: 'Mon Panier',
+                    articles: [],
+                    total: 0,
+                    nombreArticles: 0,
+                    erreur: 'Panier vide'
+                };
+            }
 
             const articlesMappes = outils.map(item => ({
                 id: item.outil.id,
