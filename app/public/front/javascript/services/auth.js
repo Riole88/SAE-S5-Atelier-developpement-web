@@ -10,21 +10,14 @@ class AuthManager {
         this.accessToken = payload.access_token;
         this.refreshToken = payload.refresh_token;
         this.userId = profile.id;
-
-        // 🔍 LOG pour debug
-        console.log('✅ Auth configuré:');
-        console.log('   - accessToken:', this.accessToken ? 'présent' : 'absent');
-        console.log('   - userId:', this.userId);
     }
 
     getUserId() {
-        console.log('🔍 getUserId appelé:', this.userId);
         return this.userId;
     }
 
     isAuthenticated() {
         const auth = this.accessToken !== null;
-        console.log('🔍 isAuthenticated:', auth);
         return auth;
     }
 
@@ -42,11 +35,6 @@ class AuthManager {
             'Content-Type': 'application/json',
             'Authorization': `Bearer ${this.accessToken}`
         };
-
-        // 🔍 LOG pour debug
-        console.log('🔍 Headers envoyés:', {
-            'Authorization': headers.Authorization.substring(0, 30) + '...'
-        });
 
         return headers;
     }

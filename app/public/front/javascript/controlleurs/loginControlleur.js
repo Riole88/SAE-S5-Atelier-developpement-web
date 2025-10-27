@@ -32,11 +32,6 @@ const loginController = {
 
             let userData = await response.json();
 
-            // 🔍 LOG pour debug
-            console.log('📦 Données reçues du backend:', userData);
-            console.log('📦 Structure payload:', userData.payload);
-            console.log('📦 Structure profile:', userData.profile);
-
             auth.setAuth(userData.payload, userData.profile);
             router.goTo('/catalogue');
 

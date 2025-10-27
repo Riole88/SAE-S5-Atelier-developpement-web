@@ -58,15 +58,11 @@ const panierController = {
                 quantite: parseInt(item.quantite),
                 prixQuantite: (parseFloat(item.quantite) * parseFloat(item.outil.tarif_journalier))
             }));
-            console.log(articlesMappes);
 
-
-            console.log('✅ Panier récupéré:', panier);
 
             const sommeTotale = articlesMappes.reduce((total, article) => {
                 return total + article.prix * article.quantite;
             }, 0);
-            console.log(sommeTotale);
 
 
             return {
