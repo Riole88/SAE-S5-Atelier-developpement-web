@@ -58,16 +58,16 @@ class AuthMiddleware
         }
 
         // on vérifie que la la structure du payload est correct
-        if (!isset($payload->sub, $payload->data->user, $payload->data->role)) {
+        if (!isset($payload->sub, $payload->data->id, $payload->data->email)) {
             throw new UnauthorizedException('Payload du token incomplet');
         }
 
         // créer le profil utilisateur
         try {
             $profile = new UserDTO(
-                id: $payload->sub,
-                email: $payload->data->user,
-                role: (int) $payload->data->role
+                id: (string) $payload->sub,
+                email: $payload->data->email,
+                role: (int) $payload->data->role ?? 0
             );
         } catch (\Exception $e) {
             throw new UnauthorizedException('Données utilisateur invalides');
