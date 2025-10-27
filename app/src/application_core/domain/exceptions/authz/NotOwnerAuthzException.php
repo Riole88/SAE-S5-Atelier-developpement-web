@@ -1,6 +1,6 @@
 <?php
 
-namespace toubilib\core\domain\exceptions\authz;
+namespace charlymatloc\core\domain\exceptions\authz;
 
 class NotOwnerAuthzException extends \Exception
 {
