@@ -16,34 +16,33 @@
 
         <div class="reservations-grid">
             {{#each reservations}}
-                <div id="produits-reservation">
-                        <p id="date-reservation">réservation du {{date_debut}} au {{date_fin}}</p>
+                <div class="produits-reservation">
+                        <p class="date-reservation">Réservation du {{date_debut}} au {{date_fin}}</p>
                     {{#each outils}}
-                        <article id="res-produit-card">
+                        <article class="res-produit-card">
 
-                            <div id="res-produit-image-container">
+                            <div class="res-produit-image-container">
                                 <img
                                 src="../front/assets/images/produits/{{image}}"
                                 alt="{{nom}}"
-                                id="res-produit-image">
+                                class="res-produit-image">
                             </div>
 
-                            <div id="res-produit-content">
-                                <h2 id="res-produit-titre">{{nom}}</h2>
-                                <p id="res-produit-description">{{description}}</p>
-                                <div id="res-produit-footer">
-                                    <div id="res-produit-prix">
-                                        <span id="res-prix-label">Tarif journalier</span>
-                                        <div id="res-prix-stock-info">
-                                            <span id="res-stock">Quantite réservée : {{quantite}}</span>
-                                            <span id="res-prix-montant">{{prix}}€/jour</span>
+                            <div class="res-produit-content">
+                                <h2 class="res-produit-titre">{{nom}}</h2>
+                                <p class="res-produit-description">{{description}}</p>
+                                <div class="res-produit-footer">
+                                    <div class="res-produit-prix">
+                                        <div class="res-prix-stock-info">
+                                            <span class="res-stock">Quantite réservée : {{quantite}}</span>
+                                            <span class="res-prix-montant">{{prix}}€/jour</span>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </article>
                     {{/each}}
-                    <p id="total-reservation">
+                    <p class="total-reservation">
                         Total de la reservation : {{totalReservation}} €
                     </p>
                 {{/each}}
