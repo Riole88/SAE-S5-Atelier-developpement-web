@@ -1,4 +1,6 @@
-
+import auth from '../services/auth.js';
+import router from "../routeur.js";
+import detailOutilControlleur from "./detailOutilControlleur.js";
 
 const reservationController = {
     async chargerTemplate() {
@@ -11,11 +13,13 @@ const reservationController = {
     },
     async recupererDonnees() {
         try {
-            //
-            const idUser = localStorage.getItem("id_user");
+            if (!auth.isAuthenticated()) {
+                router.goTo('/connexion');
+            }
+            
+            const idUser = auth.getUserId();
             // Appel API pour récupérer les réservations
-            //const response = await fetch(`http://localhost:6080/reservations/${idUser}`);
-            const response = await fetch(`http://localhost:6080/reservations/b12c59b7-9d2d-4e7c-9f84-cb39f9a1322f`);
+            const response = await fetch(`http://localhost:6080/reservations/${idUser}`);
             if (!response.ok) {
                 throw new Error('Erreur lors de la récupération des réservations');
             }
@@ -41,11 +45,6 @@ const reservationController = {
                     totalReservation: outilsMappes.reduce((total, o) => total + o.prixQuantite, 0)
                 }
             });
-            console.log(reservationsMappes);
-
-
-            console.log('Réservations récupérées:', reservations);
-
 
             return {
                 titre: 'Mes Reservations',
@@ -61,6 +60,25 @@ const reservationController = {
             };
         }
     },
+
+    // événements de clic sur les cartes produits
+    attacherEvenementsCartes() {
+        const liensDetail = document.querySelectorAll('.res-produit-card');
+        liensDetail.forEach(lien => {
+            lien.addEventListener('click', (e) => {
+                console.log('Carte trouvée:', lien.outerHTML);
+                e.preventDefault();
+                const productId = lien.dataset.productId;
+                if (!productId) {
+                    console.error('Aucun ID produit trouvé sur cette carte.');
+                    return;
+                }
+                router.add(`/detailOutil/${productId}`, detailOutilControlleur);
+                router.goTo(`/detailOutil/${productId}`);
+            });
+        });
+    },
+
     async afficher() {
         const app = document.getElementById('app');
 
@@ -78,8 +96,8 @@ const reservationController = {
 
             const html = template(donnees);
             app.innerHTML = html;
-
-            //this.ajouterEvenements();
+            console.log(app.innerHTML);
+            this.attacherEvenementsCartes();
 
         } catch (error) {
             console.error('erreur affichage réservations:', error);
