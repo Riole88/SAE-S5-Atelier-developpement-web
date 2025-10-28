@@ -43,12 +43,14 @@
   color: #daa757;
 }
 
-.navbar__cart {
-  display: flex;
-  align-items: center;
+.navbar__cart, .navbar__res {
   text-decoration: none;
   color: #333;
   position: relative;
+  transition: color 0.2s ease;
+  &:hover{
+    color: #daa757;
+  }
 }
 
 .navbar__cart-count {
@@ -60,4 +62,10 @@
   border-radius: 50%;
   font-size: 0.75rem;
   padding: 0.2rem 0.4rem;
+}
+
+.navbar__right {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem; 
 }
