@@ -12,6 +12,7 @@ const registerController = {
         const formSubmit = document.querySelector('#register-form');
         if (formSubmit) {
             formSubmit.addEventListener("submit", (event) => {
+                document.getElementById("after-submit").innerText = "Veuillez patienter";
                 event.preventDefault();
                 this.register(formSubmit)
             });

@@ -239,6 +239,54 @@ body {
   text-align: center;
 }
 
+.page-login {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.page-login .container {
+  text-align: center;
+}
+.page-login .login-header {
+  margin-bottom: 1.5rem;
+}
+.page-login input {
+  width: 50%;
+  padding: 0.6em;
+  font-size: 16px;
+  border: 2px solid #969696;
+  border-radius: 4px;
+  margin-bottom: 20px;
+}
+.page-login #after-submit {
+  color: red;
+  font-size: x-large;
+}
+
+.page-register {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.page-register .container {
+  text-align: center;
+}
+.page-register .register-header {
+  margin-bottom: 1.5rem;
+}
+.page-register input {
+  width: 50%;
+  padding: 0.6em;
+  font-size: 16px;
+  border: 2px solid #969696;
+  border-radius: 4px;
+  margin-bottom: 20px;
+}
+.page-register #after-submit {
+  color: red;
+  font-size: x-large;
+}
+
 .page-panier {
   min-height: 100vh;
   background: #ffffff;

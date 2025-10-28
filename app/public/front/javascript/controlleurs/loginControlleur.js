@@ -12,6 +12,7 @@ const loginController = {
         const formSubmit = document.querySelector('#connexion-form');
         if (formSubmit) {
             formSubmit.addEventListener("submit", (event) => {
+                document.getElementById("after-submit").innerText = "Veuillez patienter";
                 event.preventDefault();
                 this.login(formSubmit)
             });
