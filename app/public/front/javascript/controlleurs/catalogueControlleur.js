@@ -1,4 +1,4 @@
-// controllers/catalogueController.js - Version avec filtre de recherche
+// controllers/catalogueController.js - Version Hash Routing
 
 import router from '../routeur.js';
 import detailOutilControlleur from "./detailOutilControlleur.js";
