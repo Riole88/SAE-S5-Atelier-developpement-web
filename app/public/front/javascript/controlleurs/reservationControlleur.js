@@ -1,4 +1,6 @@
-
+import auth from '../services/auth.js';
+import router from "../routeur.js";
+import detailOutilControlleur from "./detailOutilControlleur.js";
 
 const reservationController = {
     async chargerTemplate() {
@@ -11,18 +13,39 @@ const reservationController = {
     },
     async recupererDonnees() {
         try {
-            //
-            const idUser = localStorage.getItem("id_user");
+            if (!auth.isAuthenticated()) {
+                router.goTo('/connexion');
+                return { 
+                    titre: 'Mes Réservations',
+                    reservations: [],
+                    erreur: 'Veuillez vous connecter pour voir vos réservations.'
+                };
+            }
+            
+            const idUser = auth.getUserId();
             // Appel API pour récupérer les réservations
-            //const response = await fetch(`http://localhost:6080/reservations/${idUser}`);
-            const response = await fetch(`http://localhost:6080/reservations/b12c59b7-9d2d-4e7c-9f84-cb39f9a1322f`);
+            const response = await fetch(`http://localhost:6080/reservations/${idUser}`,  {
+                            method: 'GET',
+                            headers: auth.getAuthHeaders(),
+                            mode: 'cors'
+                        });
             if (!response.ok) {
+                if (response.status === 401) {
+                    auth.clearAuth();
+                    router.goTo('/login');
+                    throw new Error('Session expirée');
+                }
                 throw new Error('Erreur lors de la récupération des réservations');
             }
 
             const reservations = await response.json();
+            console.log(reservations);
             const reservationsMappes = reservations.map(item=>{
                 const reservation = item.reservation;
+                const dateDebut = new Date(reservation.date_debut);
+                const dateFin = new Date(reservation.date_fin);
+                const diffTime = dateFin - dateDebut;
+                const nbJours = Math.ceil(diffTime / (1000 * 60 * 60 * 24)) + 1;
                 const outilsMappes = reservation.outils.map(outilItem => ({
                     id: outilItem.outil.id,
                     nom: outilItem.outil.nom,
@@ -30,7 +53,7 @@ const reservationController = {
                     image: `${outilItem.outil.image}`,
                     prix: parseFloat(outilItem.outil.tarif_journalier),
                     quantite: parseInt(outilItem.quantite),
-                    prixQuantite: (parseFloat(outilItem.quantite) * parseFloat(outilItem.outil.tarif_journalier))
+                    prixQuantite: (parseFloat(outilItem.quantite) * parseFloat(outilItem.outil.tarif_journalier)) * nbJours
                 }));
                 return {
                     id: reservation.id,
@@ -41,26 +64,39 @@ const reservationController = {
                     totalReservation: outilsMappes.reduce((total, o) => total + o.prixQuantite, 0)
                 }
             });
-            console.log(reservationsMappes);
-
-
-            console.log('Réservations récupérées:', reservations);
-
-
             return {
-                titre: 'Mes Reservations',
+                titre: 'Mes Réservations',
                 reservations: reservationsMappes,
             };
 
         } catch (error) {
+            console.log(error);
             // Retourner des réservations vide en cas d'erreur
             return {
-                titre: 'Mes Reservations',
+                titre: 'Mes Réservations',
                 reservations: [],
                 erreur: 'Impossible de charger l\'historique des réservations'
             };
         }
     },
+
+    // événements de clic sur les cartes produits
+    attacherEvenementsCartes() {
+        const liensDetail = document.querySelectorAll('.res-produit-card');
+        liensDetail.forEach(lien => {
+            lien.addEventListener('click', (e) => {
+                e.preventDefault();
+                const productId = lien.dataset.productId;
+                if (!productId) {
+                    console.error('Aucun ID produit trouvé sur cette carte.');
+                    return;
+                }
+                router.add(`/detailOutil/${productId}`, detailOutilControlleur);
+                router.goTo(`/detailOutil/${productId}`);
+            });
+        });
+    },
+
     async afficher() {
         const app = document.getElementById('app');
 
@@ -75,11 +111,9 @@ const reservationController = {
         try {
             const template = await this.chargerTemplate();
             const donnees = await this.recupererDonnees();
-
             const html = template(donnees);
             app.innerHTML = html;
-
-            //this.ajouterEvenements();
+            this.attacherEvenementsCartes();
 
         } catch (error) {
             console.error('erreur affichage réservations:', error);
