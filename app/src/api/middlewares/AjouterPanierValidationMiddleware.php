@@ -20,10 +20,24 @@ class AjouterPanierValidationMiddleware {
             ->getRoute()
             ->getArguments() ?? null;
 
-        $data = $request->getQueryParams();
-        $data["id_outil"] = $route_params["id_outil"];
+        $profile = $request->getAttribute('profile');
+        if (!$profile) {
+            throw new HttpBadRequestException($request, "Utilisateur non authentifié");
+        }
 
-        $data["quantite"] = intval($data["quantite"]);
+
+        $body = json_decode($request->getBody()->getContents(), true);
+
+        if (!$body) {
+            throw new HttpBadRequestException($request, "Corps de la requête invalide ou vide");
+        }
+
+        $data = [
+            'id_user' => $profile->id,
+            'id_outil' => $route_params["id_outil"] ?? null,
+            'quantite' => isset($body['quantite']) ? intval($body['quantite']) : null,
+            'date_reservation' => $body['date_reservation'] ?? null
+        ];
 
         try {
             v::key('id_user', v::stringType()->notEmpty())
@@ -42,8 +56,9 @@ class AjouterPanierValidationMiddleware {
             $data[$datetime] = urldecode($data[$datetime]);
             $date = DateTime::createFromFormat('Y-m-d H:i:s', $data[$datetime]);
             if (!$date || $date->format('Y-m-d H:i:s') !== $data[$datetime]) {
-                throw new HttpBadRequestException($request, "Le champ $datetime doit etre au format Y-m-d H:i:s");
+                throw new HttpBadRequestException($request, "Le champ $datetime doit etre au format Y-m-d H:i:s(ex: 2025-12-04)");
             }
+
         }
 
         $panierDTO = new InputPanierDTO($data);

@@ -30,7 +30,7 @@ const panierController = {
             if (!response.ok) {
                 if (response.status === 401) {
                     auth.clearAuth();
-                    router.goTo('/login');
+                    router.goTo('/connexion');
                     throw new Error('Session expirée');
                 }
                 throw new Error('Erreur lors de la récupération du panier');

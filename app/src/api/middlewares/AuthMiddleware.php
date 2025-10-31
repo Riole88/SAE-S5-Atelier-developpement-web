@@ -3,7 +3,7 @@
 namespace charlymatloc\api\middlewares;
 
 use charlymatloc\api\dto\auth\UserDTO;
-use charlymatloc\core\domain\exceptions\UnauthorizedException;
+use charlymatloc\core\domain\exceptions\authz\UnauthorizedException;
 use Firebase\JWT\BeforeValidException;
 use Firebase\JWT\ExpiredException;
 use Firebase\JWT\JWT;

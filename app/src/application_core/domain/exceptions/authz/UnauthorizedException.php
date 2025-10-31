@@ -1,6 +1,6 @@
 <?php
 
-namespace charlymatloc\core\domain\exceptions;
+namespace charlymatloc\core\domain\exceptions\authz;
 
 class UnauthorizedException extends \Exception
 {
