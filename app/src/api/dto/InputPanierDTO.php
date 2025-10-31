@@ -8,13 +8,15 @@ class InputPanierDTO {
     private string $id_user;
     private string $id_outil;
     private string $quantite;
-    private string $date_reservation;
+    private string $date_debut;
+    private string $date_fin;
 
     public function __construct(array $data) {
         $this->id_user = $data['id_user'];
         $this->id_outil = $data['id_outil'];
         $this->quantite = $data['quantite'];
-        $this->date_reservation = $data['date_reservation'];
+        $this->date_debut = $data['date_debut'];
+        $this->date_fin = $data['date_fin'];
     }
 
     /**
