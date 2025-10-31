@@ -49,19 +49,27 @@ const panierController = {
                 };
             }
 
-            const articlesMappes = outils.map(item => ({
-                id: item.outil.id,
-                nom: item.outil.nom,
-                description: item.outil.desc,
-                image: `${item.outil.image}`,
-                prix: parseFloat(item.outil.tarif_journalier),
-                quantite: parseInt(item.quantite),
-                prixQuantite: (parseFloat(item.quantite) * parseFloat(item.outil.tarif_journalier))
-            }));
+            const articlesMappes = outils.map(item => {
+                const dateDebut = new Date(item.date_debut);
+                const dateFin = new Date(item.date_fin);
+                const diffTime = dateFin - dateDebut;
+                const nbJours = Math.ceil(diffTime / (1000 * 60 * 60 * 24)) + 1;
+
+                return{
+                    id: item.outil.id,
+                    nom: item.outil.nom,
+                    description: item.outil.desc,
+                    image: `${item.outil.image}`,
+                    prix: parseFloat(item.outil.tarif_journalier),
+                    quantite: parseInt(item.quantite),
+                    prixQuantite: (parseFloat(item.quantite) * parseFloat(item.outil.tarif_journalier) * nbJours),
+                    date_debut: item.date_debut,
+                    date_fin: item.date_fin
+                }});
 
 
             const sommeTotale = articlesMappes.reduce((total, article) => {
-                return total + article.prix * article.quantite;
+                return total + article.prixQuantite;
             }, 0);
 
 
