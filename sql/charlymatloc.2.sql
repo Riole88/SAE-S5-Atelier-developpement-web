@@ -47,10 +47,10 @@ INSERT INTO panier (id, id_user) VALUES
 -- ===========================================
 -- PANIER_OUTIL
 -- ===========================================
-INSERT INTO panier_outil (id, id_panier, id_outil, quantite, date_reservation) VALUES
-('a1df6b1e-b25e-47cd-a0f5-b7f84b9e4151', '9be3a6c4-53df-4e5b-b0f2-4b7dbf1f4931', '48efb313-9e46-4cc5-bf53-1a7a3e9a5c04', 1, '2025-10-21'),
-('b4a9e7f8-29a1-4ad4-b9b7-0e7e416f5e34', '9be3a6c4-53df-4e5b-b0f2-4b7dbf1f4931', '79b5c6e9-1c5c-4de4-857a-3f29ad73a5e4', 1, '2025-10-22'),
-('c2b9d3e4-8d1f-4988-9b5b-4f3f8d92e981', 'a4c7e2d3-64f9-42e1-94c2-8154efc9cb87', 'a8f2a5e3-82f0-4d93-b0f7-f8e8e2c31f7a', 1, '2025-10-23');
+INSERT INTO "panier_outil" ("id", "id_panier", "id_outil", "quantite", "date_debut", "date_fin") VALUES
+('a1df6b1e-b25e-47cd-a0f5-b7f84b9e4151', '9be3a6c4-53df-4e5b-b0f2-4b7dbf1f4931', '48efb313-9e46-4cc5-bf53-1a7a3e9a5c04', 1, '2025-10-21', '2025-10-23'),
+('b4a9e7f8-29a1-4ad4-b9b7-0e7e416f5e34', '9be3a6c4-53df-4e5b-b0f2-4b7dbf1f4931', '79b5c6e9-1c5c-4de4-857a-3f29ad73a5e4', 1, '2025-10-22', '2025-10-24'),
+('c2b9d3e4-8d1f-4988-9b5b-4f3f8d92e981', 'a4c7e2d3-64f9-42e1-94c2-8154efc9cb87', 'a8f2a5e3-82f0-4d93-b0f7-f8e8e2c31f7a', 1, '2025-10-23', '2025-10-25');
 
 -- ===========================================
 -- RESERVATIONS
@@ -139,7 +139,8 @@ CREATE TABLE "panier_outil" (
     "id_panier" UUID REFERENCES "panier"("id") ON DELETE CASCADE,
     "id_outil" UUID REFERENCES "outil"("id") ON DELETE CASCADE,
     "quantite" INT NOT NULL DEFAULT 1,
-    "date_reservation" DATE NOT NULL,
+    "date_debut" DATE NOT NULL,
+    "date_fin" DATE NOT NULL,
     "cree_par" UUID,
     "cree_quand" TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     "modifie_par" UUID,
@@ -220,10 +221,10 @@ INSERT INTO "panier" ("id", "id_user") VALUES
 -- ===========================================
 -- PANIER_OUTIL
 -- ===========================================
-INSERT INTO "panier_outil" ("id", "id_panier", "id_outil", "quantite", "date_reservation") VALUES
-('a1df6b1e-b25e-47cd-a0f5-b7f84b9e4151', '9be3a6c4-53df-4e5b-b0f2-4b7dbf1f4931', '48efb313-9e46-4cc5-bf53-1a7a3e9a5c04', 1, '2025-10-21'),
-('b4a9e7f8-29a1-4ad4-b9b7-0e7e416f5e34', '9be3a6c4-53df-4e5b-b0f2-4b7dbf1f4931', '79b5c6e9-1c5c-4de4-857a-3f29ad73a5e4', 1, '2025-10-22'),
-('c2b9d3e4-8d1f-4988-9b5b-4f3f8d92e981', 'a4c7e2d3-64f9-42e1-94c2-8154efc9cb87', 'a8f2a5e3-82f0-4d93-b0f7-f8e8e2c31f7a', 1, '2025-10-23');
+INSERT INTO "panier_outil" ("id", "id_panier", "id_outil", "quantite", "date_debut", "date_fin") VALUES
+('a1df6b1e-b25e-47cd-a0f5-b7f84b9e4151', '9be3a6c4-53df-4e5b-b0f2-4b7dbf1f4931', '48efb313-9e46-4cc5-bf53-1a7a3e9a5c04', 1, '2025-10-21', '2025-10-23'),
+('b4a9e7f8-29a1-4ad4-b9b7-0e7e416f5e34', '9be3a6c4-53df-4e5b-b0f2-4b7dbf1f4931', '79b5c6e9-1c5c-4de4-857a-3f29ad73a5e4', 1, '2025-10-22', '2025-10-24'),
+('c2b9d3e4-8d1f-4988-9b5b-4f3f8d92e981', 'a4c7e2d3-64f9-42e1-94c2-8154efc9cb87', 'a8f2a5e3-82f0-4d93-b0f7-f8e8e2c31f7a', 1, '2025-10-23', '2025-10-25');
 
 -- ===========================================
 -- RESERVATIONS
