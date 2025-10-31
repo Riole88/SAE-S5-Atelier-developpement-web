@@ -10,7 +10,7 @@ class CorsMiddleware {
     public function __invoke(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
     {
         $origin = $request->hasHeader('Origin') ? $request->getHeaderLine('Origin') : '*';
-        $requestHeaders = $request->getHeaderLine('Access-Control-Request-Headers');
+        $requestHeaders = $request->getHeaderLine('Access-Control-Request-Headers') ?: 'X-Requested-With, Content-Type, Accept, Origin, Authorization';
         $method = $request->getMethod();
 
         if ($method === 'OPTIONS') {

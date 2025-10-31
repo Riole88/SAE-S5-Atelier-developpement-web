@@ -20,10 +20,24 @@ class AjouterPanierValidationMiddleware {
             ->getRoute()
             ->getArguments() ?? null;
 
-        $data = $request->getQueryParams();
-        $data["id_outil"] = $route_params["id_outil"];
+        $profile = $request->getAttribute('profile');
+        if (!$profile) {
+            throw new HttpBadRequestException($request, "Utilisateur non authentifié");
+        }
 
-        $data["quantite"] = intval($data["quantite"]);
+
+        $body = json_decode($request->getBody()->getContents(), true);
+
+        if (!$body) {
+            throw new HttpBadRequestException($request, "Corps de la requête invalide ou vide");
+        }
+
+        $data = [
+            'id_user' => $profile->id,
+            'id_outil' => $route_params["id_outil"] ?? null,
+            'quantite' => isset($body['quantite']) ? intval($body['quantite']) : null,
+            'date_reservation' => $body['date_reservation'] ?? null
+        ];
 
         try {
             v::key('id_user', v::stringType()->notEmpty())
@@ -38,12 +52,10 @@ class AjouterPanierValidationMiddleware {
 
         //vérification format des datetime
         //foreach (['date_heure_debut', 'date_heure_fin'] as $datetime) {
-        foreach (['date_reservation'] as $datetime) {
-            $data[$datetime] = urldecode($data[$datetime]);
-            $date = DateTime::createFromFormat('Y-m-d H:i:s', $data[$datetime]);
-            if (!$date || $date->format('Y-m-d H:i:s') !== $data[$datetime]) {
-                throw new HttpBadRequestException($request, "Le champ $datetime doit etre au format Y-m-d H:i:s");
-            }
+        $data['date_reservation'] = urldecode($data['date_reservation']);
+        $date = DateTime::createFromFormat('Y-m-d', $data['date_reservation']);
+        if (!$date || $date->format('Y-m-d') !== $data['date_reservation']) {
+            throw new HttpBadRequestException($request, "Le champ date_reservation doit être au format Y-m-d H:i:s(ex: 2025-12-04)");
         }
 
         $panierDTO = new InputPanierDTO($data);
