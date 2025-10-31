@@ -2,7 +2,6 @@ import router from './routeur.js';
 import catalogueController from './controlleurs/catalogueControlleur.js';
 import panierController from "./controlleurs/panierControlleur.js";
 import compteController from "./controlleurs/compteControlleur.js";
-import detailOutilController from "./controlleurs/detailOutilControlleur.js";
 import loginController from "./controlleurs/loginControlleur.js";
 import registerControlleur from "./controlleurs/registerControlleur.js";
 import reservationController from "./controlleurs/ReservationControlleur.js";
