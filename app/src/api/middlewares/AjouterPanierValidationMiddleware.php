@@ -29,7 +29,8 @@ class AjouterPanierValidationMiddleware {
             v::key('id_user', v::stringType()->notEmpty())
                 ->key('id_outil', v::stringType()->notEmpty())
                 ->key('quantite', v::intType()->notEmpty())
-                ->key('date_reservation', v::stringType()->notEmpty())
+                ->key('date_debut', v::stringType()->notEmpty())
+                ->key('date_fin', v::stringType()->notEmpty())
             ->assert($data);
 
         } catch (NestedValidationException $e) {
@@ -37,8 +38,7 @@ class AjouterPanierValidationMiddleware {
         }
 
         //vérification format des datetime
-        //foreach (['date_heure_debut', 'date_heure_fin'] as $datetime) {
-        foreach (['date_reservation'] as $datetime) {
+        foreach (['date_debut', 'date_fin'] as $datetime) {
             $data[$datetime] = urldecode($data[$datetime]);
             $date = DateTime::createFromFormat('Y-m-d H:i:s', $data[$datetime]);
             if (!$date || $date->format('Y-m-d H:i:s') !== $data[$datetime]) {
