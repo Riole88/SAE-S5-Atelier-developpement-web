@@ -367,11 +367,21 @@ body {
   flex: 1;
   padding: 1.5rem;
 }
-.page-panier .produit-content .produit-titre {
+.page-panier .produit-content .produit-title {
+  display: flex;
+  justify-content: space-between;
+}
+.page-panier .produit-content .produit-title .produit-titre {
   font-size: 1.3em;
   color: #414040;
   margin-bottom: 0.5rem;
   font-weight: 600;
+}
+.page-panier .produit-content .produit-title .delete-article {
+  border: none;
+  color: white;
+  background-color: #f44336;
+  cursor: pointer;
 }
 .page-panier .produit-content .produit-description {
   color: #6b7280;
