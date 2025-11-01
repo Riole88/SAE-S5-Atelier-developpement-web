@@ -87,4 +87,30 @@ class ServicePanier implements ServicePanierInterface {
             "message" => "Outil ajoute au panier."
         ];
     }
+
+    public function supprimerDuPanier(string $id_user, string $id_outil): array
+    {
+        try {
+            $panier = $this->panierRepository->findPanierByOwnerId($id_user);
+            if (!$panier) {
+                return [
+                    'success' => false,
+                    'message' => "Aucun panier trouvé pour cet utilisateur."
+                ];
+            }
+
+            $this->panierRepository->removeFromCart($id_outil, $panier->id);
+
+            return [
+                'success' => true,
+                'message' => "L'outil a été supprimé du panier avec succès"
+            ];
+        } catch (\Exception $e) {
+            return [
+                'success' => false,
+                'message' => "Erreur lors de la suppression de l'outil du panier : " . $e->getMessage()
+            ];
+        }
+    }
+
 }

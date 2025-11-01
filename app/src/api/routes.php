@@ -2,6 +2,7 @@
 declare(strict_types=1);
 
 use charlymatloc\api\actions\LoginAction;
+use charlymatloc\api\actions\PanierDeleteAction;
 use charlymatloc\api\actions\RegisterAction;
 use charlymatloc\api\middlewares\AuthMiddleware;
 use charlymatloc\api\middlewares\CorsMiddleware;
@@ -36,6 +37,7 @@ return function(App $app): App {
     $app->group('', function ($group) {
         $group->get('/paniers/{id_user}', PanierAction::class);
         $group->get('/reservations/{id_user}', ReservationsAction::class);
+        $group->delete('/paniers/{id_user}/{id_outil}', PanierDeleteAction::class);
     })->add(new AuthMiddleware($jwtSecret));
 
     // routes protégées avec validation

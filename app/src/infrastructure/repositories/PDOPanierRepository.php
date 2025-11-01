@@ -163,7 +163,7 @@ class PDOPanierRepository implements PanierRepositoryInterface {
 
     }
 
-    public function removeFromCart(string $id_outil) : void{
+    public function removeFromCart(string $id_outil, string $id_panier) : void{
         try{
             //recherche de la quantite mis dans le panier
             $quantite_panier = $this->panier_pdo->query("SELECT quantite FROM panier_outil WHERE id_outil = '$id_outil'")
@@ -181,7 +181,8 @@ class PDOPanierRepository implements PanierRepositoryInterface {
             $stmt->execute(['quantite' => $nouvelle_quantite,'id_outil' => $id_outil]);
 
             //suppression de l'outil dans le panier
-            $stmt2 = $this->panier_pdo->query("DELETE FROM panier_outil WHERE id_outil = '$id_outil'");
+            $stmt2 = $this->panier_pdo->prepare("DELETE FROM panier_outil WHERE id_outil = :id_outil AND id_panier = :id_panier");
+            $stmt2->execute(['id_outil' => $id_outil,'id_panier' => $id_panier]);
 
         } catch (HttpInternalServerErrorException) {
             //500

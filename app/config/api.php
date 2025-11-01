@@ -2,6 +2,7 @@
 
 use charlymatloc\api\actions\LoginAction;
 use charlymatloc\api\actions\PanierAction;
+use charlymatloc\api\actions\PanierDeleteAction;
 use charlymatloc\api\actions\RegisterAction;
 use charlymatloc\api\actions\ReserverOutilAction;
 use charlymatloc\api\actions\OutilAction;
@@ -37,6 +38,8 @@ return [
     LoginAction::class => function (ContainerInterface $c) {
         return new LoginAction($c->get(AuthnProviderInterface::class));
     },
-
+    PanierDeleteAction::class => function (ContainerInterface $c) {
+        return new PanierDeleteAction($c->get(ServicePanierInterface::class));
+    }
 
 ];

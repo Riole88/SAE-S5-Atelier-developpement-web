@@ -14,7 +14,7 @@ const detailOutilControlleur = {
 
     async recupererDonnees(id_outil) {
         try {
-            const response = await fetch(`http://docketu.iutnc.univ-lorraine.fr:56197/outils/${id_outil}`);
+            const response = await fetch(`http://localhost:6080/outils/${id_outil}`);
 
             const outil = await response.json();
 

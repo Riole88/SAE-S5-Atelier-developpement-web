@@ -92,7 +92,7 @@ const panierController = {
 
     ajouterEvenements() {
         // Boutons "Supprimer"
-        const boutonsSuppression = document.querySelectorAll('[data-remove-item]');
+        const boutonsSuppression = document.querySelectorAll('.delete-article');
         boutonsSuppression.forEach(bouton => {
             bouton.addEventListener('click', (e) => {
                 const idArticle = e.target.dataset.itemId;
@@ -121,8 +121,11 @@ const panierController = {
     // Methode de suppression d'un article du panier
     async supprimerArticle(idArticle) {
         try {
-            const response = await fetch(`http://localhost:6080/panier/.....`, {
-                method: 'DELETE'
+            const idUser = auth.getUserId();
+            const response = await fetch(`http://localhost:6080/paniers/${idUser}/${idArticle}`, {
+                method: 'DELETE',
+                headers: auth.getAuthHeaders(),
+                mode: 'cors'
             });
 
             if (!response.ok) {

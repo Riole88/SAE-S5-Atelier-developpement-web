@@ -19,7 +19,7 @@ const catalogueController = {
 
     async recupererDonnees() {
         try {
-            const response = await fetch('http://docketu.iutnc.univ-lorraine.fr:56197/outils');
+            const response = await fetch('http://localhost:6080/outils');
             const outils = await response.json();
 
             //Mapper les données de l'api
