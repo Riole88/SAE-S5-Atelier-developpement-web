@@ -36,7 +36,8 @@ class AjouterPanierValidationMiddleware {
             'id_user' => $profile->id,
             'id_outil' => $route_params["id_outil"] ?? null,
             'quantite' => isset($body['quantite']) ? intval($body['quantite']) : null,
-            'date_reservation' => $body['date_reservation'] ?? null
+            'date_debut' => $body['date_debut'] ?? null,
+            'date_fin' => $body['date_fin'] ?? null
         ];
 
         try {
@@ -54,8 +55,8 @@ class AjouterPanierValidationMiddleware {
         //vérification format des datetime
         foreach (['date_debut', 'date_fin'] as $datetime) {
             $data[$datetime] = urldecode($data[$datetime]);
-            $date = DateTime::createFromFormat('Y-m-d H:i:s', $data[$datetime]);
-            if (!$date || $date->format('Y-m-d H:i:s') !== $data[$datetime]) {
+            $date = DateTime::createFromFormat('Y-m-d', $data[$datetime]);
+            if (!$date || $date->format('Y-m-d') !== $data[$datetime]) {
                 throw new HttpBadRequestException($request, "Le champ $datetime doit etre au format Y-m-d H:i:s(ex: 2025-12-04)");
             }
 

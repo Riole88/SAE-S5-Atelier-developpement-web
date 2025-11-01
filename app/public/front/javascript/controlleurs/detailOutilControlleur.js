@@ -66,9 +66,8 @@ const detailOutilControlleur = {
                 body: JSON.stringify({
                     id_user: id_user,
                     quantite: quantite,
-                    date_reservation: date_debut
-                    // date_debut: date_debut,
-                    // date_fin: date_fin
+                    date_debut: date_debut,
+                    date_fin: date_fin
                 }),
                 mode: 'cors',
             });
