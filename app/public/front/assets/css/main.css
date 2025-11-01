@@ -431,8 +431,17 @@ body {
   color: #414040;
   margin-bottom: 1.5rem;
 }
+.page-panier .total-panier .produit-crenaux {
+  text-align: center;
+}
 .page-panier .total-panier .total-panier-produits {
   margin-bottom: 2rem;
+}
+.page-panier .total-panier .total-panier-produits .bloc-article-panier {
+  border-top: 2px solid #ffd73d;
+}
+.page-panier .total-panier .total-panier-produits .bloc-article-panier:first-of-type {
+  border-top: none;
 }
 .page-panier .total-panier .total-panier-produits .unique-panier-produit {
   display: flex;

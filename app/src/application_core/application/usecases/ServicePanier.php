@@ -47,7 +47,9 @@ class ServicePanier implements ServicePanierInterface {
                 $outil->cree_quand ?? null,
                 $outil->modifie_par ?? null,
                 $outil->modifie_quand ?? null,
-            ), 'quantite' => $panier['quantite'] ?? null];
+            ), 'quantite' => $panier['quantite'] ?? null,
+            'date_debut' => $panier["date_debut"],
+            'date_fin' => $panier["date_fin"]];
         }
 
         return [

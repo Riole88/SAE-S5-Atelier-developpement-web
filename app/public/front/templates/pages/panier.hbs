@@ -54,14 +54,19 @@
                 <h2>Total du panier</h2>
                 <div class="total-panier-produits">
                     {{#each articles}}
-                        <div class="unique-panier-produit">
-                            <p class="produit-titre-panier">{{nom}} : </p>
-                            <p class="produit-quantite-panier">x{{quantite}}</p>
-                        </div>
-                        <div class="unique-panier-produit">
-                            <p class="produit-prix-panier">Prix unité : {{prix}}€</p>
-                            <p class="produit-prix-panier">Prix total : {{prixQuantite}}€</p>
-                            <br>
+                        <div class="bloc-article-panier">
+                            <div class="unique-panier-produit">
+                                <p class="produit-titre-panier">{{nom}} : </p>
+                                <p class="produit-quantite-panier">x{{quantite}}</p>
+                            </div>
+                            <div>
+                                <p class="produit-crenaux">du {{date_debut}} au {{date_fin}}</p>
+                            </div>
+                            <div class="unique-panier-produit">
+                                <p class="produit-prix-panier">Prix unité : {{prix}}€</p>
+                                <p class="produit-prix-panier">Prix total : {{prixQuantite}}€</p>
+                                <br>
+                            </div>
                         </div>
                     {{/each}}
                 </div>

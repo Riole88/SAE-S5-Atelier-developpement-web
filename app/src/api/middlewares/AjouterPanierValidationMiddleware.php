@@ -43,7 +43,8 @@ class AjouterPanierValidationMiddleware {
             v::key('id_user', v::stringType()->notEmpty())
                 ->key('id_outil', v::stringType()->notEmpty())
                 ->key('quantite', v::intType()->notEmpty())
-                ->key('date_reservation', v::stringType()->notEmpty())
+                ->key('date_debut', v::stringType()->notEmpty())
+                ->key('date_fin', v::stringType()->notEmpty())
             ->assert($data);
 
         } catch (NestedValidationException $e) {
@@ -51,11 +52,13 @@ class AjouterPanierValidationMiddleware {
         }
 
         //vérification format des datetime
-        //foreach (['date_heure_debut', 'date_heure_fin'] as $datetime) {
-        $data['date_reservation'] = urldecode($data['date_reservation']);
-        $date = DateTime::createFromFormat('Y-m-d', $data['date_reservation']);
-        if (!$date || $date->format('Y-m-d') !== $data['date_reservation']) {
-            throw new HttpBadRequestException($request, "Le champ date_reservation doit être au format Y-m-d H:i:s(ex: 2025-12-04)");
+        foreach (['date_debut', 'date_fin'] as $datetime) {
+            $data[$datetime] = urldecode($data[$datetime]);
+            $date = DateTime::createFromFormat('Y-m-d H:i:s', $data[$datetime]);
+            if (!$date || $date->format('Y-m-d H:i:s') !== $data[$datetime]) {
+                throw new HttpBadRequestException($request, "Le champ $datetime doit etre au format Y-m-d H:i:s(ex: 2025-12-04)");
+            }
+
         }
 
         $panierDTO = new InputPanierDTO($data);

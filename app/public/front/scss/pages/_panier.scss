@@ -165,9 +165,18 @@
       margin-bottom: $espace-md;
     }
 
+    .produit-crenaux{
+      text-align: center;
+    }
+
     .total-panier-produits {
       margin-bottom: $espace-lg;
-
+      .bloc-article-panier{
+        border-top: 2px solid $fond-jaune;
+        &:first-of-type{
+          border-top: none;
+        }
+      }
       .unique-panier-produit{
         display: flex;
         justify-content: space-between;

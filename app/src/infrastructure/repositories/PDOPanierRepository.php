@@ -68,7 +68,7 @@ class PDOPanierRepository implements PanierRepositoryInterface {
 
     public function findAllOutilsByPanierId(string $panierId) : array{
         try{
-            $stmt = $this->panier_pdo->prepare("SELECT p.quantite, o.*
+            $stmt = $this->panier_pdo->prepare("SELECT p.quantite, p.date_debut, p.date_fin, o.*
                                                         FROM panier_outil p
                                                         JOIN outil o
                                                         ON p.id_outil = o.id
@@ -98,7 +98,9 @@ class PDOPanierRepository implements PanierRepositoryInterface {
                 $outil["cree_quand"],
                 $outil["modifie_par"],
                 $outil["modifie_quand"]
-            ), 'quantite' => $outil["quantite"]];
+            ), 'quantite' => $outil["quantite"],
+            'date_debut' => $outil["date_debut"],
+            'date_fin' => $outil["date_fin"]];
         }
         return $res;
     }
@@ -113,15 +115,16 @@ class PDOPanierRepository implements PanierRepositoryInterface {
 
             //on insere l'outil dans le panier
             $stmt = $this->panier_pdo->prepare("
-                INSERT INTO panier_outil (id_panier, id_outil, quantite, date_reservation)
-                VALUES (:id_panier, :id_outil, :quantite, :date_reservation)
+                INSERT INTO panier_outil (id_panier, id_outil, quantite, date_debut, date_fin)
+                VALUES (:id_panier, :id_outil, :quantite, :date_debut, :date_fin)
             ");
 
             $stmt->execute([
                 'id_panier' => $id_panier,
                 'id_outil' => $dto->id_outil,
                 'quantite' => $dto->quantite,
-                'date_reservation' => $dto->date_reservation
+                'date_debut' => $dto->date_debut,
+                'date_fin' => $dto->date_fin,
             ]);
 
             //mise à jour de la quantite
