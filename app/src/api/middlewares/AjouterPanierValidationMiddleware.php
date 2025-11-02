@@ -20,16 +20,32 @@ class AjouterPanierValidationMiddleware {
             ->getRoute()
             ->getArguments() ?? null;
 
-        $data = $request->getQueryParams();
-        $data["id_outil"] = $route_params["id_outil"];
+        $profile = $request->getAttribute('profile');
+        if (!$profile) {
+            throw new HttpBadRequestException($request, "Utilisateur non authentifié");
+        }
 
-        $data["quantite"] = intval($data["quantite"]);
+
+        $body = json_decode($request->getBody()->getContents(), true);
+
+        if (!$body) {
+            throw new HttpBadRequestException($request, "Corps de la requête invalide ou vide");
+        }
+
+        $data = [
+            'id_user' => $profile->id,
+            'id_outil' => $route_params["id_outil"] ?? null,
+            'quantite' => isset($body['quantite']) ? intval($body['quantite']) : null,
+            'date_debut' => $body['date_debut'] ?? null,
+            'date_fin' => $body['date_fin'] ?? null
+        ];
 
         try {
             v::key('id_user', v::stringType()->notEmpty())
                 ->key('id_outil', v::stringType()->notEmpty())
                 ->key('quantite', v::intType()->notEmpty())
-                ->key('date_reservation', v::stringType()->notEmpty())
+                ->key('date_debut', v::stringType()->notEmpty())
+                ->key('date_fin', v::stringType()->notEmpty())
             ->assert($data);
 
         } catch (NestedValidationException $e) {
@@ -37,13 +53,13 @@ class AjouterPanierValidationMiddleware {
         }
 
         //vérification format des datetime
-        //foreach (['date_heure_debut', 'date_heure_fin'] as $datetime) {
-        foreach (['date_reservation'] as $datetime) {
+        foreach (['date_debut', 'date_fin'] as $datetime) {
             $data[$datetime] = urldecode($data[$datetime]);
-            $date = DateTime::createFromFormat('Y-m-d H:i:s', $data[$datetime]);
-            if (!$date || $date->format('Y-m-d H:i:s') !== $data[$datetime]) {
-                throw new HttpBadRequestException($request, "Le champ $datetime doit etre au format Y-m-d H:i:s");
+            $date = DateTime::createFromFormat('Y-m-d', $data[$datetime]);
+            if (!$date || $date->format('Y-m-d') !== $data[$datetime]) {
+                throw new HttpBadRequestException($request, "Le champ $datetime doit etre au format Y-m-d H:i:s(ex: 2025-12-04)");
             }
+
         }
 
         $panierDTO = new InputPanierDTO($data);

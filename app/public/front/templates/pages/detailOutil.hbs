@@ -4,21 +4,21 @@
 <div class="outil">
     <div class="outil-image">
         <img
-            src="../front/assets/images/produits/{{image}}"
+            src="assets/images/produits/{{image}}"
             alt="{{nom}}">
     </div>
     <div class="outil-detail">
         <h3 class="outil-prix">{{prix}} €</h3>
         <h3 class="outil-stock">Quantité restante : {{stock}}</h3>
         <p class="outil-description">{{description}}</p>
-        <form>
+        <form id="form-outil">
             <label for="date_debut">Du :</label>
-            <input type="date" id="date_debut">
+            <input type="date" id="date_debut" required>
             <label for="date_fin">Au :</label>
-            <input type="date" id="date_fin">
+            <input type="date" id="date_fin" required>
             <div class="form-bas">
-                <input type="number" value="1" min="1" max="{{stock}}">
-                <input type="submit" id="submit-outil" value="Ajouter au panier"/>
+                <input type="number" id="quantite" value="1" min="1" max="{{stock}}" required>
+                <input type="submit" id="submit-outil" value="Ajouter au panier" data-outil-id="{{id}}"/>
             </div>
         </form>
     </div>

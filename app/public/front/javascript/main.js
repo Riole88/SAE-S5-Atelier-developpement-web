@@ -2,8 +2,9 @@ import router from './routeur.js';
 import catalogueController from './controlleurs/catalogueControlleur.js';
 import panierController from "./controlleurs/panierControlleur.js";
 import compteController from "./controlleurs/compteControlleur.js";
-import detailOutilController from "./controlleurs/detailOutilControlleur.js";
 import loginController from "./controlleurs/loginControlleur.js";
+import registerControlleur from "./controlleurs/registerControlleur.js";
+import reservationController from "./controlleurs/ReservationControlleur.js";
 
 async function chargerComposants() {
     const composants = ['header', 'footer'];
@@ -28,7 +29,9 @@ async function demarrer() {
         router.add('/catalogue', catalogueController);
         router.add('/panier', panierController);
         router.add('/compte', compteController);
-        router.add('/login',loginController);
+        router.add('/connexion',loginController);
+        router.add('/register', registerControlleur);
+        router.add('/reservations',reservationController);
 
         // Démarrer le router
         router.init();

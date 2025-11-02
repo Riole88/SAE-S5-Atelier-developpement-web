@@ -1,5 +1,5 @@
 // controllers/panierController.js
-
+import auth from '../services/auth.js';
 import router from "../routeur.js";
 
 const panierController = {
@@ -15,36 +15,62 @@ const panierController = {
 
     async recupererDonnees() {
         try {
-            //
-            const idUser = localStorage.getItem("idUser");
-            // Appel API pour récupérer le panier
-            const response = await fetch('http://localhost:6080/paniers/b12c59b7-9d2d-4e7c-9f84-cb39f9a1322f');
+            if (!auth.isAuthenticated()) {
+                router.goTo('/connexion');
+            }
+
+            const idUser = auth.getUserId();
+
+            const response = await fetch(`http://localhost:6080/paniers/${idUser}`, {
+                method: 'GET',
+                headers: auth.getAuthHeaders(),
+                mode: 'cors'
+            });
 
             if (!response.ok) {
+                if (response.status === 401) {
+                    auth.clearAuth();
+                    router.goTo('/connexion');
+                    throw new Error('Session expirée');
+                }
                 throw new Error('Erreur lors de la récupération du panier');
             }
 
             const panier = await response.json();
             const outils = panier[0].outils;
 
-            const articlesMappes = outils.map(item => ({
-                id: item.outil.id,
-                nom: item.outil.nom,
-                description: item.outil.desc,
-                image: `${item.outil.image}`,
-                prix: parseFloat(item.outil.tarif_journalier),
-                quantite: parseInt(item.quantite),
-                prixQuantite: (parseFloat(item.quantite) * parseFloat(item.outil.tarif_journalier))
-            }));
-            console.log(articlesMappes);
+            if (outils.length === 0){
+                return {
+                    titre: 'Mon Panier',
+                    articles: [],
+                    total: 0,
+                    nombreArticles: 0,
+                    erreur: 'Panier vide'
+                };
+            }
 
+            const articlesMappes = outils.map(item => {
+                const dateDebut = new Date(item.date_debut);
+                const dateFin = new Date(item.date_fin);
+                const diffTime = dateFin - dateDebut;
+                const nbJours = Math.ceil(diffTime / (1000 * 60 * 60 * 24)) + 1;
 
-            console.log('✅ Panier récupéré:', panier);
+                return{
+                    id: item.outil.id,
+                    nom: item.outil.nom,
+                    description: item.outil.desc,
+                    image: `assets/images/produits/${item.outil.image}`,
+                    prix: parseFloat(item.outil.tarif_journalier),
+                    quantite: parseInt(item.quantite),
+                    prixQuantite: (parseFloat(item.quantite) * parseFloat(item.outil.tarif_journalier) * nbJours),
+                    date_debut: item.date_debut,
+                    date_fin: item.date_fin
+                }});
+
 
             const sommeTotale = articlesMappes.reduce((total, article) => {
-                return total + article.prix * article.quantite;
+                return total + article.prixQuantite;
             }, 0);
-            console.log(sommeTotale);
 
 
             return {
@@ -74,7 +100,7 @@ const panierController = {
 
     ajouterEvenements() {
         // Boutons "Supprimer"
-        const boutonsSuppression = document.querySelectorAll('[data-remove-item]');
+        const boutonsSuppression = document.querySelectorAll('.delete-article');
         boutonsSuppression.forEach(bouton => {
             bouton.addEventListener('click', (e) => {
                 const idArticle = e.target.dataset.itemId;
@@ -103,8 +129,11 @@ const panierController = {
     // Methode de suppression d'un article du panier
     async supprimerArticle(idArticle) {
         try {
-            const response = await fetch(`http://localhost:6080/panier/.....`, {
-                method: 'DELETE'
+            const idUser = auth.getUserId();
+            const response = await fetch(`http://localhost:6080/paniers/${idUser}/${idArticle}`, {
+                method: 'DELETE',
+                headers: auth.getAuthHeaders(),
+                mode: 'cors'
             });
 
             if (!response.ok) {

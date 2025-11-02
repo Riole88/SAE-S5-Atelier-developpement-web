@@ -1,4 +1,4 @@
-// controllers/catalogueController.js - Version avec filtre de recherche
+// controllers/catalogueController.js - Version Hash Routing
 
 import router from '../routeur.js';
 import detailOutilControlleur from "./detailOutilControlleur.js";
@@ -19,7 +19,7 @@ const catalogueController = {
 
     async recupererDonnees() {
         try {
-            const response = await fetch('http://docketu.iutnc.univ-lorraine.fr:56197/outils');
+            const response = await fetch('http://localhost:6080/outils');
             const outils = await response.json();
 
             //Mapper les données de l'api
@@ -27,7 +27,7 @@ const catalogueController = {
                 id: outil.id,
                 nom: outil.nom,
                 description: outil.desc,
-                image: `${outil.image}`,
+                image: `assets/images/produits/${outil.image}`,
                 prix: parseFloat(outil.tarif_journalier),
                 stock: parseInt(outil.quantite_stock),
                 disponible: parseInt(outil.quantite_stock) > 0
@@ -86,7 +86,7 @@ const catalogueController = {
             <article class="produit-card" data-product-id="${produit.id}">
                 <div class="produit-image-container">
                     <img
-                        src="../front/assets/images/produits/${produit.image}"
+                        src="assets/images/produits/${produit.image}"
                         alt="${produit.nom}"
                         class="produit-image">
                 </div>

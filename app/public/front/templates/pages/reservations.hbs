@@ -1,0 +1,54 @@
+{{> header}}
+
+<div class="page-panier">
+    <main class="container">
+
+        <div class="reservation-header">
+            <h1>{{titre}}</h1>
+        </div>
+
+        {{!-- cas d'erreur --}}
+        {{#if erreur}}
+            <div class="alert alert-error">
+            <span>{{erreur}}</span>
+            </div>
+        {{/if}}
+
+        <div class="reservations-grid">
+            {{#each reservations}}
+                <div class="produits-reservation">
+                        <p class="date-reservation">Réservation du {{date_debut}} au {{date_fin}}</p>
+                    {{#each outils}}
+                        <article class="res-produit-card" data-product-id="{{id}}">
+
+                            <div class="res-produit-image-container">
+                                <img
+                                src="../front/assets/images/produits/{{image}}"
+                                alt="{{nom}}"
+                                class="res-produit-image">
+                            </div>
+
+                            <div class="res-produit-content">
+                                <h2 class="res-produit-titre">{{nom}}</h2>
+                                <p class="res-produit-description">{{description}}</p>
+                                <div class="res-produit-footer">
+                                    <div class="res-produit-prix">
+                                        <div class="res-prix-stock-info">
+                                            <span class="res-stock">Quantite réservée : {{quantite}}</span>
+                                            <span class="res-prix-montant">{{prix}}€/jour</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </article>
+                    {{/each}}
+                    <p class="total-reservation">
+                        Total de la reservation : {{totalReservation}} €
+                    </p>
+                {{/each}}
+            </div>
+        </div>
+    </main>
+</div>
+
+{{> footer}}

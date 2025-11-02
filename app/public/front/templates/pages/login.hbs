@@ -1,5 +1,27 @@
 {{> header}}
 
-<h1> LOGIN </h1>
+
+<div class="page-login">
+    <main class="container">
+        <div class="login-header">
+            <h1>Connexion</h1>
+        </div>
+
+        <div class="login-body">
+            <form id="connexion-form">
+              <label for="email">Email :</label><br>
+              <input type="email" id="email" name="email"><br>
+              <label for="password">Mot de passe :</label><br>
+              <input type="password" id="password" name="password">
+              <input type="submit" value="Connexion">
+            </form>
+
+            <div id="after-submit"></div>
+            <div>
+                <p>Pas encore de compte ? <a href="#" id="lien-register">Créer un compte</a></p>
+            </div>
+        </div>
+    </main>
+</div>
 
 {{> footer}}

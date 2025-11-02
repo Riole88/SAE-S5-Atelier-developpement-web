@@ -89,11 +89,23 @@
     flex: 1;
     padding: $espace-md;
 
-    .produit-titre {
-      font-size: 1.3em;
-      color: $texte-principal;
-      margin-bottom: $espace-xs;
-      font-weight: 600;
+    .produit-title {
+      display: flex;
+      justify-content: space-between;
+
+      .produit-titre {
+        font-size: 1.3em;
+        color: $texte-principal;
+        margin-bottom: $espace-xs;
+        font-weight: 600;
+      }
+
+      .delete-article{
+        border: none;
+        color: white;
+        background-color: #f44336;
+        cursor: pointer;
+      }
     }
 
     .produit-description {
@@ -153,9 +165,18 @@
       margin-bottom: $espace-md;
     }
 
+    .produit-crenaux{
+      text-align: center;
+    }
+
     .total-panier-produits {
       margin-bottom: $espace-lg;
-
+      .bloc-article-panier{
+        border-top: 2px solid $fond-jaune;
+        &:first-of-type{
+          border-top: none;
+        }
+      }
       .unique-panier-produit{
         display: flex;
         justify-content: space-between;
@@ -185,6 +206,16 @@
       color: $texte-principal;
       border-top: 2px solid $fond-jaune;
       padding-top: $espace-md;
+    }
+
+    #boutonPaye {
+      text-align: center;
+      background-color: $fond-jaune;
+      border: none;
+      font-size: 1.6rem;
+      font-weight: 600;
+      color: white;
+      cursor: pointer;
     }
   }
 }

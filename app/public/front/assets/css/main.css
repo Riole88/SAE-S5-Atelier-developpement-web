@@ -239,6 +239,54 @@ body {
   text-align: center;
 }
 
+.page-login {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.page-login .container {
+  text-align: center;
+}
+.page-login .login-header {
+  margin-bottom: 1.5rem;
+}
+.page-login input {
+  width: 50%;
+  padding: 0.6em;
+  font-size: 16px;
+  border: 2px solid #969696;
+  border-radius: 4px;
+  margin-bottom: 20px;
+}
+.page-login #after-submit {
+  color: red;
+  font-size: x-large;
+}
+
+.page-register {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.page-register .container {
+  text-align: center;
+}
+.page-register .register-header {
+  margin-bottom: 1.5rem;
+}
+.page-register input {
+  width: 50%;
+  padding: 0.6em;
+  font-size: 16px;
+  border: 2px solid #969696;
+  border-radius: 4px;
+  margin-bottom: 20px;
+}
+.page-register #after-submit {
+  color: red;
+  font-size: x-large;
+}
+
 .page-panier {
   min-height: 100vh;
   background: #ffffff;
@@ -319,11 +367,21 @@ body {
   flex: 1;
   padding: 1.5rem;
 }
-.page-panier .produit-content .produit-titre {
+.page-panier .produit-content .produit-title {
+  display: flex;
+  justify-content: space-between;
+}
+.page-panier .produit-content .produit-title .produit-titre {
   font-size: 1.3em;
   color: #414040;
   margin-bottom: 0.5rem;
   font-weight: 600;
+}
+.page-panier .produit-content .produit-title .delete-article {
+  border: none;
+  color: white;
+  background-color: #f44336;
+  cursor: pointer;
 }
 .page-panier .produit-content .produit-description {
   color: #6b7280;
@@ -373,8 +431,17 @@ body {
   color: #414040;
   margin-bottom: 1.5rem;
 }
+.page-panier .total-panier .produit-crenaux {
+  text-align: center;
+}
 .page-panier .total-panier .total-panier-produits {
   margin-bottom: 2rem;
+}
+.page-panier .total-panier .total-panier-produits .bloc-article-panier {
+  border-top: 2px solid #ffd73d;
+}
+.page-panier .total-panier .total-panier-produits .bloc-article-panier:first-of-type {
+  border-top: none;
 }
 .page-panier .total-panier .total-panier-produits .unique-panier-produit {
   display: flex;
@@ -401,6 +468,87 @@ body {
   color: #414040;
   border-top: 2px solid #ffd73d;
   padding-top: 1.5rem;
+}
+.page-panier .total-panier #boutonPaye {
+  text-align: center;
+  background-color: #ffd73d;
+  border: none;
+  font-size: 1.6rem;
+  font-weight: 600;
+  color: white;
+  cursor: pointer;
+}
+
+.page-panier {
+  min-height: 100vh;
+  background: #ffffff;
+}
+.page-panier h1 {
+  text-align: center;
+}
+.page-panier .reservations-grid .produits-reservation {
+  display: flex;
+  flex-basis: auto;
+  flex-direction: column;
+  gap: 10px;
+}
+.page-panier .reservations-grid .produits-reservation article {
+  align-items: center;
+  display: flex;
+  align-items: stretch;
+  border: 2px solid black;
+  border-radius: 2px;
+  margin-left: 15px;
+}
+.page-panier .reservations-grid .produits-reservation article .res-produit-content {
+  flex: 1;
+  display: flex;
+  flex-basis: auto;
+  flex-direction: column;
+  justify-content: space-between;
+}
+.page-panier .reservations-grid .produits-reservation article .res-prix-montant {
+  font-weight: bold;
+}
+.page-panier .reservations-grid .produits-reservation article:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+}
+.page-panier .reservations-grid .res-produit-image-container {
+  flex: 0 0 150px;
+  background: #ffd73d;
+  height: 150px;
+  overflow: hidden;
+  margin-right: 0.5em;
+}
+@media (min-width: 768px) {
+  .page-panier .reservations-grid .res-produit-image-container {
+    height: 200px;
+  }
+}
+.page-panier .reservations-grid .res-produit-image-container img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.page-panier .total-reservation {
+  font-weight: bold;
+  text-align: center;
+}
+.page-panier .date-reservation {
+  font-weight: bold;
+  text-align: center;
+  font-size: 1rem;
+  margin-top: 3em;
+}
+.page-panier .res-prix-stock-info {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  width: auto;
+  margin-bottom: 0.5em;
 }
 
 .site-footer {
@@ -503,12 +651,14 @@ body {
   color: #daa757;
 }
 
-.navbar__cart {
-  display: flex;
-  align-items: center;
+.navbar__cart, .navbar__res {
   text-decoration: none;
   color: #333;
   position: relative;
+  transition: color 0.2s ease;
+}
+.navbar__cart:hover, .navbar__res:hover {
+  color: #daa757;
 }
 
 .navbar__cart-count {
@@ -520,6 +670,12 @@ body {
   border-radius: 50%;
   font-size: 0.75rem;
   padding: 0.2rem 0.4rem;
+}
+
+.navbar__right {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
 }
 
 /*# sourceMappingURL=main.css.map */
