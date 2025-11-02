@@ -22,7 +22,7 @@ return [
         return new ServiceOutil($c->get(OutilRepositoryInterface::class));
     },
     ServicePanierInterface::class => function (ContainerInterface $c) {
-        return new ServicePanier($c->get(PanierRepositoryInterface::class));
+        return new ServicePanier($c->get(PanierRepositoryInterface::class), $c->get(ReservationRepositoryInterface::class));
     },
     AuthnServiceInterface::class => function (ContainerInterface $c) {
         return new AuthnService($c->get(UserRepositoryInterface::class));
