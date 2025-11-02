@@ -39,6 +39,7 @@ const registerController = {
 
             router.goTo('/connexion');
         } catch(e){
+            document.getElementById("after-submit").innerText = "Erreur, veuillez réessayer";
             console.error(e);
         }
     },
