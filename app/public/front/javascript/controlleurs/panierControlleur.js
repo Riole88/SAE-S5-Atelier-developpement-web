@@ -59,7 +59,7 @@ const panierController = {
                     id: item.outil.id,
                     nom: item.outil.nom,
                     description: item.outil.desc,
-                    image: `${item.outil.image}`,
+                    image: `assets/images/produits/${item.outil.image}`,
                     prix: parseFloat(item.outil.tarif_journalier),
                     quantite: parseInt(item.quantite),
                     prixQuantite: (parseFloat(item.quantite) * parseFloat(item.outil.tarif_journalier) * nbJours),

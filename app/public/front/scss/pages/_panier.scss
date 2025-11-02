@@ -207,5 +207,15 @@
       border-top: 2px solid $fond-jaune;
       padding-top: $espace-md;
     }
+
+    #boutonPaye {
+      text-align: center;
+      background-color: $fond-jaune;
+      border: none;
+      font-size: 1.6rem;
+      font-weight: 600;
+      color: white;
+      cursor: pointer;
+    }
   }
 }
