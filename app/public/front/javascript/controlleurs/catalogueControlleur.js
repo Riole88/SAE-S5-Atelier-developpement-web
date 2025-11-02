@@ -1,12 +1,19 @@
-// controllers/catalogueController.js - Version Hash Routing
+// controllers/catalogueController.js - Version avec Pagination
 
 import router from '../routeur.js';
 import detailOutilControlleur from "./detailOutilControlleur.js";
 
 const catalogueController = {
 
-    // Stock des pour le filtrage
+    // Stock des produits pour le filtrage
     tousLesProduits: [],
+
+    // Configuration pagination
+    pagination: {
+        produitsParPage: 9,
+        pageActuelle: 1,
+        totalPages: 1
+    },
 
     async chargerTemplate() {
         const response = await fetch('templates/pages/catalogue.hbs');
@@ -22,7 +29,7 @@ const catalogueController = {
             const response = await fetch('http://localhost:6080/outils');
             const outils = await response.json();
 
-            //Mapper les données de l'api
+            // Mapper les données de l'api
             const produitsMappes = outils.map(outil => ({
                 id: outil.id,
                 nom: outil.nom,
@@ -36,16 +43,34 @@ const catalogueController = {
             // 💾 Stocker tous les produits pour le filtrage
             this.tousLesProduits = produitsMappes;
 
+            // Calculer le nombre total de pages
+            this.pagination.totalPages = Math.ceil(produitsMappes.length / this.pagination.produitsParPage);
+
+            // Récupérer les produits de la page actuelle
+            const produitsPagines = this.getProduitsPagines(produitsMappes);
+
             return {
                 titre: 'Notre Catalogue d\'Outils',
-                produits: produitsMappes,
-                nombreProduits: produitsMappes.length
+                produits: produitsPagines,
+                nombreProduits: produitsMappes.length,
+                pagination: {
+                    pageActuelle: this.pagination.pageActuelle,
+                    totalPages: this.pagination.totalPages,
+                    afficherPagination: this.pagination.totalPages > 1
+                }
             };
 
         } catch (error) {
             console.error('Erreur pendant la récupération des données:', error);
             throw error;
         }
+    },
+
+    // Obtenir les produits pour la page actuelle
+    getProduitsPagines(produits) {
+        const debut = (this.pagination.pageActuelle - 1) * this.pagination.produitsParPage;
+        const fin = debut + this.pagination.produitsParPage;
+        return produits.slice(debut, fin);
     },
 
     // Filtrer les produits selon la recherche
@@ -61,10 +86,26 @@ const catalogueController = {
         );
     },
 
-    // mettre à jour l'affichage avec les outils filtres
-    mettreAJourAffichage(produitsFiltres) {
+    // Mettre à jour l'affichage avec les outils filtrés et paginés
+    mettreAJourAffichage(produitsFiltres, resetPage = false) {
         const grid = document.querySelector('.produits-grid');
         const infoElement = document.querySelector('.catalogue-info');
+
+        // Réinitialiser à la page 1 si demandé (lors d'une recherche)
+        if (resetPage) {
+            this.pagination.pageActuelle = 1;
+        }
+
+        // Calculer la pagination pour les produits filtrés
+        this.pagination.totalPages = Math.ceil(produitsFiltres.length / this.pagination.produitsParPage);
+
+        // S'assurer que la page actuelle est valide
+        if (this.pagination.pageActuelle > this.pagination.totalPages && this.pagination.totalPages > 0) {
+            this.pagination.pageActuelle = this.pagination.totalPages;
+        }
+
+        // Obtenir les produits de la page actuelle
+        const produitsAfficher = this.getProduitsPagines(produitsFiltres);
 
         // Mettre à jour le compteur
         if (infoElement) {
@@ -78,11 +119,12 @@ const catalogueController = {
                     <p>Aucun outil ne correspond à votre recherche.</p>
                 </div>
             `;
+            this.mettreAJourPagination(0);
             return;
         }
 
-        // Générer le HTML des produits filtrés
-        grid.innerHTML = produitsFiltres.map(produit => `
+        // Générer le HTML des produits filtrés et paginés
+        grid.innerHTML = produitsAfficher.map(produit => `
             <article class="produit-card" data-product-id="${produit.id}">
                 <div class="produit-image-container">
                     <img
@@ -108,11 +150,48 @@ const catalogueController = {
             </article>
         `).join('');
 
+        // Mettre à jour l'affichage de la pagination
+        this.mettreAJourPagination(produitsFiltres.length);
+
         // Réattacher les événements sur les nouvelles cartes
         this.attacherEvenementsCartes();
+
+        window.scrollTo({ top: 0, behavior: 'smooth' });
     },
 
-    // événements de clic sur les cartes produits
+    // Mettre à jour l'affichage de la pagination
+    mettreAJourPagination(totalProduits) {
+        const paginationContainer = document.querySelector('.pagination-container');
+
+        if (!paginationContainer) return;
+
+        const totalPages = Math.ceil(totalProduits / this.pagination.produitsParPage);
+
+        paginationContainer.style.display = 'flex';
+
+        const btnPrecedent = paginationContainer.querySelector('.btn-precedent');
+        const btnSuivant = paginationContainer.querySelector('.btn-suivant');
+        const pageInfo = paginationContainer.querySelector('.page-info');
+
+        // Mettre à jour le texte
+        pageInfo.textContent = `Page ${this.pagination.pageActuelle} sur ${totalPages}`;},
+
+    // Changer de page
+    changerPage(direction) {
+        const searchBox = document.getElementById('search-box');
+        const recherche = searchBox ? searchBox.value : '';
+        const produitsFiltres = this.filtrerProduits(recherche);
+
+        if (direction === 'suivant' && this.pagination.pageActuelle < this.pagination.totalPages) {
+            this.pagination.pageActuelle++;
+        } else if (direction === 'precedent' && this.pagination.pageActuelle > 1) {
+            this.pagination.pageActuelle--;
+        }
+
+        this.mettreAJourAffichage(produitsFiltres, false);
+    },
+
+    // Événements de clic sur les cartes produits
     attacherEvenementsCartes() {
         const liensDetail = document.querySelectorAll('.produit-card');
         liensDetail.forEach(lien => {
@@ -130,13 +209,29 @@ const catalogueController = {
     },
 
     ajouterEvenements() {
-        // event de recherche dynamique
+        // Event de recherche dynamique
         const searchBox = document.getElementById('search-box');
         if (searchBox) {
             searchBox.addEventListener('input', (e) => {
                 const recherche = e.target.value;
                 const produitsFiltres = this.filtrerProduits(recherche);
-                this.mettreAJourAffichage(produitsFiltres);
+                this.mettreAJourAffichage(produitsFiltres, true); // Reset à la page 1
+            });
+        }
+
+        // Événements de pagination
+        const btnPrecedent = document.querySelector('.btn-precedent');
+        const btnSuivant = document.querySelector('.btn-suivant');
+
+        if (btnPrecedent) {
+            btnPrecedent.addEventListener('click', () => {
+                this.changerPage('precedent');
+            });
+        }
+
+        if (btnSuivant) {
+            btnSuivant.addEventListener('click', () => {
+                this.changerPage('suivant');
             });
         }
 
@@ -156,6 +251,9 @@ const catalogueController = {
         `;
 
         try {
+            // Réinitialiser la pagination
+            this.pagination.pageActuelle = 1;
+
             const template = await this.chargerTemplate();
             const donnees = await this.recupererDonnees();
 

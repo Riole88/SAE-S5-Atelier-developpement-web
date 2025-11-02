@@ -46,6 +46,18 @@
       {{/each}}
     </div>
 
+    {{#if pagination.afficherPagination}}
+      <div class="pagination-container">
+        <button class="btn-pagination btn-precedent">
+          ← Précédent
+        </button>
+        <span class="page-info">Page {{pagination.pageActuelle}} sur {{pagination.totalPages}}</span>
+        <button class="btn-pagination btn-suivant">
+          Suivant →
+        </button>
+      </div>
+    {{/if}}
+
   </main>
 </div>
 
