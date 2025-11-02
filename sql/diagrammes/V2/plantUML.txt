@@ -1,0 +1,145 @@
+    @startuml CharlyMatloc_Database
+
+    !define table(x) class x << (T,#FFAAAA) >>
+    !define primary_key(x) <u>x</u>
+    !define foreign_key(x) <i>x</i>
+
+    hide methods
+    hide stereotypes
+
+    skinparam classAttributeIconSize 0
+    skinparam linetype ortho
+
+    ' Tables principales
+    table(users) {
+      primary_key(id) : UUID
+      --
+      email : VARCHAR(255) <<unique>>
+      password_hash : TEXT
+      role : INTEGER (default: 0)
+      --
+      cree_par : UUID
+      cree_quand : TIMESTAMP
+      modifie_par : UUID
+      modifie_quand : TIMESTAMP
+    }
+
+    table(categorie) {
+      primary_key(id) : UUID
+      --
+      nom : VARCHAR(255)
+      description : TEXT
+      --
+      cree_par : UUID
+      cree_quand : TIMESTAMP
+      modifie_par : UUID
+      modifie_quand : TIMESTAMP
+    }
+
+    table(outil) {
+      primary_key(id) : UUID
+      --
+      nom : VARCHAR(255)
+      description : TEXT
+      image : VARCHAR(255)
+      tarif_journalier : DOUBLE PRECISION
+      quantite_stock : INTEGER
+      foreign_key(id_cat) : UUID
+      --
+      cree_par : UUID
+      cree_quand : TIMESTAMP
+      modifie_par : UUID
+      modifie_quand : TIMESTAMP
+    }
+
+    table(panier) {
+      primary_key(id) : UUID
+      --
+      foreign_key(id_user) : UUID
+      --
+      cree_par : UUID
+      cree_quand : TIMESTAMP
+      modifie_par : UUID
+      modifie_quand : TIMESTAMP
+    }
+
+    table(panier_outil) {
+      primary_key(id) : UUID
+      --
+      foreign_key(id_panier) : UUID
+      foreign_key(id_outil) : UUID
+      quantite : INTEGER (default: 1)
+      date_debut : DATE
+      date_fin : DATE
+      --
+      cree_par : UUID
+      cree_quand : TIMESTAMP
+      modifie_par : UUID
+      modifie_quand : TIMESTAMP
+    }
+
+    table(reservation) {
+      primary_key(id) : UUID
+      --
+      foreign_key(id_user) : UUID
+      date_debut : DATE
+      date_fin : DATE
+      statut : VARCHAR(20) (default: 'en_attente')
+      --
+      cree_par : UUID
+      cree_quand : TIMESTAMP
+      modifie_par : UUID
+      modifie_quand : TIMESTAMP
+    }
+
+    table(reservation_outil) {
+      primary_key(id) : UUID
+      --
+      foreign_key(id_reservation) : UUID
+      foreign_key(id_outil) : UUID
+      quantite : INTEGER (default: 1)
+      --
+      cree_par : UUID
+      cree_quand : TIMESTAMP
+      modifie_par : UUID
+      modifie_quand : TIMESTAMP
+    }
+
+    ' Relations
+    categorie "1" -- "0..*" outil : classifie >
+    users "1" -- "0..1" panier : possède >
+    users "1" -- "0..*" reservation : effectue >
+
+    panier "1" -- "0..*" panier_outil : contient >
+    outil "1" -- "0..*" panier_outil : < inclus dans
+
+    reservation "1" -- "1..*" reservation_outil : inclut >
+    outil "1" -- "0..*" reservation_outil : < réservé via
+
+    note right of users
+      **Rôles:**
+      0 = Utilisateur standard
+      1 = Administrateur
+    end note
+
+    note right of reservation
+      **Statuts possibles:**
+      - en_attente
+      - confirmee
+      - annulee
+      - terminee
+    end note
+
+    note bottom of panier_outil
+      Table de liaison avec
+      informations supplémentaires:
+      quantité et période de location
+    end note
+
+    note bottom of reservation_outil
+      Table de liaison pour
+      associer outils et réservations
+      avec quantités
+    end note
+
+    @enduml

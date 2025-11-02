@@ -86,7 +86,7 @@ const catalogueController = {
             <article class="produit-card" data-product-id="${produit.id}">
                 <div class="produit-image-container">
                     <img
-                        src="../front/assets/images/produits/${produit.image}"
+                        src="${produit.image}"
                         alt="${produit.nom}"
                         class="produit-image">
                 </div>

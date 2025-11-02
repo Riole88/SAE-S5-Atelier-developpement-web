@@ -46,6 +46,7 @@ const loginController = {
 
 
         } catch(e){
+            document.getElementById("after-submit").innerText = "Email ou mot de passe incorrect";
             console.error(e);
         }
     },

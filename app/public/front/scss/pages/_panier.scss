@@ -207,5 +207,20 @@
       border-top: 2px solid $fond-jaune;
       padding-top: $espace-md;
     }
+
+    #boutonPaye {
+      background-color: $fond-jaune;
+      color: $texte-clair;
+      padding: $espace-xs $espace-sm $espace-xs $espace-sm;
+      font-weight: bold;
+      font-family: $police-base;
+      font-size: 1em;
+      border: none;
+      border-radius: 5px;
+      &:hover {
+        filter: brightness(95%);
+        cursor: pointer;
+      }
+    }
   }
 }

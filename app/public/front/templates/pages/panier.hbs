@@ -24,7 +24,7 @@
 
                         <div class="produit-image-container">
                             <img
-                            src="../front/assets/images/produits/{{image}}"
+                            src="{{image}}"
                             alt="{{nom}}"
                             class="produit-image">
                         </div>
@@ -70,7 +70,8 @@
                         </div>
                     {{/each}}
                 </div>
-                <h2 class="prix-panier">Prix total : {{total}}€</h2>
+                <h2 class="prix-panier">Prix total : {{total}}€</h2><br>
+                <button id="boutonPaye" data-item-id="{{id}}">Payer le panier</button>
             </div>
         </div>
     </main>

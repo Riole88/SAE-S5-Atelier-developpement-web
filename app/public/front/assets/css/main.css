@@ -258,6 +258,21 @@ body {
   border-radius: 4px;
   margin-bottom: 20px;
 }
+.page-login #validation {
+  align-content: center;
+  background-color: #ffd73d;
+  color: #ffffff;
+  padding: 0.5rem 1rem 0.5rem 1rem;
+  font-weight: bold;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  font-size: 1em;
+  border: none;
+  border-radius: 5px;
+}
+.page-login #validation:hover {
+  filter: brightness(95%);
+  cursor: pointer;
+}
 .page-login #after-submit {
   color: red;
   font-size: x-large;
@@ -281,6 +296,20 @@ body {
   border: 2px solid #969696;
   border-radius: 4px;
   margin-bottom: 20px;
+}
+.page-register #validation {
+  background-color: #ffd73d;
+  color: #ffffff;
+  padding: 0.5rem 1rem 0.5rem 1rem;
+  font-weight: bold;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  font-size: 1em;
+  border: none;
+  border-radius: 5px;
+}
+.page-register #validation:hover {
+  filter: brightness(95%);
+  cursor: pointer;
 }
 .page-register #after-submit {
   color: red;
@@ -468,6 +497,20 @@ body {
   color: #414040;
   border-top: 2px solid #ffd73d;
   padding-top: 1.5rem;
+}
+.page-panier .total-panier #boutonPaye {
+  background-color: #ffd73d;
+  color: #ffffff;
+  padding: 0.5rem 1rem 0.5rem 1rem;
+  font-weight: bold;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  font-size: 1em;
+  border: none;
+  border-radius: 5px;
+}
+.page-panier .total-panier #boutonPaye:hover {
+  filter: brightness(95%);
+  cursor: pointer;
 }
 
 .page-panier {
