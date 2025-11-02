@@ -73,10 +73,10 @@ class PDOReservationRepository implements ReservationRepositoryInterface {
         return $res;
     }
 
-    public function saveReservation(Reservation $reservation): void{
+    public function saveReservation(string $date_debut, string $date_fin, string $ownerId): void{
         try{
-            $stmt = $this->reservation_pdo->prepare("INSERT INTO reservation (id_user, date_debut, date_fin, statut) VALUES (:id_user, :date_debut, :date_fin, :statut)");
-            $stmt->execute(['id_user' => $reservation->id_user, 'date_debut' => $reservation->date_debut, 'date_fin' => $reservation->date_fin, 'statut' => $reservation->statut]);
+            $stmt = $this->reservation_pdo->prepare("INSERT INTO reservation (id_user, date_debut, date_fin, statut) VALUES (:id_user, :date_debut, :date_fin, 'reservee')");
+            $stmt->execute(['id_user' => $ownerId, 'date_debut' => $date_debut, 'date_fin' => $date_fin]);
         } catch(\PDOException $e){
             throw new \Exception("Erreur lors de l'execution de la requête");
         } catch(\Throwable){
@@ -151,5 +151,53 @@ class PDOReservationRepository implements ReservationRepositoryInterface {
             );
         }
         return $res;
+    }
+
+    public function reservationExists(string $date_debut, string $date_fin, string $ownerId){
+        try {
+            $reservation = $this->reservation_pdo->query("SELECT count(id) AS num_res FROM reservation 
+            WHERE date_debut = '$date_debut' AND date_fin = '$date_fin' AND id_user = '$ownerId'")
+                                            ->fetch(PDO::FETCH_ASSOC);
+        } catch (HttpInternalServerErrorException) {
+            //500
+            throw new \Exception("Erreur lors de l'execution de la requete SQL.");
+        } catch(\Throwable $e) {
+            throw new \Exception("Erreur lors de la recherche de la réservation.");
+        }
+
+        return $reservation['num_res'] == 0;
+    }
+
+    public function addOutilToReservation(array $outilsDTO, string $ownerId) : void{
+        foreach($outilsDTO as $outilDTO){
+            //verification de l'existance d'une reservation pour une date donnée
+            $res_existant = $this->reservationExists($outilDTO['date_debut'], $outilDTO['date_fin'], $ownerId);
+            if($res_existant === true){
+                //création d'une nouvelle réservation
+                $this->saveReservation($outilDTO['date_debut'], $outilDTO['date_fin'], $ownerId);
+            }
+            try{
+                //récupération de l'id de réservation
+                $stmt =  $this->reservation_pdo->prepare("SELECT id AS num_res FROM reservation 
+                        WHERE date_debut = :date_debut AND date_fin = :date_fin AND id_user = :id_user");
+                $stmt->execute(['date_debut' => $outilDTO['date_debut'], 'date_fin' => $outilDTO['date_fin'], 'id_user' => $ownerId]);
+                $res_id = $stmt->fetch(PDO::FETCH_ASSOC);
+            } catch (HttpInternalServerErrorException) {
+                //500
+                throw new \Exception("Erreur lors de l'execution de la requete SQL.");
+            } catch(\Throwable $e) {
+                throw new \Exception("Erreur lors de la recherche de la réservation.");
+            }
+            try{
+                //insertion d'un nouveau reservation_outil
+                $stmt = $this->reservation_pdo->prepare("INSERT INTO reservation_outil (id_reservation, id_outil, quantite) VALUES (:id_reservation, :id_outil, :quantite)");
+                $stmt->execute(['id_reservation' => $res_id['num_res'], 'id_outil' => $outilDTO['outil']->id, 'quantite' => $outilDTO['quantite']]);
+            } catch (HttpInternalServerErrorException) {
+                //500
+                throw new \Exception("Erreur lors de l'execution de la requete SQL.");
+            } catch(\Throwable $e) {
+                throw new \Exception("Erreur lors de la recherche de la réservation.");
+            }
+        }
     }
 }
