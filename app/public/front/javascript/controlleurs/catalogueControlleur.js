@@ -27,7 +27,7 @@ const catalogueController = {
                 id: outil.id,
                 nom: outil.nom,
                 description: outil.desc,
-                image: `assets/images/produits/${outil.image}`,
+                image: `${outil.image}`,
                 prix: parseFloat(outil.tarif_journalier),
                 stock: parseInt(outil.quantite_stock),
                 disponible: parseInt(outil.quantite_stock) > 0
@@ -86,7 +86,7 @@ const catalogueController = {
             <article class="produit-card" data-product-id="${produit.id}">
                 <div class="produit-image-container">
                     <img
-                        src="assets/images/produits/${produit.image}"
+                        src="${produit.image}"
                         alt="${produit.nom}"
                         class="produit-image">
                 </div>
