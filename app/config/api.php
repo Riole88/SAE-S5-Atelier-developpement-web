@@ -7,6 +7,7 @@ use charlymatloc\api\actions\RegisterAction;
 use charlymatloc\api\actions\ReserverOutilAction;
 use charlymatloc\api\actions\OutilAction;
 use charlymatloc\api\actions\ReservationsAction;
+use charlymatloc\api\actions\ValiderPanierAction;
 use charlymatloc\api\providers\auth\AuthnProviderInterface;
 use charlymatloc\core\application\usecases\auth\AuthnServiceInterface;
 use charlymatloc\core\application\usecases\interface\ServiceOutilInterface;
@@ -40,6 +41,9 @@ return [
     },
     PanierDeleteAction::class => function (ContainerInterface $c) {
         return new PanierDeleteAction($c->get(ServicePanierInterface::class));
+    },
+    ValiderPanierAction::class => function (ContainerInterface $c) {
+        return new ValiderPanierAction($c->get(ServicePanierInterface::class));
     }
 
 ];

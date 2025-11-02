@@ -9,6 +9,7 @@ use charlymatloc\api\middlewares\CorsMiddleware;
 use charlymatloc\api\actions\PanierAction;
 use charlymatloc\api\actions\ReserverOutilAction;
 use charlymatloc\api\actions\ReservationsAction;
+use charlymatloc\api\actions\ValiderPanierAction;
 use charlymatloc\api\middlewares\AjouterPanierValidationMiddleware;
 use charlymatloc\api\middlewares\EnregistrerUtilisateurMiddleware;
 use charlymatloc\api\middlewares\ErreurMiddleware;
@@ -38,6 +39,7 @@ return function(App $app): App {
         $group->get('/paniers/{id_user}', PanierAction::class);
         $group->get('/reservations/{id_user}', ReservationsAction::class);
         $group->delete('/paniers/{id_user}/{id_outil}', PanierDeleteAction::class);
+        $group->post('/paniers/{id_user}/valider', ValiderPanierAction::class);
     })->add(new AuthMiddleware($jwtSecret));
 
     // routes protégées avec validation
