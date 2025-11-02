@@ -6,14 +6,18 @@ use charlymatloc\api\dto\OutilDTO;
 use charlymatloc\api\dto\PanierDTO;
 use charlymatloc\core\application\usecases\interface\ServicePanierInterface;
 use charlymatloc\infra\repositories\interface\PanierRepositoryInterface;
+use charlymatloc\core\application\usecases\interface\ServiceReservationInterface;
+use charlymatloc\infra\repositories\interface\ReservationRepositoryInterface;
 use charlymatloc\api\dto\InputPanierDTO;
 
 class ServicePanier implements ServicePanierInterface {
     private PanierRepositoryInterface $panierRepository;
+    private ReservationRepositoryInterface $reservationRepository;
 
-    public function __construct(PanierRepositoryInterface $panierRepository)
+    public function __construct(PanierRepositoryInterface $panierRepository, ReservationRepositoryInterface $reservationRepository)
     {
         $this->panierRepository = $panierRepository;
+        $this->reservationRepository = $reservationRepository;
     }
 
     public function getPanier(string $id_user): array {
@@ -115,4 +119,41 @@ class ServicePanier implements ServicePanierInterface {
         }
     }
 
+    public function validerPanier(string $id_user): array{
+        try{
+            
+           
+
+            $panier = $this->panierRepository->findPanierByOwnerId($id_user);
+            if (!$panier) {
+                return [
+                    'success' => false,
+                    'message' => "Aucun panier trouvé pour cet utilisateur."
+                ];
+            }
+
+            $outils = $this->panierRepository->findAllOutilsByPanierId($panier->id);
+            if (!$outils) {
+                return [
+                    'success' => false,
+                    'message' => "Aucun outil trouvé dans le panier"
+                ];
+            }
+
+            $this->reservationRepository->addOutilToReservation($outils, $id_user);
+
+            foreach($outils as $outil){
+                $this->panierRepository->removeFromCart($outil['outil']->id, $panier->id);
+            }
+        } catch (\Exception $e) {
+            return [
+                'success' => false,
+                "message" => $e->getMessage()
+            ];
+        }
+        return [
+                'success' => true,
+                'message' => "Panier vider et réservations ajoutées"
+        ];
+    }   
 }
