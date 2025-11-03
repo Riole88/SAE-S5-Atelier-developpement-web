@@ -148,17 +148,28 @@ const panierController = {
     async validerPanier() {
         try {
             const idUser = auth.getUserId();
-            const response = await fetch(`http://localhost:6080/paniers/${idUser}/valider`, {
-                method: 'POST',
+            const responsePanier = await fetch(`http://localhost:6080/paniers/${idUser}`,{
+                method: 'GET',
                 headers: auth.getAuthHeaders(),
                 mode: 'cors'
-            });
+            })
 
-            if (!response.ok) {
-                throw new Error('Erreur lors de la validation du panier');
+            if(reponsePanier[0].outils === []){
+                alert('Panier vide, impossible de valider le panier !!!!')
+            } else {
+
+                const response = await fetch(`http://localhost:6080/paniers/${idUser}/valider`, {
+                    method: 'POST',
+                    headers: auth.getAuthHeaders(),
+                    mode: 'cors'
+                });
+
+                if (!response.ok) {
+                    throw new Error('Erreur lors de la validation du panier');
+                }
+                // Recharger le panier
+                router.goTo('/reservations');
             }
-            // Recharger le panier
-            router.goTo('/reservations');
 
         } catch (error) {
             alert('Erreur lors de la validation du panier');
