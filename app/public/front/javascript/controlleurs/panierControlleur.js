@@ -153,10 +153,14 @@ const panierController = {
                 headers: auth.getAuthHeaders(),
                 mode: 'cors'
             })
+            if (!responsePanier.ok) throw new Error('Erreur récupération panier');
 
-            if(reponsePanier[0].outils === []){
-                alert('Panier vide, impossible de valider le panier !!!!')
-            } else {
+            const panierData = await responsePanier.json();
+
+            if (!panierData.length || panierData[0].outils.length === 0) {
+                alert('Panier vide, impossible de valider le panier !!!!');
+                return;
+            }else {
 
                 const response = await fetch(`http://localhost:6080/paniers/${idUser}/valider`, {
                     method: 'POST',
