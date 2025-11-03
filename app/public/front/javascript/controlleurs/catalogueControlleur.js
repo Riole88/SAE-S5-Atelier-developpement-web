@@ -1,6 +1,7 @@
 // controllers/catalogueController.js - Version avec Pagination
 
 import router from '../routeur.js';
+import auth from '../services/auth.js';
 import detailOutilControlleur from "./detailOutilControlleur.js";
 
 const catalogueController = {
@@ -240,6 +241,7 @@ const catalogueController = {
     },
 
     async afficher() {
+
         const app = document.getElementById('app');
 
         // Loader avec animation

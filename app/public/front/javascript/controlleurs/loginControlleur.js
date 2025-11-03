@@ -42,6 +42,12 @@ const loginController = {
             let userData = await response.json();
 
             auth.setAuth(userData.payload, userData.profile);
+
+            document.getElementById("header-logout").style.display = "list-item";
+            document.getElementById("espace-compte").style.display = "list-item";
+            document.getElementById("header-login").style.display = "none";
+            document.getElementById("statut-connexion").textContent = "Connecté";
+
             router.goTo('/catalogue');
 
 
