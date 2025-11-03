@@ -52,6 +52,10 @@ class AjouterPanierValidationMiddleware {
             throw new HttpBadRequestException($request, "Invalid data: " . $e->getFullMessage(), $e);
         }
 
+        if($data['date_debut'] > $data['date_fin']){
+            throw new \Exception("Date de début supérieur à date de fin");
+        }
+
         //vérification format des datetime
         foreach (['date_debut', 'date_fin'] as $datetime) {
             $data[$datetime] = urldecode($data[$datetime]);

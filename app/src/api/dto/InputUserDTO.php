@@ -15,4 +15,12 @@ class InputUserDTO{
         }
         throw new \Exception("Propriété '$name' inexistante dans " . __CLASS__);
     }
+
+    public function __set(string $name, $value) {
+        if (property_exists($this, $name)) {
+            $this->$name = $value;
+            return;
+        }
+        throw new \Exception("Propriété '$name' inexistante dans " . __CLASS__);
+    }
 }
