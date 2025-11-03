@@ -42,8 +42,8 @@ const loginController = {
             let userData = await response.json();
 
             auth.setAuth(userData.payload, userData.profile);
-            router.goTo('/catalogue');
 
+            router.goTo('/catalogue');
 
         } catch(e){
             document.getElementById("after-submit").innerText = "Email ou mot de passe incorrect";

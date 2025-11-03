@@ -1,0 +1,38 @@
+@use '../var/variables' as *;
+@use '../var/mixins' as *;
+
+.titre {
+  text-align: center;
+}
+
+.profile-list {
+  margin-top: 2%;
+  margin-bottom: 5%;
+  list-style: none;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: $espace-lg;
+  justify-content: center;
+
+  li {
+    cursor: pointer;
+
+    a {
+      display: block;
+      padding: $espace-md $espace-lg $espace-md $espace-lg;
+      background-color: $fond-carte;
+      border: 1px solid $texte-secondaire;
+      border-radius: 10px;
+      text-decoration: none;
+      color: $texte-principal;
+      font-size: $taille-base;
+      font-family: $police-base;
+      text-align: center;
+
+      &:hover {
+        background-color: darken($fond-carte, 10%);;
+      }
+    }
+  }
+}
