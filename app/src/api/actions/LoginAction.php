@@ -16,11 +16,14 @@ readonly class LoginAction
     public function __invoke(Request $request, Response $response): Response
     {
         $data = $request->getParsedBody();
-        $email = $data['email'];
+        $email = trim($data['email']);
         $password = $data['password'];
 
         if (empty($email) || empty($password)) {
             throw new \InvalidArgumentException("Email ou mot de passe non fourni");
+        }
+        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            throw new \Exception("Email invalide");
         }
 
         $credentials = new CredentialsDTO($email, $password);
