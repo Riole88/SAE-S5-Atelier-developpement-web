@@ -81,7 +81,7 @@ class PDOPanierRepository implements PanierRepositoryInterface {
             throw new \Exception("Erreur lors de la reception des outils");
         }
         if(!$outils){
-            throw new EntityNotFoundException("outils du panier $panierId pas trouver");
+            return [];
         }
 
         $res = [];
