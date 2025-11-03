@@ -19,12 +19,30 @@ class RegisterAction {
                 throw new \Exception("Erreur récupération DTO de création d'un rendez-vous");
             }
 
+            $user_dto->email = filter_var(trim($user_dto->email), FILTER_SANITIZE_EMAIL);
+
+            if (!filter_var($user_dto->email, FILTER_VALIDATE_EMAIL)) {
+                throw new \Exception("Email invalide");
+            }
+
+            $password = trim($user_dto->password ?? '');
+            $minLength = 8;
+            $maxLength = 64;
+
+            if (strlen($password) < $minLength) {
+                throw new \Exception("Le mot de passe doit contenir au moins $minLength caractères");
+            }
+
+            if (strlen($password) > $maxLength) {
+                throw new \Exception("Le mot de passe ne doit pas dépasser $maxLength caractères");
+            }
+
             $res = $this->serviceAuthn->register($user_dto);
             $response->getBody()->write(json_encode($res));
             return $response->withHeader("Content-Type", "application/json");
 
         } catch (\Exception $e) {
-            throw new \Exception("Erreur lors de la création du compte.");
+            throw new \Exception("Erreur lors de la création du compte." . $e->getMessage());
         } catch(\Throwable $e){
             throw new \Exception($e->getMessage());
         }
