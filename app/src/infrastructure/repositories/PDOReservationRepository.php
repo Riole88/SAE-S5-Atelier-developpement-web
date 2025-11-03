@@ -125,7 +125,7 @@ class PDOReservationRepository implements ReservationRepositoryInterface {
             $stmt = $this->reservation_pdo->prepare("SELECT * 
             FROM reservation
             WHERE id_user = :ownerId
-            AND statut IN ('en_attente', 'confirmee')");
+            AND statut IN ('en_attente', 'confirmee', 'reservee')");
             $stmt->execute(['ownerId' => $ownerId]);
             $reservations = $stmt->fetchAll(PDO::FETCH_ASSOC);
         } catch(\PDOException $e){
@@ -134,7 +134,7 @@ class PDOReservationRepository implements ReservationRepositoryInterface {
             throw new \Exception("Erreur lors de la reception des reservations");
         }
         if(!$reservations){
-            throw new NotFoundException("Pas de reservations trouvees");
+            return [];
         }
         $res = [];
         foreach ($reservations as $reservation) {

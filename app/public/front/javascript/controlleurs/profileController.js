@@ -1,3 +1,6 @@
+import auth from "../services/auth";
+import router from "../routeur";
+
 const profileController = {
     async chargerTemplate() {
         const response = await fetch('templates/pages/profile.hbs');
@@ -6,6 +9,10 @@ const profileController = {
     },
 
     async afficher() {
+        if(!auth.isAuthenticated()) {
+            router.goTo("/connexion");
+        }
+
         const app = document.getElementById('app');
 
         // Loader avec animation

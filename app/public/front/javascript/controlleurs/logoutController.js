@@ -5,10 +5,6 @@ const logoutController = {
         const logout = document.querySelector('#deconnexion');
         logout.addEventListener("click", (event) => {
             auth.clearAuth();
-            document.getElementById("header-login").style.display = "list-item";
-            document.getElementById("header-logout").style.display = "none";
-            document.getElementById("statut-connexion").textContent = "Invité";
-            document.getElementById("espace-compte").style.display = "none";
             router.goTo("/catalogue");
         });
     },

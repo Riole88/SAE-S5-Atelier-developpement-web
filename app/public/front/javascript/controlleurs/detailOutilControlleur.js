@@ -34,13 +34,6 @@ const detailOutilControlleur = {
     },
 
     ajouterEvenements() {
-        //Bouton "Ajouter au panier"
-        // const bouton_ajout = document.querySelector("#submit-outil");
-        // bouton_ajout.addEventListener('click', (e) => {
-        //     const id_outil = e.target.dataset.outilId;
-        //     const date_debut =
-        //     this.ajouterAuPanier(id_outil);
-        // });
         const form = document.getElementById('form-outil');
         form.addEventListener('submit', (e) => {   // ← fonction fléchée
             e.preventDefault();
