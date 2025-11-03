@@ -25,20 +25,11 @@ class ReserverOutilAction {
                 throw new \Exception("Erreur récupération DTO de création d'un rendez-vous");
             }
 
-            $queryParams = $request->getQueryParams();
-            $date_debut = $queryParams['date_debut'] ?? null;
-            $date_fin = $queryParams['date_fin'] ?? null;
-            if(empty($date_debut)) {
-                throw new \Exception("Saisissez une date de debut.");
-            }
-            if(empty($date_fin)) {
-                throw new \Exception("Saisissez une date de fin.");
-            }
             $res = $this->servicePanier->ajouterPanier($panier_dto);
             $response->getBody()->write(json_encode($res));
             return $response->withHeader("Content-Type", "application/json");
         } catch (\Exception $e) {
-            throw new \Exception("Erreur lors de la réservation de l'outil.");
+            throw new \Exception("Erreur lors de la réservation de l'outil." . $e->getMessage(),);
         } catch(\Throwable $e){
             throw new \Exception($e->getMessage());
         }
