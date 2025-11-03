@@ -142,6 +142,41 @@ body {
   margin-bottom: 20px;
 }
 
+/* Styles pour la pagination */
+.pagination-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1.5rem;
+  margin: 3rem 0 2rem;
+  padding: 1.5rem;
+}
+
+.btn-pagination {
+  background-color: #3a3a3a;
+  color: white;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  font-size: 1rem;
+  font-weight: 500;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  min-width: 120px;
+}
+
+.page-info {
+  font-size: 1rem;
+  font-weight: 500;
+  color: #333;
+  min-width: 140px;
+  text-align: center;
+}
+
+.page-info span {
+  font-weight: 700;
+}
+
 .outil {
   display: flex;
   justify-content: center;
