@@ -1,5 +1,5 @@
-import auth from "../services/auth";
-import router from "../routeur";
+import auth from "../services/auth.js";
+import router from "../routeur.js";
 
 const profileController = {
     async chargerTemplate() {
