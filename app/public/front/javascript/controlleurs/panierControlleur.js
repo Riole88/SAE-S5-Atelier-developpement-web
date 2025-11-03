@@ -116,13 +116,11 @@ const panierController = {
             });
         }
 
-        // Bouton "Commander"
-        const boutonCommander = document.querySelector('[data-commander]');
-        if (boutonCommander) {
-            boutonCommander.addEventListener('click', () => {
-                this.commander();
-            });
-        }
+        // Bouton "Valider"
+        const boutonValider = document.getElementById('boutonPaye');
+        boutonValider.addEventListener('click', () => {
+            this.validerPanier();
+        });
     },
 
 
@@ -144,6 +142,26 @@ const panierController = {
 
         } catch (error) {
             alert('Erreur lors de la suppression de l\'article');
+        }
+    },
+
+    async validerPanier() {
+        try {
+            const idUser = auth.getUserId();
+            const response = await fetch(`http://localhost:6080/paniers/${idUser}/valider`, {
+                method: 'POST',
+                headers: auth.getAuthHeaders(),
+                mode: 'cors'
+            });
+
+            if (!response.ok) {
+                throw new Error('Erreur lors de la validation du panier');
+            }
+            // Recharger le panier
+            router.goTo('/reservations');
+
+        } catch (error) {
+            alert('Erreur lors de la validation du panier');
         }
     },
 
